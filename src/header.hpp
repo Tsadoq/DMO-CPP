@@ -11,5 +11,6 @@ vector<vector<int>> read_file_stu(char* file_name,int n_exams,int &total_number_
 template <typename T>
 vector<size_t> sort_indexes(const vector<T> &v) ;
 vector<int> graph_coloring_greedy(vector<Exam*> all_exams, int n_timeslot, vector<size_t> sorted_index, int n_exams);
+vector<vector<int>> neighbours_by_mutation(vector<Exam*> all_exams, vector<size_t> order_for_mutation,int num_mutation,vector<int> possible_timeslots);
 
 

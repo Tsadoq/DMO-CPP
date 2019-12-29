@@ -5,5 +5,5 @@
 using namespace std;
 
 Solution::Solution(std::vector<int> e){
-    exams = e;
+    timeslot_per_exams = e;
 }

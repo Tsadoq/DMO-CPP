@@ -5,7 +5,7 @@
 using namespace std;
 
 class Solution{
-    vector <int> exams;
-public:
+    public:
+    vector <int> timeslot_per_exams;
     Solution(std::vector <int>);   
 };

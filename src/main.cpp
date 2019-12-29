@@ -6,8 +6,9 @@
 #include "read_file_slo.cpp"
 #include "read_file_exm.cpp"
 #include "read_file_stu.cpp"
-#include "sort_by_num_neighbours.cpp"
+#include "sort_indexes.cpp"
 #include "graph_coloring_greedy.cpp"
+#include "neighbours_by_mutation.cpp"
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -72,8 +73,13 @@ int main(int argc, char **argv) {
     vector<int> assigned_timeslots=vector<int>(n_exams);
     assigned_timeslots=graph_coloring_greedy(all_exams, n_timeslot, sorted_index, n_exams);
 
-    Solution solution (assigned_timeslots);
+    // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
+    // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
 
+    // create initial solution
+    Solution initial_solution (assigned_timeslots);
+
+    // inizialize all attributes for each exam
     for(int i=0;i<n_exams;i++){   
         // save timeslot for current exam 
         all_exams[i]->timeslot=assigned_timeslots[i];
@@ -83,6 +89,8 @@ int main(int argc, char **argv) {
         }
     }
     
+    vector<double> weight_for_exams;
+    // calculate total weight in objective function for each exam
     int current_exam_timeslot;
     int neighbour_exam_timeslot;
     double neighbour_exam_weight;
@@ -99,6 +107,7 @@ int main(int argc, char **argv) {
             }
         }
         all_exams[i]->weight_in_obj_fun=weight_for_exam;
+        weight_for_exams.push_back(weight_for_exam);
     }
     
     // prova per vedere se ho fatto i conti giusti-> poi mettere in funzione a sè
@@ -107,8 +116,41 @@ int main(int argc, char **argv) {
         obj_fun+=all_exams[i]->weight_in_obj_fun;
     }
     obj_fun/=(2*total_number_students);
-
     cout<<"Objective function is: "<<obj_fun<<"\n";
+
+    // sort exams by decreasing value of penalty in objective function
+    vector<size_t> order_for_mutation=vector<size_t>(n_exams);
+    // it's a vector of indexes: values in [0,n_exams-1]   
+    order_for_mutation=sort_indexes(weight_for_exams);
+
+    vector<int> possible_timeslots;
+    for (int i=0; i<n_timeslot;i++){
+        possible_timeslots.push_back(i+1);
+    }
+
+    int num_mutation=10;
+    vector <Exam*> copy_all_exams;
+    // create a copy of all_exam, if we do a local search we will have #copies=#neighbours generated
+    Exam* copy_exam;
+    for(int i=0; i<n_exams;i++){
+        copy_exam=new Exam();
+        copy_exam->conflict_exams=all_exams[i]->conflict_exams;
+        copy_exam->conflict_times=all_exams[i]->conflict_times;
+        copy_exam->conflict_weights=all_exams[i]->conflict_weights;
+        copy_exam->timeslot=all_exams[i]->timeslot;
+        copy_exam->weight_in_obj_fun=all_exams[i]->weight_in_obj_fun;
+        copy_exam->id_exam=all_exams[i]->id_exam;
+        copy_all_exams.push_back(copy_exam);
+    }
+
+    // I modify a copy of exams, so if I don't accept the new solution I have no problems with the old one
+    vector<vector<int>>mutations_vector=neighbours_by_mutation(copy_all_exams, order_for_mutation, num_mutation, possible_timeslots);
+
+    for (int i=0; i<num_mutation;i++){
+        cout<<"Mutation: "<<"exam "<< mutations_vector[i][0]<<" timeslot "<<mutations_vector[i][1]<<"\n";
+        // provo a vedere se è feasible con il checker -> OK è feasible
+        assigned_timeslots[mutations_vector[i][0]-1]=mutations_vector[i][1];
+    }
 
     string file_out=current_instance+".sol";
     ofstream output_file;
