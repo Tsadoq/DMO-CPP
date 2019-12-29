@@ -6,3 +6,7 @@ src/main.exe
 src/main
 
 .DS_Store
+
+*.xml
+
+*.iml
