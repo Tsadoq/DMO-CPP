@@ -8,7 +8,7 @@
 
 using namespace std;
 
-vector<vector<int>> read_file_stu(char* file_name,int n_exams){
+vector<vector<int>> read_file_stu(char* file_name,int n_exams, int &total_number_students){
     //vector<string> student_ids; 
     //int conflict_matrix;
     vector<vector<int>> conflict_matrix = vector<vector<int>> (n_exams,vector<int>(n_exams, 0));
@@ -17,7 +17,7 @@ vector<vector<int>> read_file_stu(char* file_name,int n_exams){
     FILE *fp;
     char stud_id[10];
     string stud_id_string="";
-    int exam_id; 
+    int exam_id;
 
     fp = fopen(file_name, "r");
     
@@ -28,6 +28,7 @@ vector<vector<int>> read_file_stu(char* file_name,int n_exams){
     while(fscanf(fp, "%s\t%d", stud_id, &exam_id)!=EOF){
         stud_id_string=stud_id;
         if (stud_id_string.compare(current_student)!=0){
+            total_number_students++;
             exams_for_student.push_back(count_exams_for_student);
             count_exams_for_student=0;
             current_student.assign(stud_id_string);

@@ -15,6 +15,7 @@
 #include <string.h>
 #include <ios>
 #include <time.h> //per tempo per simulating annealing
+#include <math.h>
 
 //int read_file_stu(char *name_stu);
 int main(int argc, char **argv) {
@@ -38,7 +39,8 @@ int main(int argc, char **argv) {
 
     // create the conflict matrix: for each pair of exams the number of students willing to give both exams
     vector<vector<int>> conflict_matrix;
-    conflict_matrix=read_file_stu(writable_instance_stu,n_exams);
+    int total_number_students=0;
+    conflict_matrix=read_file_stu(writable_instance_stu,n_exams,total_number_students);
     
     // vector of exams pointer
     vector<Exam*> all_exams;
@@ -46,7 +48,7 @@ int main(int argc, char **argv) {
     vector<int> num_neighbours_for_exams;
     // initialize attriburtes conflict_exams and conflict_weights for each exam
     int num_neighbour;
-     for(int i=0;i<n_exams;i++){
+    for(int i=0;i<n_exams;i++){
          num_neighbour=0;
         Exam *exam = new Exam();
         exam->id_exam=i+1;
@@ -71,9 +73,46 @@ int main(int argc, char **argv) {
     assigned_timeslots=graph_coloring_greedy(all_exams, n_timeslot, sorted_index, n_exams);
 
     Solution solution (assigned_timeslots);
+
+    for(int i=0;i<n_exams;i++){   
+        // save timeslot for current exam 
+        all_exams[i]->timeslot=assigned_timeslots[i];
+        for (auto j:all_exams[i]->conflict_exams){
+            // save timeslot of conflicting exams
+            all_exams[i]->conflict_times.push_back(assigned_timeslots[j-1]);
+        }
+    }
     
+    int current_exam_timeslot;
+    int neighbour_exam_timeslot;
+    double neighbour_exam_weight;
+    int weight_for_exam;
+    for(int i=0;i<n_exams;i++){
+        weight_for_exam=0;
+        current_exam_timeslot=all_exams[i]->timeslot;
+        for (int j=0;j<all_exams[i]->conflict_exams.size();j++){
+            // save timeslot of conflicting exams
+            neighbour_exam_timeslot=all_exams[i]->conflict_times[j];
+            neighbour_exam_weight=all_exams[i]->conflict_weights[j];
+            if (abs(neighbour_exam_timeslot-current_exam_timeslot)<=5){
+                weight_for_exam+=pow(2,5-abs(neighbour_exam_timeslot-current_exam_timeslot))*neighbour_exam_weight;
+            }
+        }
+        all_exams[i]->weight_in_obj_fun=weight_for_exam;
+    }
+    
+    // prova per vedere se ho fatto i conti giusti-> poi mettere in funzione a sè
+    double obj_fun=0;
+    for(int i=0;i<n_exams;i++){
+        obj_fun+=all_exams[i]->weight_in_obj_fun;
+    }
+    obj_fun/=(2*total_number_students);
+
+    cout<<"Objective function is: "<<obj_fun<<"\n";
+
+    string file_out=current_instance+".sol";
     ofstream output_file;
-    output_file.open ("instance01.sol");
+    output_file.open (file_out);
     for(int i=0; i<n_exams;i++){    
         output_file << i+1 <<"\t"<< assigned_timeslots[i]<<"\n"; 
     }
