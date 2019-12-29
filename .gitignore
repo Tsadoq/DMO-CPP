@@ -1,4 +1,10 @@
+# config
 .vscode/
 .output/
 
 build.bat
+
+src/main.exe
+src/main
+
+.DS_Store
