@@ -21,9 +21,9 @@ int main(int argc, char **argv) {
     int n_exams = 0;
     int n_timeslot = 0;
     string current_instance=argv[1];
-    string instance_exm=".\\instances\\"+current_instance+".exm";
-    string instance_slo=".\\instances\\"+current_instance+".slo";
-    string instance_stu=".\\instances\\"+current_instance+".stu";
+    string instance_exm="./instances/"+current_instance+".exm";
+    string instance_slo="./instances/"+current_instance+".slo";
+    string instance_stu="./instances/"+current_instance+".stu";
     char * writable_instance_stu = new char[instance_stu.size() + 1];
     std::copy(instance_stu.begin(), instance_stu.end(), writable_instance_stu);
     writable_instance_stu[instance_stu.size()] = '\0';
