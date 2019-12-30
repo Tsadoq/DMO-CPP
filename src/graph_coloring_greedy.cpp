@@ -4,7 +4,7 @@
 
 using namespace std;
 
-vector<int> graph_coloring_greedy(Solution* initial_solution, int n_timeslot, vector<size_t> sorted_index, int n_exams){
+void graph_coloring_greedy(Solution* initial_solution, int n_timeslot, vector<size_t> sorted_index, int n_exams){
     // initialize vector of timeslot for each exams to -1
     initial_solution->timeslot_per_exams=vector<int>(n_exams,-1);
     // put the the exam with highest number of conflits in first timeslot
@@ -39,6 +39,4 @@ vector<int> graph_coloring_greedy(Solution* initial_solution, int n_timeslot, ve
             initial_solution->timeslot_per_exams[current_exam_idx]=select_timeslot+1;
         }        
     }
-
-    //return initial_solution->timeslot_per_exams;
 }
