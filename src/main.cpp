@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
     vector<Exam*> all_exams;
     // for each exam save the number of neighbour
     vector<int> num_neighbours_for_exams;
-    // initialize attriburtes conflict_exams and conflict_weights for each exam
+    // initialize attributes conflict_exams and conflict_weights for each exam
     int num_neighbour;
     for(int i=0;i<n_exams;i++){
          num_neighbour=0;
@@ -76,9 +76,6 @@ int main(int argc, char **argv) {
     // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
     // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
 
-    // create initial solution
-    Solution initial_solution (assigned_timeslots);
-
     // inizialize all attributes for each exam
     for(int i=0;i<n_exams;i++){   
         // save timeslot for current exam 
@@ -88,7 +85,16 @@ int main(int argc, char **argv) {
             all_exams[i]->conflict_times.push_back(assigned_timeslots[j-1]);
         }
     }
-    
+
+    // create initial solution
+    Solution *initial_solution = new Solution();
+
+    int flag = initial_solution->check_feasibility(assigned_timeslots, all_exams);
+    fprintf(stdout, "%d\n", flag);
+
+    initial_solution->timeslot_per_exams = assigned_timeslots;
+    initial_solution->total_exams = all_exams;
+
     vector<double> weight_for_exams;
     // calculate total weight in objective function for each exam
     int current_exam_timeslot;
