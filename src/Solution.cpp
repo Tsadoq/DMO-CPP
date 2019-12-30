@@ -5,10 +5,27 @@
 #include <iostream>
 using namespace std;
 
-/*Solution::Solution(std::vector<int> t, std::vector<Exam> e){
-    timeslot_per_exams = t;
-    exams = e;
-}*/
+void Solution::solution_update(std::vector<vector<int>> conflict_matrix, int n_exams){
+    // vector of exams pointer
+  
+    // initialize attributes conflict_exams and conflict_weights for each exam
+    int num_neighbour;
+    for(int i=0;i<n_exams;i++){
+        num_neighbour=0;
+        Exam *exam = new Exam();
+        exam->id_exam=i+1;
+        for(int j=0;j<n_exams;j++){
+            if (conflict_matrix[i][j]>0){
+                num_neighbour++;
+                exam->conflict_exams.push_back(j+1);
+                exam->conflict_weights.push_back(conflict_matrix[i][j]);
+            }
+        }
+        all_exams.push_back(exam);
+        num_neighbours_for_exams.push_back(num_neighbour);
+    }
+ 
+}
 
 int Solution::check_feasibility(std::vector<int> t, std::vector<Exam*> e) {
     int flag = 0;

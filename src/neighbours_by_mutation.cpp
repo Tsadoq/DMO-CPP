@@ -1,5 +1,5 @@
 #include "header.hpp"
-#include<string>
+#include <string>
 #include <iostream>
 #include <algorithm>
 #include <vector>
