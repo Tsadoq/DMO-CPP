@@ -6,6 +6,7 @@ build.bat
 
 src/main.exe
 src/main
+src/*.sol
 
 .DS_Store
 
