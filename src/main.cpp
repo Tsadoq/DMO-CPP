@@ -9,7 +9,6 @@
 #include "sort_indexes.cpp"
 #include "graph_coloring_greedy.cpp"
 #include "neighbours_by_mutation.cpp"
-#include "sa.cpp"
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -20,6 +19,7 @@
 #include <math.h>
 #include <time.h>
 #include <sys/timeb.h>
+#include "SimulatedAnelling.cpp"
 
 //int read_file_stu(char *name_stu);
 int main(int argc, char **argv) {
@@ -48,12 +48,12 @@ int main(int argc, char **argv) {
     fprintf(stdout, "Number of exams: %d\n", n_exams);
     
     // create the conflict matrix: for each pair of exams the number of students willing to give both exams
+    
     vector<vector<int>> conflict_matrix;
     int total_number_students=0;
     conflict_matrix=read_file_stu(writable_instance_stu,n_exams,total_number_students);
         
     Solution *initial_solution = new Solution();
-    
     initial_solution->solution_update(conflict_matrix, n_exams);
     //fprintf(stdout, "%d\n", initial_solution->num_neighbours_for_exams[1]);
     
@@ -75,7 +75,11 @@ int main(int argc, char **argv) {
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
     
     int num_mutation=30;
-    sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot, num_mutation, current_instance);
+    fprintf(stdout,"before SA\n");
+    SimulatedAnelling sa = SimulatedAnelling(initial_solution,timelimit,n_exams,total_number_students,n_timeslot,current_instance,num_mutation);
+    fprintf(stdout,"SA initialization completed");
+    sa.heatup();
+    //sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot, num_mutation, current_instance);
 
     /*
     // calculate total weight in objective function for each exam
