@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     // read number of exams
     n_exams=read_file_exm(instance_exm);
     fprintf(stdout, "Number of exams: %d\n", n_exams);
-   
+    
     // create the conflict matrix: for each pair of exams the number of students willing to give both exams
     vector<vector<int>> conflict_matrix;
     int total_number_students=0;
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
     // apply greedy coloring trying to assign timeslots first to exams with higher degree
     //assigned_timeslots=graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
     graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
-
+    //fprintf(stdout, "aaaaaaaaaaaaaaaaaaa");
     // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
     // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY   
 
