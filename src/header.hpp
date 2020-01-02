@@ -1,8 +1,10 @@
-#include<string>
+#include <string>
 #include <iostream>
 #include <vector>
 #include "Exam.hpp"
 #include "Solution.hpp"
+#include <time.h>
+#include <sys/timeb.h>
 
 using namespace std;
 
@@ -14,5 +16,5 @@ template <typename T>
 vector<size_t> sort_indexes(const vector<T> &v) ;
 void graph_coloring_greedy(Solution* initial_solution, int n_timeslot, vector<size_t> sorted_index, int n_exams);
 vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> order_for_mutation,int num_mutation,vector<int> possible_timeslots);
-
+void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot, int num_mutation, string current_instance);
 

@@ -9,6 +9,7 @@
 #include "sort_indexes.cpp"
 #include "graph_coloring_greedy.cpp"
 #include "neighbours_by_mutation.cpp"
+#include "sa.cpp"
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -17,15 +18,23 @@
 #include <ios>
 #include <time.h> //per tempo per simulating annealing
 #include <math.h>
+#include <time.h>
+#include <sys/timeb.h>
 
 //int read_file_stu(char *name_stu);
 int main(int argc, char **argv) {
+    struct timeb start;
     int n_exams = 0;
     int n_timeslot = 0;
+    
+    ftime(&start);
+
     string current_instance=argv[1];
     string instance_exm="./instances/"+current_instance+".exm";
     string instance_slo="./instances/"+current_instance+".slo";
     string instance_stu="./instances/"+current_instance+".stu";
+    int timelimit = atoi(argv[2]);
+    cout<<"timelimit: "<<timelimit<<endl;
     char * writable_instance_stu = new char[instance_stu.size() + 1];
     std::copy(instance_stu.begin(), instance_stu.end(), writable_instance_stu);
     writable_instance_stu[instance_stu.size()] = '\0';
@@ -63,9 +72,12 @@ int main(int argc, char **argv) {
     // inizialize attributes timeslot and conflict time for each exam
     initial_solution->update_timeslots(n_exams);
 
-
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-  
+    
+    int num_mutation=30;
+    sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot, num_mutation, current_instance);
+
+    /*
     // calculate total weight in objective function for each exam
     vector<double> weight_for_exams=initial_solution->update_weights(n_exams);
 
@@ -86,20 +98,21 @@ int main(int argc, char **argv) {
     int num_mutation=10;
 
     // create a copy of initial_solution, if we do a local search we will have #copies=#neighbours 
-    Solution* copy_sol=initial_solution->copy_solution(n_exams);
-    
+    Solution* copy_sol=initial_solution->copy_solution(n_exams);   
 
     // I modify the copy of solution, so if I don't accept the new solution I have no problems with the old one
-    vector<vector<int>>mutations_vector=neighbours_by_mutation(copy_sol, order_for_mutation, num_mutation, possible_timeslots);
+    //vector<vector<int>>mutations_vector=neighbours_by_mutation(copy_sol, order_for_mutation, num_mutation, possible_timeslots);
 
     // update weights in the new solution
-    weight_for_exams=copy_sol->update_weights(n_exams);
-
-    obj_fun=copy_sol->objective_function(n_exams,total_number_students);
-    cout<<"New objective function: "<<obj_fun<<"\n";
+    //weight_for_exams=copy_sol->update_weights(n_exams);
+    
+    //obj_fun=copy_sol->objective_function(n_exams,total_number_students);
+    //cout<<"New objective function: "<<obj_fun<<"\n";
 
     // write solution on file
-    copy_sol->write_output_file("./instances/"+current_instance, n_exams);
-
+    //copy_sol->write_output_file("./instances/"+current_instance, n_exams);
+    */
+   
     return 0;
 }
+
