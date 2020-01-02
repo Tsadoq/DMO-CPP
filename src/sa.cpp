@@ -2,6 +2,7 @@
 #include <time.h>
 #include <sys/timeb.h>
 #include <cmath>
+#include<random>
 
 using namespace std;
 
@@ -15,6 +16,9 @@ void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int 
  double t = 20000;
  double obj_new;
   Solution* copy_sol;
+
+  std::default_random_engine generator;
+  std::uniform_real_distribution<double> distribution(0.0,1.0);
 
  vector<double> weight_for_exams=solution->update_weights(n_exams);
  double obj_old = solution->objective_function(n_exams,total_number_students);
@@ -40,10 +44,10 @@ for (int i=0; i<n_timeslot;i++){
     obj_new=copy_sol->objective_function(n_exams,total_number_students);    
     if(obj_new > obj_old){
        prob = probability(obj_new, obj_old, t);
-       prob_random = rand()%2;
-       if (prob_random > prob){
+       prob_random = distribution(generator);
+        if (prob_random > prob){
            //non aggiorno il valore della funzione obiettivo
-       }else{
+        }else{
         cout<<"Objective Function: "<<obj_new<<endl;
         copy_sol->write_output_file("./instances/"+current_instance, n_exams);
         obj_old=obj_new;

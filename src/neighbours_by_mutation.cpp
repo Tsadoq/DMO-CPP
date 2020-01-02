@@ -21,6 +21,9 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
     int k;
     int new_timeslot;
     int randomIndex;
+    /*std::vector<int> order_for_mutation(25);
+    std::iota(numeri.begin(), numeri.end(), 1);
+    std::random_shuffle(numeri.begin(), numeri.end());*/
     //int size_random=(int)perc*n_exams;
     for(int i=0;i<num_mutation+is_void;i++){
         // exam I'm trying to mutate
