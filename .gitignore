@@ -13,3 +13,4 @@ src/*.sol
 *.xml
 
 *.iml
+src/.DS_Store
