@@ -10,7 +10,7 @@
 using namespace std;
 
 vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> order_for_mutation,int num_mutation,
-                    vector<int> possible_timeslots/*,double perc, int n_exams*/){
+                    vector<int> possible_timeslots,double perc,int n_exams){
                         
     vector<vector<int>> mutations_vector; 
     vector<int> single_mutation=vector<int> (2);                                       
@@ -21,14 +21,15 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
     int k;
     int new_timeslot;
     int randomIndex;
-    /*std::vector<int> order_for_mutation(25);
-    std::iota(numeri.begin(), numeri.end(), 1);
-    std::random_shuffle(numeri.begin(), numeri.end());*/
-    //int size_random=(int)perc*n_exams;
-    for(int i=0;i<num_mutation+is_void;i++){
+    int size_random=(int) (perc*n_exams);
+    std::vector<int> indexes= vector<int>(size_random);
+    std::iota(indexes.begin(), indexes.end(), 0);
+    std::random_shuffle(indexes.begin(), indexes.end());
+        
+    for(int i=0;i<num_mutation+is_void & i<size_random;i++){
         // exam I'm trying to mutate
         available_timeslots=vector<int> ();
-        exam_mutate=solution->all_exams[order_for_mutation[i]];
+        exam_mutate=solution->all_exams[order_for_mutation[indexes[i]]];
         not_available_timeslots=exam_mutate->conflict_times;
         // sort vector because set_difference works with sorted arrays
         sort(not_available_timeslots.begin(), not_available_timeslots.end());

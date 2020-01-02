@@ -65,17 +65,22 @@ int main(int argc, char **argv) {
     // apply greedy coloring trying to assign timeslots first to exams with higher degree
     //assigned_timeslots=graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
     graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
-    //fprintf(stdout, "aaaaaaaaaaaaaaaaaaa");
     // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
-    // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY   
+    // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY  
+    /*initial_solution->timeslot_per_exams= vector<int>(n_exams,-1);
+    vector<int> current_exam_conflict;
+    for(int i=0;i<n_exams;i++){
+        initial_solution->timeslot_per_exams[i]=rand() % n_timeslot +1;        
+        cout<<initial_solution->timeslot_per_exams[i]<<endl;
+    } */
 
     // inizialize attributes timeslot and conflict time for each exam
     initial_solution->update_timeslots(n_exams);
 
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
     
-    int num_mutation=30;
-    sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot, num_mutation, current_instance);
+    
+    sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
 
     /*
     // calculate total weight in objective function for each exam

@@ -9,13 +9,13 @@ using namespace std;
 double probability(double obj_new, double obj_old, double temperature);
 double cooling(double temperature);
 
-void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot, int num_mutation, string current_instance){
+void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance){
  struct timeb now;
  double prob = 0;
  double prob_random = 0;
  double t = 20000;
  double obj_new;
-  Solution* copy_sol;
+Solution* copy_sol;
 
   std::default_random_engine generator;
   std::uniform_real_distribution<double> distribution(0.0,1.0);
@@ -35,11 +35,17 @@ for (int i=0; i<n_timeslot;i++){
     possible_timeslots.push_back(i+1);
 }
 
+//PER ORA SONO FISSE -> MODIFICARE IN SA
+int num_mutation=30;
+double perc=0.4;
+
  while((int)((now.time-start.time))<timelimit){
     ftime(&now);    
     order_for_mutation=sort_indexes(weight_for_exams);
     copy_sol=solution->copy_solution(n_exams);    
-    vector<vector<int>>mutations_vector=neighbours_by_mutation(copy_sol, order_for_mutation, num_mutation, possible_timeslots);
+    vector<vector<int>>mutations_vector=neighbours_by_mutation(copy_sol, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
+    /*int feasible=copy_sol->check_feasibility;
+    cout<<"Feasibility: "<<feasible;*/
     weight_for_exams=copy_sol->update_weights(n_exams);    
     obj_new=copy_sol->objective_function(n_exams,total_number_students);    
     if(obj_new > obj_old){
@@ -60,13 +66,13 @@ for (int i=0; i<n_timeslot;i++){
         obj_old=obj_new;
         solution=copy_sol; 
     }
-/*
+
     t = cooling(t);
     //botta di calore per togliermi dal local minimum
     if(t<0.0001){ 
         t=200000; 
     }
-*/
+
  } 
 }
 
@@ -77,11 +83,10 @@ double probability(double obj_new, double obj_old, double temperature)
 
     return p;
 }
-/*
+
 double cooling(double temperature)
 {
     temperature = temperature/(1+500*temperature);
     return  temperature;
 }
 
-*/
