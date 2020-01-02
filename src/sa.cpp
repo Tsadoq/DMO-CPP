@@ -34,6 +34,7 @@ public:
         n_timeslot = num_timeslot;
         current_instance = this_instance;
         num_mutation = n_mutation;
+        
     }
 
     int heatup()
@@ -50,19 +51,28 @@ public:
         vector<int> possible_timeslots;
         Solution* copy_sol;
         double obj_new;
-
+        current_sol = initial_sol->copy_solution(n_exams);
+        std::default_random_engine generator;
+        std::uniform_real_distribution<double> distribution(0.0,1.0);
+        
         while ((int)((now.time - start.time)) < warmup_time)
         {
-            
+            double prob = 0;
             ftime(&now);
             order_for_mutation = sort_indexes(weight_for_exams);
-            copy_sol = initial_sol->copy_solution(n_exams);
+            copy_sol = current_sol->copy_solution(n_exams);
             vector<vector<int>> mutations_vector = neighbours_by_mutation(copy_sol, order_for_mutation, num_mutation, possible_timeslots);
             weight_for_exams = copy_sol->update_weights(n_exams);
             obj_new = copy_sol->objective_function(n_exams, total_number_students);
+            prob = distribution(generator);
+
             if (obj_new > max_penalty){max_penalty = obj_new;}
             else {
-                if()
+                if(obj_new <= current_penalty || prob > 0.5 ){
+                    obj_old=obj_new;
+                    current_sol=copy_sol;
+                    if(obj_new <= min_penalty) min_penalty = obj_new;
+                }
             }
         }
 
@@ -80,3 +90,11 @@ public:
         // sa normale con un running time uguale a running_time;
     };
 };
+
+double probability(double obj_new, double obj_old, double temperature)
+{
+    double e=2.71828183;
+    double p = pow(e, -((obj_new-obj_old)/temperature)); // p = exp^(-(F(x_new)-F(x_old))/T)
+
+    return p;
+}
