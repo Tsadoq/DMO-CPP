@@ -1,6 +1,8 @@
 #include "header.hpp"
 #include <string>
 #include <iostream>
+#include <numeric> 
+#include <random>  
 #include <algorithm>
 #include <vector>
 #include <iterator>
@@ -24,13 +26,16 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
     int size_random=(int) (perc*n_exams);
     std::vector<int> indexes= vector<int>(size_random);
     std::iota(indexes.begin(), indexes.end(), 0);
-    std::random_shuffle(indexes.begin(), indexes.end());
+    std::random_device rd;
+    std::shuffle(indexes.begin(), indexes.end(), rd);
+    //std::random_shuffle(indexes.begin(), indexes.end());
         
     for(int i=0;i<num_mutation+is_void & i<size_random;i++){
         // exam I'm trying to mutate
         available_timeslots=vector<int> ();
         exam_mutate=solution->all_exams[order_for_mutation[indexes[i]]];
         not_available_timeslots=exam_mutate->conflict_times;
+        not_available_timeslots.push_back(exam_mutate->timeslot);
         // sort vector because set_difference works with sorted arrays
         sort(not_available_timeslots.begin(), not_available_timeslots.end());
         // find available timeslot
