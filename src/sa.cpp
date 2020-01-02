@@ -13,6 +13,8 @@ void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int 
  double prob = 0;
  double prob_random = 0;
  double t = 20000;
+ double obj_new;
+  Solution* copy_sol;
 
  vector<double> weight_for_exams=solution->update_weights(n_exams);
  double obj_old = solution->objective_function(n_exams,total_number_students);
@@ -22,22 +24,20 @@ void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int 
  //riscrivo il file output -> da fare
  solution->write_output_file("./instances/"+current_instance, n_exams);
 
- while((int)((now.time-start.time))<timelimit){
-    ftime(&now);
-    vector<size_t> order_for_mutation=vector<size_t>(n_exams);
-    order_for_mutation=sort_indexes(weight_for_exams);
-    vector<int> possible_timeslots;
-    for (int i=0; i<n_timeslot;i++){
-        possible_timeslots.push_back(i+1);
-    }
 
-    Solution* copy_sol=solution->copy_solution(n_exams);
-    
+ vector<size_t> order_for_mutation=vector<size_t>(n_exams);
+ vector<int> possible_timeslots;
+for (int i=0; i<n_timeslot;i++){
+    possible_timeslots.push_back(i+1);
+}
+
+ while((int)((now.time-start.time))<timelimit){
+    ftime(&now);    
+    order_for_mutation=sort_indexes(weight_for_exams);
+    copy_sol=solution->copy_solution(n_exams);    
     vector<vector<int>>mutations_vector=neighbours_by_mutation(copy_sol, order_for_mutation, num_mutation, possible_timeslots);
-    weight_for_exams=copy_sol->update_weights(n_exams);
-    double obj_new;
-    obj_new=copy_sol->objective_function(n_exams,total_number_students);
-    
+    weight_for_exams=copy_sol->update_weights(n_exams);    
+    obj_new=copy_sol->objective_function(n_exams,total_number_students);    
     if(obj_new > obj_old){
        prob = probability(obj_new, obj_old, t);
        prob_random = rand()%2;
@@ -46,12 +46,14 @@ void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int 
        }else{
         cout<<"Objective Function: "<<obj_new<<endl;
         copy_sol->write_output_file("./instances/"+current_instance, n_exams);
+        obj_old=obj_new;
         solution=copy_sol; 
        }
 
     }else{
         cout<<"Objective Function: "<<obj_new<<endl;
         copy_sol->write_output_file("./instances/"+current_instance, n_exams);
+        obj_old=obj_new;
         solution=copy_sol; 
     }
 /*

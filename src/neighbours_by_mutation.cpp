@@ -10,8 +10,8 @@
 using namespace std;
 
 vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> order_for_mutation,int num_mutation,
-                    vector<int> possible_timeslots){
-
+                    vector<int> possible_timeslots/*,double perc, int n_exams*/){
+                        
     vector<vector<int>> mutations_vector; 
     vector<int> single_mutation=vector<int> (2);                                       
     Exam* exam_mutate;
@@ -21,6 +21,7 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
     int k;
     int new_timeslot;
     int randomIndex;
+    //int size_random=(int)perc*n_exams;
     for(int i=0;i<num_mutation+is_void;i++){
         // exam I'm trying to mutate
         available_timeslots=vector<int> ();
