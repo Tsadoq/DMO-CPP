@@ -45,6 +45,7 @@ public:
         double obj_old = initial_sol->objective_function(n_exams, total_number_students);
         double max_penalty = obj_old;
         double min_penalty = obj_old;
+        double current_penalty = obj_old;
         vector<size_t> order_for_mutation = vector<size_t>(n_exams);
         vector<int> possible_timeslots;
         Solution* copy_sol;
@@ -52,16 +53,16 @@ public:
 
         while ((int)((now.time - start.time)) < warmup_time)
         {
+            
             ftime(&now);
             order_for_mutation = sort_indexes(weight_for_exams);
             copy_sol = initial_sol->copy_solution(n_exams);
             vector<vector<int>> mutations_vector = neighbours_by_mutation(copy_sol, order_for_mutation, num_mutation, possible_timeslots);
-            weight_for_exams = copy_sol->update_weights(n_exams);s
+            weight_for_exams = copy_sol->update_weights(n_exams);
             obj_new = copy_sol->objective_function(n_exams, total_number_students);
-            if (obj_new > max_penalty)
-            {
-                max_penalty = obj_
-            
+            if (obj_new > max_penalty){max_penalty = obj_new;}
+            else {
+                if()
             }
         }
 
@@ -70,6 +71,7 @@ public:
         // - generare nuove soluzioni (senza farci problemi sugli esami con priorità più o meno alta)
         // - - se la soluzione è migliorante la teniamo e
         // - - (anche se non è migliorante) salviamo la penalty se maggiore di max_penalty o minore di min_penalty
+        // - - sempre se non è migliorante la teniamo con una probabilità di 0.5;
         // - finite le iterazioni usiamo max e min penalty per calcolare il delta e delta per calcolare la temperatura
 
         return 0;
