@@ -67,8 +67,10 @@ std::vector<double> Solution::update_weights(int n_exams){
             // save timeslot of conflicting exams
             neighbour_exam_timeslot=all_exams[i]->conflict_times[j];
             neighbour_exam_weight=all_exams[i]->conflict_weights[j];
-            if (abs(neighbour_exam_timeslot-current_exam_timeslot)<=5){
+            if (abs(neighbour_exam_timeslot-current_exam_timeslot)<=5 & abs(neighbour_exam_timeslot-current_exam_timeslot)>=1){
                 weight_for_exam+=pow(2,5-abs(neighbour_exam_timeslot-current_exam_timeslot))*neighbour_exam_weight;
+            }else if(abs(neighbour_exam_timeslot-current_exam_timeslot)==0){
+                weight_for_exam+=pow(2,8)*neighbour_exam_weight;
             }
         }
         all_exams[i]->weight_in_obj_fun=weight_for_exam;

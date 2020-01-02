@@ -44,8 +44,8 @@ double perc=0.4;
     order_for_mutation=sort_indexes(weight_for_exams);
     copy_sol=solution->copy_solution(n_exams);    
     vector<vector<int>>mutations_vector=neighbours_by_mutation(copy_sol, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
-    /*int feasible=copy_sol->check_feasibility;
-    cout<<"Feasibility: "<<feasible;*/
+   /* int feasible=copy_sol->check_feasibility;
+    cout<<"Feasibility: "<<feasible<<endl;*/
     weight_for_exams=copy_sol->update_weights(n_exams);    
     obj_new=copy_sol->objective_function(n_exams,total_number_students);    
     if(obj_new > obj_old){
