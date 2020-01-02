@@ -15,7 +15,8 @@ void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int 
  double prob_random = 0;
  double t = 20000;
  double obj_new;
-Solution* copy_sol;
+ vector<int> old_timeslot_solution;
+
 
   std::default_random_engine generator;
   std::uniform_real_distribution<double> distribution(0.0,1.0);
@@ -42,29 +43,29 @@ double perc=0.4;
  while((int)((now.time-start.time))<timelimit){
     ftime(&now);    
     order_for_mutation=sort_indexes(weight_for_exams);
-    copy_sol=solution->copy_solution(n_exams);    
-    vector<vector<int>>mutations_vector=neighbours_by_mutation(copy_sol, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
-   /* int feasible=copy_sol->check_feasibility;
-    cout<<"Feasibility: "<<feasible<<endl;*/
-    weight_for_exams=copy_sol->update_weights(n_exams);    
-    obj_new=copy_sol->objective_function(n_exams,total_number_students);    
+    old_timeslot_solution=solution->timeslot_per_exams;  
+    vector<vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
+    weight_for_exams=solution->update_weights(n_exams);    
+    obj_new=solution->objective_function(n_exams,total_number_students);    
     if(obj_new > obj_old){
        prob = probability(obj_new, obj_old, t);
        prob_random = distribution(generator);
         if (prob_random > prob){
-           //non aggiorno il valore della funzione obiettivo
+            //rifiuto, quindi risistemo la soluzione
+            solution->timeslot_per_exams=old_timeslot_solution;
+            solution->update_timeslots(n_exams);
+            weight_for_exams=solution->update_weights(n_exams);
+           
         }else{
         cout<<"Objective Function: "<<obj_new<<endl;
-        copy_sol->write_output_file("./instances/"+current_instance, n_exams);
+        solution->write_output_file("./instances/"+current_instance, n_exams);
         obj_old=obj_new;
-        solution=copy_sol; 
        }
 
     }else{
         cout<<"Objective Function: "<<obj_new<<endl;
-        copy_sol->write_output_file("./instances/"+current_instance, n_exams);
+        solution->write_output_file("./instances/"+current_instance, n_exams);
         obj_old=obj_new;
-        solution=copy_sol; 
     }
 
     t = cooling(t);
