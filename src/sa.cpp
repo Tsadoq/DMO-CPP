@@ -41,7 +41,7 @@ int num_mutation=5;
 double perc=0.5;
 
 double best_sol = obj_old;
-TabuSearch* tabu;
+//TabuSearch* tabu;
 
 while((int)((now.time-start.time))<timelimit){
     ftime(&now);    
@@ -53,9 +53,10 @@ while((int)((now.time-start.time))<timelimit){
     weight_for_exams=solution->update_weights(n_exams);    
     obj_new=solution->objective_function(n_exams,total_number_students);    
 
-    tabu.tabuControl(solution,  n_exams, n_timeslot);
-    weight_for_exams=solution->update_weights(n_exams);    
-    obj_new=solution->objective_function(n_exams,total_number_students);    
+    //TABU SEARCH
+    //tabu.tabuControl(solution,  n_exams, n_timeslot);
+    //weight_for_exams=solution->update_weights(n_exams);    
+    //obj_new=solution->objective_function(n_exams,total_number_students);    
 
     if(obj_new > obj_old){
        prob = probability(obj_new, obj_old, t);
