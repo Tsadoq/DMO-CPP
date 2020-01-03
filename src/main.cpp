@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
     weight_for_exams=initial_solution->update_weights(n_exams);    
     double obj_new=initial_solution->objective_function(n_exams,total_number_students); 
     cout<<"new initial sol: "<<obj_new<<endl;
-    
+    // prova push Chiara
     sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
 
     /*vector<int> x;
