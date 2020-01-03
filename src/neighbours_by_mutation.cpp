@@ -5,6 +5,7 @@
 #include <random>   
 #include <algorithm> 
 #include <vector> 
+#include <chrono>
 #include <iterator> 
 #include "Exam.hpp" 
 #include "Solution.hpp" 
@@ -26,14 +27,15 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
     int size_random=(int) (perc*n_exams); 
     std::vector<int> indexes= vector<int>(size_random); 
     std::iota(indexes.begin(), indexes.end(), 0); 
-    std::random_device rd; 
-    std::shuffle(indexes.begin(), indexes.end(), rd); 
+    // obtain a time-based seed:
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
+    std::shuffle(indexes.begin(), indexes.end(),std::default_random_engine(seed) ); 
     //std::random_shuffle(indexes.begin(), indexes.end()); 
          
     for(int i=0;i<num_mutation+is_void && i<size_random;i++){ 
         // exam I'm trying to mutate 
         available_timeslots=vector<int> (); 
-        exam_mutate=solution->all_exams[order_for_mutation[indexes[i]]]; 
+        exam_mutate=solution->all_exams[order_for_mutation[indexes[i]]];
         not_available_timeslots=exam_mutate->conflict_times; 
         not_available_timeslots.push_back(exam_mutate->timeslot); 
         // sort vector because set_difference works with sorted arrays 
@@ -45,9 +47,6 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
         if(available_timeslots.size()==0){ 
             is_void++; 
         }else{ 
-            for(int i=0; i<available_timeslots.size(); i++){
-                cout<<"available timeslot"<<available_timeslots[i]<<"\n"<<endl;
-            }
             randomIndex = rand() % available_timeslots.size(); 
             new_timeslot=available_timeslots[randomIndex]; 
             // update timeslot in exam I want to mutate 
@@ -65,8 +64,7 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
             single_mutation[0]=exam_mutate->id_exam; 
             // insert time slot in which I want to schedule exam 
             single_mutation[1]=new_timeslot; 
-            solution->timeslot_per_exams[exam_mutate->id_exam-1]=new_timeslot;  
-            cout<<single_mutation[0]<<" "<<single_mutation[1]<<endl;           
+            solution->timeslot_per_exams[exam_mutate->id_exam-1]=new_timeslot;       
             mutations_vector.push_back(single_mutation); 
         } 
     } 
