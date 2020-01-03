@@ -11,8 +11,8 @@ using namespace std;
 class TabuSearch{
 public:
     int listSize;
-    vector<Solution*> tabuSol;
+    vector<vector<int>> tabuSol;
     
-    Solution* tabuControl(Solution* actual, Solution* candidateNewSol);
+    void tabuControl(Solution* candidateNewSol, int n_exams,  int n_timeslot);
     int tabuCheck(Solution* s);
 };

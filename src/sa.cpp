@@ -53,11 +53,10 @@ while((int)((now.time-start.time))<timelimit){
     weight_for_exams=solution->update_weights(n_exams);    
     obj_new=solution->objective_function(n_exams,total_number_students);    
 
-   /* DA MODIFICAREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    copy_sol2 = tabu.tabuControl(solution, copy_sol);
-    weight_for_exams=copy_sol2->update_weights(n_exams);    
-    obj_new=copy_sol2->objective_function(n_exams,total_number_students);    
-*/
+    tabu.tabuControl(solution,  n_exams, n_timeslot);
+    weight_for_exams=solution->update_weights(n_exams);    
+    obj_new=solution->objective_function(n_exams,total_number_students);    
+
     if(obj_new > obj_old){
        prob = probability(obj_new, obj_old, t);
        prob_random = distribution(generator);
