@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
     vector<vector<int>> conflict_matrix;
     int total_number_students=0;
     conflict_matrix=read_file_stu(writable_instance_stu,n_exams,total_number_students);
-        
+    cout<<total_number_students<<endl;
     Solution *initial_solution = new Solution();
     
     initial_solution->solution_update(conflict_matrix, n_exams);
@@ -71,6 +71,7 @@ int main(int argc, char **argv) {
     // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY  
     initial_solution->update_timeslots(n_exams);
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
+    cout<<flag;
 /*
     //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
     initial_solution->update_timeslots(n_exams);
@@ -87,7 +88,7 @@ int main(int argc, char **argv) {
     cout<<"new initial sol: "<<obj_new<<endl;
   */  
     // prova push Chiara
-    sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
+    //sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
 
     /*vector<int> x;
     x.push_back(10);

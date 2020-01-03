@@ -12,7 +12,9 @@ int read_file_exm(std::string file_name){
     {
         while ( getline (myfile,line) )
         {
-            n_exams++;
+            if (line.compare("")!=0){
+                n_exams++;
+            }
         }
         myfile.close();
     }

@@ -9,8 +9,6 @@
 using namespace std;
 
 vector<vector<int>> read_file_stu(char* file_name,int n_exams, int &total_number_students){
-    //vector<string> student_ids; 
-    //int conflict_matrix;
     vector<vector<int>> conflict_matrix = vector<vector<int>> (n_exams,vector<int>(n_exams, 0));
     vector <int> exam_ids; 
     vector <int> exams_for_student;
@@ -20,10 +18,8 @@ vector<vector<int>> read_file_stu(char* file_name,int n_exams, int &total_number
     int exam_id;
 
     fp = fopen(file_name, "r");
-    
     string current_student="";
     int count_exams_for_student=0;
-    // ASK TADEI IF IN ALL INSTANCES ROWS ARE SORTED BY STUDENTS ID
     //reading of .exm to know how many exams there are
     while(fscanf(fp, "%s\t%d", stud_id, &exam_id)!=EOF){
         stud_id_string=stud_id;
@@ -38,6 +34,7 @@ vector<vector<int>> read_file_stu(char* file_name,int n_exams, int &total_number
         count_exams_for_student++;
     }
     fclose(fp);
+    
     int line_student=0;
     for (int i=0; i<exams_for_student.size(); i++){
         for(int j=0; j<exams_for_student[i]-1;j++){
