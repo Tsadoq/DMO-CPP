@@ -3,6 +3,8 @@
 #include "header.hpp"
 #include "Exam.cpp"
 #include "Solution.cpp"
+#include "TabuSearch.hpp"
+#include "TabuSearch.cpp"
 #include "read_file_slo.cpp"
 #include "read_file_exm.cpp"
 #include "read_file_stu.cpp"
@@ -76,6 +78,21 @@ int main(int argc, char **argv) {
     
     
     sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
+
+    vector<int> x;
+    x.push_back(10);
+    x.push_back(20);
+
+    vector<int> y;
+    y.push_back(10);
+    y.push_back(20);
+
+    if (x == y){
+        cout<<"Hai sbagliato"<<endl;
+    } else{
+        cout<<"Hai fatto bene"<<endl;
+    }
+
 
     /*
     // calculate total weight in objective function for each exam
