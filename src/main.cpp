@@ -69,13 +69,10 @@ int main(int argc, char **argv) {
     graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
     // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
     // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY  
-    
-
-    // inizialize attributes timeslot and conflict time for each exam
     initial_solution->update_timeslots(n_exams);
-
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    // inizialize attributes timeslot and conflict time for each exam
+/*
+    //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
     initial_solution->update_timeslots(n_exams);
     vector<double> weight_for_exams=initial_solution->update_weights(n_exams);
     vector<int> possible_timeslots;
@@ -88,7 +85,7 @@ int main(int argc, char **argv) {
     weight_for_exams=initial_solution->update_weights(n_exams);    
     double obj_new=initial_solution->objective_function(n_exams,total_number_students); 
     cout<<"new initial sol: "<<obj_new<<endl;
-    
+  */  
     sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
 
     /*vector<int> x;

@@ -37,15 +37,15 @@ for (int i=0; i<n_timeslot;i++){
     possible_timeslots.push_back(i+1);
 }
 //PER ORA SONO FISSE -> MODIFICARE IN SA
-int num_mutation=5;
-double perc=0.5;
+int num_mutation=1;
+double perc=1;
 
 double best_sol = obj_old;
 //TabuSearch* tabu;
 
 while((int)((now.time-start.time))<timelimit){
     ftime(&now);    
-    TabuSearch tabu;
+    //TabuSearch tabu;
     order_for_mutation=sort_indexes(weight_for_exams);
 
     old_timeslot_solution=solution->timeslot_per_exams;  
@@ -86,9 +86,9 @@ while((int)((now.time-start.time))<timelimit){
     /*if(t<0.0001){ 
         t=200000; 
     }*/
-    if (obj_new < best_sol){
+    /*if (obj_new < best_sol){
         best_sol = obj_new;
-    }
+    }*/
 
  }
 }
