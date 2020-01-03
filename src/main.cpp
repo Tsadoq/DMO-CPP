@@ -71,6 +71,7 @@ int main(int argc, char **argv) {
     // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY  
     initial_solution->update_timeslots(n_exams);
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
+    cout<<"Il flag è:"<<flag<<endl;
 /*
     //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
     initial_solution->update_timeslots(n_exams);

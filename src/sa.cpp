@@ -61,6 +61,9 @@ ftime(&now);
         num_mutation = num_mutation_changer(num_mutation, count_iter, perc, improvement,best_improvement,first,n_exams);
         first=false;
         vector<vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
+        cout<<"Trying to do swapping"<<endl;
+        neighbours_by_swapping(solution, n_timeslot);
+        cout<<"Swapping done"<<endl;
         weight_for_exams=solution->update_weights(n_exams);    
         obj_new=solution->objective_function(n_exams,total_number_students);    
 
@@ -112,7 +115,7 @@ ftime(&now);
             count_iter=0;
         }
         //botta di calore per togliermi dal local minimum
-        if(t<t0*0.001 || (best_improvement-improvement)/best_improvement<0.1){          
+        if(t<t0*0.001 ){ // || (best_improvement-improvement)/best_improvement<0.1         
             temperature_shock(t0);
             cout<<"shock"<<endl;
         }

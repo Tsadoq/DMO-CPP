@@ -51,8 +51,7 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
             new_timeslot=available_timeslots[randomIndex]; 
             // update timeslot in exam I want to mutate 
             exam_mutate->timeslot=new_timeslot; 
-             
-            // update timeslot in all conflicting exam with respect to exam_mutate 
+            // update timeslot in all exam in conflict with respect to exam_mutate 
             for (auto j : exam_mutate->conflict_exams){ 
                 k=0; 
                 while(solution->all_exams[j-1]->conflict_exams[k] != exam_mutate->id_exam){ 
@@ -69,4 +68,48 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
         } 
     } 
     return mutations_vector; 
+}
+
+
+void neighbours_by_swapping(Solution* solution, int totTimeslots){
+    vector<int> exams = solution->timeslot_per_exams;
+    int t1 = rand() % totTimeslots;
+    int t2 = rand() % totTimeslots;
+    while(t2==t1)
+        t2 = rand() % totTimeslots;
+    vector<int> e1;
+    vector<int> e2;
+    for (int i = 0; i<exams.size(); i++){
+        if (exams[i] == t1){
+            e1.push_back(i);
+        }
+        if (exams[i] == t2){
+            e2.push_back(i);
+        }
+    }
+
+    vector<int> toSwappedIn1;
+    vector<int> toSwappedIn2;
+    for (int i = 0; i< e1.size(); i++){
+        if ( std::find(solution->all_exams[e1[i]]->conflict_times.begin(), 
+                solution->all_exams[e1[i]]->conflict_times.end(), t2) != solution->all_exams[e1[i]]->conflict_times.end()){
+                    toSwappedIn2.push_back(e1[i]);
+        }
+    }
+
+    for (int i = 0; i< e2.size(); i++){
+        if ( std::find(solution->all_exams[e2[i]]->conflict_times.begin(), 
+                solution->all_exams[e2[i]]->conflict_times.end(), t1) != solution->all_exams[e2[i]]->conflict_times.end()){
+                    toSwappedIn1.push_back(e2[i]);
+        }
+    }
+
+    for (int i = 0; i < toSwappedIn1.size(); i++){
+        solution->all_exams[toSwappedIn1[i]]->timeslot = t1;
+    }
+    for (int i = 0; i < toSwappedIn2.size(); i++){
+        solution->all_exams[toSwappedIn2[i]]->timeslot = t2;
+    }
+
+
 }
