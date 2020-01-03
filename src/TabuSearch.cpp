@@ -19,44 +19,48 @@ TabuSearch::~TabuSearch()
 {
 }*/
 
-Solution* TabuSearch::tabuControl(Solution* actual, Solution* candidateNewSol){
+void TabuSearch::tabuControl(Solution* candidateNewSol, int n_exams,  int n_timeslot){
     int problem = tabuCheck(candidateNewSol);
     if ( problem== 0){
-        if (tabuSol.size()<10){
-        } else{
+        if (tabuSol.size()>=10){
             tabuSol.erase(tabuSol.begin());    
         }
-        tabuSol.push_back(candidateNewSol);
-        return candidateNewSol;
+        tabuSol.push_back(candidateNewSol->timeslot_per_exams);
+       
     }
     else{
-        cout<<"Ho beccato un fottuto ciclo, ora ci esco"<<endl;
-        int n_exams = actual->all_exams.size();
-        Solution* copy_sol=actual->copy_solution(n_exams); 
+        
+        vector<double> weight_for_exams;
         vector<size_t> order_for_mutation=vector<size_t>(n_exams);
+        weight_for_exams=candidateNewSol->update_weights(n_exams);
+        order_for_mutation=sort_indexes(weight_for_exams);
+        
         vector<int> possible_timeslots;
-        for (int i=0; i<13;i++){ // to be adjusted, it's i <n_timeslot
+        for (int i=0; i<n_timeslot;i++){
             possible_timeslots.push_back(i+1);
         }
         int num_mutation=20;
         double perc=1;   
+     
         while (problem != 0){
-            vector<vector<int>>mutations_vector=neighbours_by_mutation(copy_sol, order_for_mutation,
-                                                                 num_mutation, possible_timeslots,1,actual-> all_exams.size());
-            problem = tabuCheck(copy_sol);
+            vector<vector<int>>mutations_vector=neighbours_by_mutation(candidateNewSol, order_for_mutation,
+                                                                 num_mutation, possible_timeslots,1,n_exams);
+            problem = tabuCheck(candidateNewSol);
+            weight_for_exams=candidateNewSol->update_weights(n_exams);
+            order_for_mutation=sort_indexes(weight_for_exams);
         }
-        return copy_sol;
+       
     }
 }
 
-int TabuSearch::tabuCheck(Solution* s){
+int TabuSearch::tabuCheck(Solution* candidateNewSol){
     for (int i = 0; i< tabuSol.size(); i++){
-        if (s->timeslot_per_exams == tabuSol[i]->timeslot_per_exams){
+        if (candidateNewSol->timeslot_per_exams == tabuSol[i]){
             return i+1; // così non viene confuso lo zero
         }
     }
     if (tabuSol.size()< 10){
-        tabuSol.push_back(s);
+        tabuSol.push_back(candidateNewSol->timeslot_per_exams);
     }
     return 0;
 }

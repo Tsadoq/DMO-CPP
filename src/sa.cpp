@@ -1,6 +1,6 @@
 #include "header.hpp"
 #include "TabuSearch.hpp"
-//#include "TabuSearch.cpp"
+#include "TabuSearch.cpp"
 #include <time.h>
 #include <sys/timeb.h>
 #include <cmath>
@@ -27,7 +27,7 @@ std::uniform_real_distribution<double> distribution(0.0,1.0);
 
 vector<double> weight_for_exams=solution->update_weights(n_exams);
 double obj_old = solution->objective_function(n_exams,total_number_students);
-//cout<<"Initial Objective Function: "<<obj_old<<endl;
+cout<<"Initial Objective Function: "<<obj_old<<endl;
 
 //riscrivo il file output -> da fare
 solution->write_output_file("./instances/"+current_instance, n_exams);
@@ -69,12 +69,12 @@ while((int)((now.time-start.time))<timelimit){
            
         }else{
         solution->write_output_file("./instances/"+current_instance, n_exams);
-        //cout<<"Objective Function: "<<obj_new<<endl;
+        cout<<"Objective Function: "<<obj_new<<endl;
         obj_old=obj_new;
        }
 
     }else{
-        //cout<<"Objective Function: "<<obj_new<<endl;
+        cout<<"Objective Function: "<<obj_new<<endl;
         solution->write_output_file("./instances/"+current_instance, n_exams);
         obj_old=obj_new;
 
