@@ -72,38 +72,12 @@ int main(int argc, char **argv) {
     initial_solution->update_timeslots(n_exams);
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
     cout<<"Il flag è:"<<flag<<endl;
-/*
-    //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
-    initial_solution->update_timeslots(n_exams);
-    vector<double> weight_for_exams=initial_solution->update_weights(n_exams);
-    vector<int> possible_timeslots;
-    for (int i=0; i<n_timeslot;i++){
-        possible_timeslots.push_back(i+1);
+
+    /*for (int i = 0; i < 200; i++){
+        cout<<"Next random: "<<rand() % 10<<endl;
     }
-    vector<size_t>order_for_mutation=sort_indexes(weight_for_exams);
-    //int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    vector<vector<int>>mutations_vector=neighbours_by_mutation(initial_solution, order_for_mutation, (int)(2*n_exams/3), possible_timeslots,1.0,n_exams);
-    weight_for_exams=initial_solution->update_weights(n_exams);    
-    double obj_new=initial_solution->objective_function(n_exams,total_number_students); 
-    cout<<"new initial sol: "<<obj_new<<endl;
-  */  
-    // prova push Chiara
+    */
     sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
-
-    /*vector<int> x;
-    x.push_back(10);
-    x.push_back(20);
-
-    vector<int> y;
-    y.push_back(10);
-    y.push_back(20);
-
-    if (x == y){
-        cout<<"Hai sbagliato"<<endl;
-    } else{
-        cout<<"Hai fatto bene"<<endl;
-    }*/
-
 
     /*
     // calculate total weight in objective function for each exam

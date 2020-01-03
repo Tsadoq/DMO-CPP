@@ -73,10 +73,11 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
 
 void neighbours_by_swapping(Solution* solution, int totTimeslots){
     vector<int> exams = solution->timeslot_per_exams;
-    int t1 = rand() % totTimeslots;
-    int t2 = rand() % totTimeslots;
+    int t1 = 1 + rand() % totTimeslots;
+    int t2 = 1 + rand() % totTimeslots;
     while(t2==t1)
         t2 = rand() % totTimeslots;
+    cout<<"timeslot to be swapped: "<<t1<<" and: "<<t2<<endl;
     vector<int> e1;
     vector<int> e2;
     for (int i = 0; i<exams.size(); i++){
@@ -110,6 +111,8 @@ void neighbours_by_swapping(Solution* solution, int totTimeslots){
     for (int i = 0; i < toSwappedIn2.size(); i++){
         solution->all_exams[toSwappedIn2[i]]->timeslot = t2;
     }
-
+    int flag = solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
+    cout<<"The swapped solution is feasible? "<<flag<<endl;
+    return;
 
 }

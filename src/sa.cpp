@@ -61,9 +61,42 @@ ftime(&now);
         num_mutation = num_mutation_changer(num_mutation, count_iter, perc, improvement,best_improvement,first,n_exams);
         first=false;
         vector<vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
+        weight_for_exams=solution->update_weights(n_exams);    
+        obj_new=solution->objective_function(n_exams,total_number_students); 
+        cout<<"Obj function pre swapping: "<<obj_new<<endl;
         cout<<"Trying to do swapping"<<endl;
         neighbours_by_swapping(solution, n_timeslot);
-        cout<<"Swapping done"<<endl;
+        weight_for_exams=solution->update_weights(n_exams);    
+        obj_new=solution->objective_function(n_exams,total_number_students); 
+        cout<<"Swapping done with new obj"<<obj_new<<endl;
+
+        mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
+        weight_for_exams=solution->update_weights(n_exams);    
+        obj_new=solution->objective_function(n_exams,total_number_students);
+        cout<<"Trying to do swapping after mutation, new obj pre swap: "<<obj_new<<endl;
+        neighbours_by_swapping(solution, n_timeslot);
+        weight_for_exams=solution->update_weights(n_exams);    
+        obj_new=solution->objective_function(n_exams,total_number_students); 
+        cout<<"Swapping done with new obj"<<obj_new<<endl;
+
+        mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
+        weight_for_exams=solution->update_weights(n_exams);    
+        obj_new=solution->objective_function(n_exams,total_number_students);
+        cout<<"Trying to do swapping after mutation, new obj pre swap: "<<obj_new<<endl;
+        neighbours_by_swapping(solution, n_timeslot);
+        weight_for_exams=solution->update_weights(n_exams);    
+        obj_new=solution->objective_function(n_exams,total_number_students); 
+        cout<<"Swapping done with new obj"<<obj_new<<endl;
+
+        mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
+        weight_for_exams=solution->update_weights(n_exams);    
+        obj_new=solution->objective_function(n_exams,total_number_students);
+        cout<<"Trying to do swapping after mutation, new obj pre swap: "<<obj_new<<endl;
+        neighbours_by_swapping(solution, n_timeslot);
+        weight_for_exams=solution->update_weights(n_exams);    
+        obj_new=solution->objective_function(n_exams,total_number_students); 
+        cout<<"Swapping done with new obj"<<obj_new<<endl;
+
         weight_for_exams=solution->update_weights(n_exams);    
         obj_new=solution->objective_function(n_exams,total_number_students);    
 
@@ -71,6 +104,7 @@ ftime(&now);
         //tabu.tabuControl(solution,  n_exams, n_timeslot);
         //weight_for_exams=solution->update_weights(n_exams);    
         //obj_new=solution->objective_function(n_exams,total_number_students);    
+        cout<<"Arrivo qui?"<<endl;
 
         if(obj_new > obj_old){
         //prob = probability(obj_new, obj_old, t);
@@ -120,6 +154,8 @@ ftime(&now);
             cout<<"shock"<<endl;
         }
     ftime(&now); 
+    cout<<"E qui?"<<endl;
+
     }
     cout<<"Best sol "<<best_sol<<endl;
 }
