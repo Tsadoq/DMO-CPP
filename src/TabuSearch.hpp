@@ -14,4 +14,5 @@ public:
 
     TabuSearch(int dimension, int max_iter);
     Solution* tabu_search(Solution *sol, int n_exams);
+    int conflicts(vector<int> solution);
 };

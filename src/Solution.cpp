@@ -53,6 +53,11 @@ void Solution::update_timeslots(int n_exams){
     }
 }
 
+void Solution::new_solution(vector<int> new_timeslots, int n_exams){
+    timeslot_per_exams = new_timeslots;
+    update_timeslots(n_exams);
+}
+
 std::vector<double> Solution::update_weights(int n_exams){
     vector<double> weight_for_exams;
     // calculate total weight in objective function for each exam
@@ -115,4 +120,9 @@ void Solution::write_output_file(string current_instance, int n_exams){
         output_file << i+1 <<"\t"<< timeslot_per_exams[i]<<"\n"; 
     }
     output_file.close();
+}
+
+vector<vector<int>> Solution::getNeighbourhood(int size){
+    vector<vector<int>> tmp;
+    return tmp;
 }

@@ -17,4 +17,6 @@ class Solution{
     double objective_function(int n_exams, int total_number_student);
     Solution* copy_solution(int n_exams);
     void write_output_file(string current_instance, int n_exams);
+    vector<vector<int>> getNeighbourhood(int size);
+    void new_solution(vector<int> new_timeslots, int n_exams);
 };
