@@ -1,6 +1,5 @@
 #include "header.hpp"
 #include "TabuSearch.hpp"
-#include "TabuSearch.cpp"
 #include <time.h>
 #include <sys/timeb.h>
 #include <cmath>

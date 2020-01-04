@@ -1,66 +1,72 @@
-#pragma once
 #include "TabuSearch.hpp"
-#include <vector>
 #include <iostream>
-#include "Exam.hpp"
-#include "header.hpp"
-//#include "sa.cpp"
-#include "Solution.hpp"
-#include "Solution.cpp"
+#include <vector>
+#include <algorithm>
+#include "Solution.hpp" 
 
 
-using namespace std;
-
-/*TabuSearch::TabuSearch()
+TabuSearch::TabuSearch(int dimension, int max_iter):
+dim(0), maxIter(0)
 {
+    dim = dimension;
+    maxIter = max_iter;
 }
 
-TabuSearch::~TabuSearch()
+Solution* TabuSearch::tabu_search(Solution *sol, int n_exams)
 {
-}*/
+    int i=0;
+    Solution *best_sol = sol;
+    Solution *best_candidate = sol;
+    vector<Solution> sol_neighbourhood;
+    tabuList.push_back(best_sol->timeslot_per_exams);
 
-void TabuSearch::tabuControl(Solution* candidateNewSol, int n_exams,  int n_timeslot){
-    int problem = tabuCheck(candidateNewSol);
-    if ( problem== 0){
-        if (tabuSol.size()>=10){
-            tabuSol.erase(tabuSol.begin());    
+    while(i < maxIter){
+        //sol_neighbourhood = getNeighbors(best_candidate); //check how to retrieve neighbourhood
+        // for(auto &candidate : sol_neighbourhood){
+        //     if((std::find(sol_neighbourhood.begin(), sol_neighbourhood.end(), candidate) == sol_neighbourhood.end()) &&
+        //      (
+        //          //obj_funct(best_candidate) < obj_funct(best_sol))
+        //          ){
+        //          best_candidate = &(candidate);
+        //      }
+        // }
+
+        // if (obj_funct(best_candidate) < obj_funct(best_sol)){
+        //     best_sol = best_candidate;
+        // }
+
+        tabuList.push_back(best_candidate->timeslot_per_exams); // add best sol in neighbourhood to tabu list
+        // when tabu list is full, delete first element
+        if(tabuList.size() > dim){
+            tabuList.erase(tabuList.begin());
         }
-        tabuSol.push_back(candidateNewSol->timeslot_per_exams);
-       
+
+        i++;
     }
-    else{
-        
-        vector<double> weight_for_exams;
-        vector<size_t> order_for_mutation=vector<size_t>(n_exams);
-        weight_for_exams=candidateNewSol->update_weights(n_exams);
-        order_for_mutation=sort_indexes(weight_for_exams);
-        
-        vector<int> possible_timeslots;
-        for (int i=0; i<n_timeslot;i++){
-            possible_timeslots.push_back(i+1);
-        }
-        int num_mutation=20;
-        double perc=1;   
-     
-        while (problem != 0){
-            vector<vector<int>>mutations_vector=neighbours_by_mutation(candidateNewSol, order_for_mutation,
-                                                                 num_mutation, possible_timeslots,1,n_exams);
-            problem = tabuCheck(candidateNewSol);
-            weight_for_exams=candidateNewSol->update_weights(n_exams);
-            order_for_mutation=sort_indexes(weight_for_exams);
-        }
-       
-    }
+
+    return best_sol;
 }
 
-int TabuSearch::tabuCheck(Solution* candidateNewSol){
-    for (int i = 0; i< tabuSol.size(); i++){
-        if (candidateNewSol->timeslot_per_exams == tabuSol[i]){
-            return i+1; // così non viene confuso lo zero
-        }
-    }
-    if (tabuSol.size()< 10){
-        tabuSol.push_back(candidateNewSol->timeslot_per_exams);
-    }
-    return 0;
-}
+
+// PSEUDOCODE
+// best_sol = s0;
+// best_candidate = s0;
+// tabuList = [];
+// tabuList.add(s0);
+// while (i < max_iter){
+//     sol_neighborhood = getNeighbors(best_candidate);
+//     for (candidate in sol_neighborhood){
+//         if ( (not tabuList.contains(sCandidate)) and (obj_funct(sCandidate) < obj_funct(bestCandidate)) )
+//             bestCandidate ← sCandidate;
+//     }   
+    
+//     if (obj_funct(best_candidate) < obj_funct(best_sol))
+//         best_sol = best_candidate;
+
+//     tabuList.add(bestCandidate);
+//     if (tabuList.size > maxTabuSize)
+//         tabuList.removeFirst();
+    
+// }
+
+// return best_sol;
