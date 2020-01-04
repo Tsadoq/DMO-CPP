@@ -40,8 +40,8 @@ void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int 
         possible_timeslots.push_back(i+1);
     }
 
-    int num_mutation;
-    double perc;
+    int num_mutation=3;
+    double perc=0.2;
     int count_iter=0;
     // improvement current solution wrt worst solution
     double improvement=0;
@@ -62,7 +62,7 @@ void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int 
         // save old solution
         old_timeslot_solution=solution->timeslot_per_exams; 
         // find num_mutation and perc wrt the improvement in the current solution
-        num_mutation = num_mutation_changer(num_mutation, count_iter, perc, improvement,best_improvement,first,n_exams);
+        //num_mutation = num_mutation_changer(num_mutation, count_iter, perc, improvement,best_improvement,first,n_exams);
         first=false;
         // create a neighbour
         vector<vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
@@ -118,11 +118,10 @@ void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int 
         //botta di calore per togliermi dal local minimum
         if(t<t0*0.001 ){ // || (best_improvement-improvement)/best_improvement<0.1         
             t=temperature_shock(t0);
-        }
-             
-    cout<<"Best sol "<<best_sol<<endl; 
+        } 
     ftime(&now); 
-    }          
+    }                
+    cout<<"Best sol "<<best_sol<<endl;      
 }
 
 /*double probability(double obj_new, double obj_old, double temperature)
@@ -150,7 +149,7 @@ double cooling(double temperature)
     return  temperature;
 }
 
-// passare per riferimento perc, modificare num_mutation
+// FUNZIONE CHE DA' PROBLEMI: per ora mutazioni e percentuale fisse
 int num_mutation_changer(int num_mutation_actual, int iteration, double &perc, double improvement,double best_improvement,bool first,int n_exams){
     int num_mutation_now;
     int available_num_mutation;
@@ -160,7 +159,7 @@ int num_mutation_changer(int num_mutation_actual, int iteration, double &perc, d
     }else{    
         perc = (best_improvement-improvement)/best_improvement;           
         available_num_mutation=ceil(perc*n_exams*0.05);
-        num_mutation_now = rand()%available_num_mutation+1;
+        num_mutation_now = rand() % available_num_mutation+1;
         //cout<< num_mutation_now<<endl;
         /*cout<< num_mutation_actual<<endl;*/
     }

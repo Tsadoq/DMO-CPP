@@ -78,7 +78,7 @@ void neighbours_by_swapping(Solution* solution, int totTimeslots){
     int t2 = 1 + rand() % totTimeslots;
     while(t2==t1)
         t2 = 1 + rand() % totTimeslots;
-    cout<<"timeslot to be swapped: "<<t1<<" and: "<<t2<<endl;
+    //cout<<"timeslot to be swapped: "<<t1<<" and: "<<t2<<endl;
     // vettori di indici di esami che stanno nello stesso timeslot rispettivamente in t1 e in t2
     vector<int> e1;
     vector<int> e2;
@@ -122,7 +122,7 @@ void neighbours_by_swapping(Solution* solution, int totTimeslots){
     }
     solution->update_timeslots(solution->all_exams.size());
     int flag = solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
-    cout<<"The swapped solution is feasible? "<<flag<<endl;    
+    //cout<<"The swapped solution is feasible? "<<flag<<endl;    
     return;
 
 }
