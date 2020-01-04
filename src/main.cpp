@@ -5,6 +5,7 @@
 #include "Solution.cpp"
 #include "TabuSearch.hpp"
 #include "TabuSearch.cpp"
+#include"TSforInitialSolution.hpp"
 #include "read_file_slo.cpp"
 #include "read_file_exm.cpp"
 #include "read_file_stu.cpp"
@@ -12,6 +13,7 @@
 #include "graph_coloring_greedy.cpp"
 #include "neighbours.cpp"
 #include "sa.cpp"
+#include"TSforInitialSolution.cpp"
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -53,7 +55,7 @@ int main(int argc, char **argv) {
     vector<vector<int>> conflict_matrix;
     int total_number_students=0;
     conflict_matrix=read_file_stu(writable_instance_stu,n_exams,total_number_students);
-    cout<<total_number_students<<endl;
+    cout<<"Number of students: "<<total_number_students<<endl;
     Solution *initial_solution = new Solution();
     
     initial_solution->solution_update(conflict_matrix, n_exams);
@@ -67,10 +69,26 @@ int main(int argc, char **argv) {
     // apply greedy coloring trying to assign timeslots first to exams with higher degree
     
     graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
-    // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
-    // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY  
     initial_solution->update_timeslots(n_exams);
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
+    TSforInitialSolution* TS=new TSforInitialSolution();
+    TS->dim=n_timeslot;
+    TS->maxIter=10000;
+    TS->tabu_search(initial_solution,n_exams,n_timeslot);
+    initial_solution->write_output_file(current_instance, n_exams);
+    flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
+
+    /*int i=0;
+    while(flag==1 && i<1000){
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
+        std::shuffle(sorted_index.begin(), sorted_index.end(),std::default_random_engine(seed) );
+        graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
+        initial_solution->update_timeslots(n_exams);
+        i++;
+    }*/
+
+    // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
+    // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
     cout<<"Flag: "<<flag<<endl;
 /*
     //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
@@ -81,7 +99,7 @@ int main(int argc, char **argv) {
         possible_timeslots.push_back(i+1);
     }
 */
-    sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+".sol");
+    //sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+".sol");
 
    
     return 0;
