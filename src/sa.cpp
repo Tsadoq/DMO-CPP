@@ -192,7 +192,7 @@ int num_mutation_changer(int num_mutation_actual, int iteration, double &perc, d
     if (first==true){
         perc=1;
         num_mutation_now=1;
-    }else{
+    }else{    
         perc = (best_improvement-improvement)/best_improvement;           
         available_num_mutation=ceil(perc*n_exams*0.05);
         num_mutation_now = rand()%available_num_mutation+1;

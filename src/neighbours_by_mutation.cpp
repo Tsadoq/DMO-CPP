@@ -55,7 +55,7 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
             for (auto j : exam_mutate->conflict_exams){ 
                 k=0; 
                 while(solution->all_exams[j-1]->conflict_exams[k] != exam_mutate->id_exam){ 
-                    k++; 
+                    k++;
                 } 
                 solution->all_exams[j-1]->conflict_times[k]=new_timeslot; 
             } 
@@ -76,7 +76,7 @@ void neighbours_by_swapping(Solution* solution, int totTimeslots){
     int t1 = 1 + rand() % totTimeslots;
     int t2 = 1 + rand() % totTimeslots;
     while(t2==t1)
-        t2 = rand() % totTimeslots;
+        t2 = 1 + rand() % totTimeslots;
     cout<<"timeslot to be swapped: "<<t1<<" and: "<<t2<<endl;
     vector<int> e1;
     vector<int> e2;
