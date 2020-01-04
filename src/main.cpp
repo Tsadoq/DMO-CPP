@@ -71,7 +71,8 @@ int main(int argc, char **argv) {
     // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY  
     initial_solution->update_timeslots(n_exams);
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    cout<<"Il flag è:"<<flag<<endl;
+    cout<<"Flag: "<<flag<<endl;
+    //initial_solution->write_output_file("./instances/"+current_instance, n_exams);
 
     /*for (int i = 0; i < 200; i++){
         cout<<"Next random: "<<rand() % 10<<endl;
@@ -83,9 +84,9 @@ int main(int argc, char **argv) {
     vector<int> possible_timeslots;
     for (int i=0; i<n_timeslot;i++){
         possible_timeslots.push_back(i+1);
-    }
+    }s
     */
-    sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
+    //sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
    /* vector<size_t>order_for_mutation=sort_indexes(weight_for_exams);
     //int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
     vector<vector<int>>mutations_vector=neighbours_by_mutation(initial_solution, order_for_mutation, (int)(2*n_exams/3), possible_timeslots,1.0,n_exams);
@@ -94,7 +95,7 @@ int main(int argc, char **argv) {
     cout<<"new initial sol: "<<obj_new<<endl;
   */  
     // prova push Chiara
-    //sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
+    //sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+".sol");
 
     /*
     // calculate total weight in objective function for each exam

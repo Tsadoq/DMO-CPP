@@ -32,7 +32,7 @@ double obj_old = solution->objective_function(n_exams,total_number_students);
 cout<<"Initial Objective Function: "<<obj_old<<endl;
 
 //riscrivo il file output -> da fare
-solution->write_output_file("./instances/"+current_instance, n_exams);
+solution->write_output_file(current_instance, n_exams);
 vector<size_t> order_for_mutation=vector<size_t>(n_exams);
 vector<int> possible_timeslots;
 for (int i=0; i<n_timeslot;i++){
@@ -63,7 +63,7 @@ ftime(&now);
         vector<vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
         weight_for_exams=solution->update_weights(n_exams);    
         obj_new=solution->objective_function(n_exams,total_number_students); 
-        cout<<"Obj function pre swapping: "<<obj_new<<endl;
+        /*cout<<"Obj function pre swapping: "<<obj_new<<endl;
         cout<<"Trying to do swapping"<<endl;
         neighbours_by_swapping(solution, n_timeslot);
         weight_for_exams=solution->update_weights(n_exams);    
@@ -95,7 +95,7 @@ ftime(&now);
         neighbours_by_swapping(solution, n_timeslot);
         weight_for_exams=solution->update_weights(n_exams);    
         obj_new=solution->objective_function(n_exams,total_number_students); 
-        cout<<"Swapping done with new obj"<<obj_new<<endl;
+        cout<<"Swapping done with new obj"<<obj_new<<endl;*/
 
         weight_for_exams=solution->update_weights(n_exams);    
         obj_new=solution->objective_function(n_exams,total_number_students);    
@@ -118,7 +118,7 @@ ftime(&now);
                 weight_for_exams=solution->update_weights(n_exams);
             
             }else{
-            solution->write_output_file("./instances/"+current_instance, n_exams);
+            solution->write_output_file(current_instance, n_exams);
             //cout<<"Objective Function: "<<obj_new<<endl;
             obj_old=obj_new;
         }

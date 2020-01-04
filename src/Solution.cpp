@@ -33,7 +33,7 @@ int Solution::check_feasibility(std::vector<int> t, std::vector<Exam*> e) {
     int flag = 0;
     for(int i=0;i<e.size();i++){
         for(int j=0; j<e[i]->conflict_exams.size(); j++){
-            if(t[i]==e[i]->conflict_times[j] ||  t[i]== -2){ 
+            if((t[i]==e[i]->conflict_times[j]) || (t[i]<0)){ 
                 flag=1;
                 return flag;
             }
@@ -108,7 +108,7 @@ Solution* Solution::copy_solution(int n_exams){
 }
 
 void Solution::write_output_file(string current_instance, int n_exams){
-    string file_out=current_instance+".sol";
+    string file_out=current_instance;
     ofstream output_file;
     output_file.open (file_out);
     for(int i=0; i<n_exams;i++){    
