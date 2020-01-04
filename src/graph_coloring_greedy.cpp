@@ -8,7 +8,7 @@ void graph_coloring_greedy(Solution* initial_solution, int n_timeslot, vector<si
     // initialize vector of timeslot for each exams to -1
     initial_solution->timeslot_per_exams=vector<int>(n_exams,-1);
     // put the the exam with highest number of conflits in first timeslot
-    initial_solution->timeslot_per_exams[sorted_index[0]]=1;
+    //initial_solution->timeslot_per_exams[sorted_index[0]]=1;
     // index of the exam I'm considering: to get the id I must add 1
     int current_exam_idx;
     vector<int> current_exam_conflict;
@@ -31,8 +31,6 @@ void graph_coloring_greedy(Solution* initial_solution, int n_timeslot, vector<si
             select_timeslot++;
         }
         if (select_timeslot==n_timeslot){
-            // I can't assign a timeslot avoiding conflicts only using greedy coloring
-            // I'll handle it later: mark it with -2
             initial_solution->timeslot_per_exams[current_exam_idx]=-2;
         }else{
             // I put the exam in the first time slot available

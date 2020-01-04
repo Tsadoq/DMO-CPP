@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
     vector<vector<int>> conflict_matrix;
     int total_number_students=0;
     conflict_matrix=read_file_stu(writable_instance_stu,n_exams,total_number_students);
-        
+    cout<<total_number_students<<endl;
     Solution *initial_solution = new Solution();
     
     initial_solution->solution_update(conflict_matrix, n_exams);
@@ -75,9 +75,26 @@ int main(int argc, char **argv) {
 
     /*for (int i = 0; i < 200; i++){
         cout<<"Next random: "<<rand() % 10<<endl;
+    cout<<flag;
+/*
+    //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
+    initial_solution->update_timeslots(n_exams);
+    vector<double> weight_for_exams=initial_solution->update_weights(n_exams);
+    vector<int> possible_timeslots;
+    for (int i=0; i<n_timeslot;i++){
+        possible_timeslots.push_back(i+1);
     }
     */
     sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
+   /* vector<size_t>order_for_mutation=sort_indexes(weight_for_exams);
+    //int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
+    vector<vector<int>>mutations_vector=neighbours_by_mutation(initial_solution, order_for_mutation, (int)(2*n_exams/3), possible_timeslots,1.0,n_exams);
+    weight_for_exams=initial_solution->update_weights(n_exams);    
+    double obj_new=initial_solution->objective_function(n_exams,total_number_students); 
+    cout<<"new initial sol: "<<obj_new<<endl;
+  */  
+    // prova push Chiara
+    //sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
 
     /*
     // calculate total weight in objective function for each exam
