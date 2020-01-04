@@ -15,27 +15,27 @@ dim(0), maxIter(0)
 Solution* TabuSearch::tabu_search(Solution *sol, int n_exams)
 {
     int i=0;
-    Solution *best_sol = sol;
-    Solution *best_candidate = sol;
-    vector<Solution> sol_neighbourhood;
-    tabuList.push_back(best_sol->timeslot_per_exams);
+    vector<int> best_sol = sol->timeslot_per_exams;
+    vector<int> best_candidate = sol->timeslot_per_exams;
+    vector<vector<int>> sol_neighbourhood;
+    tabuList.push_back(best_sol);
 
     while(i < maxIter){
-        //sol_neighbourhood = getNeighbors(best_candidate); //check how to retrieve neighbourhood
-        // for(auto &candidate : sol_neighbourhood){
-        //     if((std::find(sol_neighbourhood.begin(), sol_neighbourhood.end(), candidate) == sol_neighbourhood.end()) &&
-        //      (
-        //          //obj_funct(best_candidate) < obj_funct(best_sol))
-        //          ){
-        //          best_candidate = &(candidate);
-        //      }
-        // }
+        sol_neighbourhood = getNeighbors(best_candidate); // neighbourhood vector<vector<int>>
+        for(auto &candidate : sol_neighbourhood){
+            if((std::find(sol_neighbourhood.begin(), sol_neighbourhood.end(), candidate) == sol_neighbourhood.end()) &&
+             (
+                 conflicts(best_candidate) < conflicts(best_sol))
+                 ){
+                 best_candidate = &(candidate);
+             }
+        }
 
-        // if (obj_funct(best_candidate) < obj_funct(best_sol)){
-        //     best_sol = best_candidate;
-        // }
+        if (conflicts(best_candidate) < conflicts(best_sol)){
+            best_sol = best_candidate;
+        }
 
-        tabuList.push_back(best_candidate->timeslot_per_exams); // add best sol in neighbourhood to tabu list
+        tabuList.push_back(best_candidate); // add best sol in neighbourhood to tabu list
         // when tabu list is full, delete first element
         if(tabuList.size() > dim){
             tabuList.erase(tabuList.begin());
@@ -44,7 +44,8 @@ Solution* TabuSearch::tabu_search(Solution *sol, int n_exams)
         i++;
     }
 
-    return best_sol;
+    // Maybe generate Solution given best_sol
+    return new Solution;//best_sol;
 }
 
 

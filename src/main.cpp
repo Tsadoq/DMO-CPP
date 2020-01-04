@@ -76,7 +76,6 @@ int main(int argc, char **argv) {
     /*for (int i = 0; i < 200; i++){
         cout<<"Next random: "<<rand() % 10<<endl;
     cout<<flag;
-/*
     //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
     initial_solution->update_timeslots(n_exams);
     vector<double> weight_for_exams=initial_solution->update_weights(n_exams);
