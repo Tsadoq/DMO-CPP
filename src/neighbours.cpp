@@ -73,11 +73,13 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
 
 void neighbours_by_swapping(Solution* solution, int totTimeslots){
     vector<int> exams = solution->timeslot_per_exams;
+    // seleziono due diversi timeslot a caso
     int t1 = 1 + rand() % totTimeslots;
     int t2 = 1 + rand() % totTimeslots;
     while(t2==t1)
         t2 = 1 + rand() % totTimeslots;
     cout<<"timeslot to be swapped: "<<t1<<" and: "<<t2<<endl;
+    // vettori di indici di esami che stanno nello stesso timeslot rispettivamente in t1 e in t2
     vector<int> e1;
     vector<int> e2;
     for (int i = 0; i<exams.size(); i++){
@@ -89,30 +91,38 @@ void neighbours_by_swapping(Solution* solution, int totTimeslots){
         }
     }
 
+    // cerco gli esami in e2 che sono in conflitto con gli esami in t1
     vector<int> toSwappedIn1;
+    // cerco gli esami in e1 che sono in conflitto con gli esami in t2
     vector<int> toSwappedIn2;
     for (int i = 0; i< e1.size(); i++){
+        // cerco un esame conflittuale piazzato in t2
         if ( std::find(solution->all_exams[e1[i]]->conflict_times.begin(), 
                 solution->all_exams[e1[i]]->conflict_times.end(), t2) != solution->all_exams[e1[i]]->conflict_times.end()){
-                    toSwappedIn2.push_back(e1[i]);
+            // ho trovato un esame conflittuale in t2, quindi l'esame con indice e1[i] va inserito
+            toSwappedIn2.push_back(e1[i]);
         }
     }
 
     for (int i = 0; i< e2.size(); i++){
-        if ( std::find(solution->all_exams[e2[i]]->conflict_times.begin(), 
+        if (std::find(solution->all_exams[e2[i]]->conflict_times.begin(), 
                 solution->all_exams[e2[i]]->conflict_times.end(), t1) != solution->all_exams[e2[i]]->conflict_times.end()){
-                    toSwappedIn1.push_back(e2[i]);
+            // ho trovato un esame conflittuale in t1, quindi l'esame con indice e2[i] va inserito
+            toSwappedIn1.push_back(e2[i]);
         }
     }
 
     for (int i = 0; i < toSwappedIn1.size(); i++){
         solution->all_exams[toSwappedIn1[i]]->timeslot = t1;
+        solution->timeslot_per_exams[toSwappedIn1[i]]=t1;
     }
     for (int i = 0; i < toSwappedIn2.size(); i++){
         solution->all_exams[toSwappedIn2[i]]->timeslot = t2;
+        solution->timeslot_per_exams[toSwappedIn2[i]]=t2;
     }
+    solution->update_timeslots(solution->all_exams.size());
     int flag = solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
-    cout<<"The swapped solution is feasible? "<<flag<<endl;
+    cout<<"The swapped solution is feasible? "<<flag<<endl;    
     return;
 
 }

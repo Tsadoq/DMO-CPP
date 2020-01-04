@@ -42,14 +42,16 @@ int Solution::check_feasibility(std::vector<int> t, std::vector<Exam*> e) {
     return flag;
 }
 
-void Solution::update_timeslots(int n_exams){
+void Solution::update_timeslots(int n_exams){    
     for(int i=0;i<n_exams;i++){   
+        vector <int> conflict_times_new=vector<int>();
         // save timeslot for current exam 
         all_exams[i]->timeslot=timeslot_per_exams[i];
         for (auto j:all_exams[i]->conflict_exams){
             // save timeslot of conflicting exams
-            all_exams[i]->conflict_times.push_back(timeslot_per_exams[j-1]);
+            conflict_times_new.push_back(timeslot_per_exams[j-1]);            
         }
+        all_exams[i]->conflict_times=conflict_times_new;
     }
 }
 

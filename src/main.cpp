@@ -10,7 +10,7 @@
 #include "read_file_stu.cpp"
 #include "sort_indexes.cpp"
 #include "graph_coloring_greedy.cpp"
-#include "neighbours_by_mutation.cpp"
+#include "neighbours.cpp"
 #include "sa.cpp"
 #include <fstream>
 #include <iostream>
@@ -72,11 +72,6 @@ int main(int argc, char **argv) {
     initial_solution->update_timeslots(n_exams);
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
     cout<<"Flag: "<<flag<<endl;
-    //initial_solution->write_output_file("./instances/"+current_instance, n_exams);
-
-    /*for (int i = 0; i < 200; i++){
-        cout<<"Next random: "<<rand() % 10<<endl;
-    cout<<flag;
 /*
     //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
     initial_solution->update_timeslots(n_exams);
@@ -84,54 +79,10 @@ int main(int argc, char **argv) {
     vector<int> possible_timeslots;
     for (int i=0; i<n_timeslot;i++){
         possible_timeslots.push_back(i+1);
-    }s
-    */
-    //sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,current_instance);
-   /* vector<size_t>order_for_mutation=sort_indexes(weight_for_exams);
-    //int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    vector<vector<int>>mutations_vector=neighbours_by_mutation(initial_solution, order_for_mutation, (int)(2*n_exams/3), possible_timeslots,1.0,n_exams);
-    weight_for_exams=initial_solution->update_weights(n_exams);    
-    double obj_new=initial_solution->objective_function(n_exams,total_number_students); 
-    cout<<"new initial sol: "<<obj_new<<endl;
-  */  
-    // prova push Chiara
-    //sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+".sol");
-
-    /*
-    // calculate total weight in objective function for each exam
-    vector<double> weight_for_exams=initial_solution->update_weights(n_exams);
-
-    // calculate objective function
-    double obj_fun=initial_solution->objective_function(n_exams,total_number_students);
-    cout<<"Objective function: "<<obj_fun<<"\n";
-
-    // sort exams by decreasing value of penalty in objective function
-    vector<size_t> order_for_mutation=vector<size_t>(n_exams);
-    // it's a vector of indexes: values in [0,n_exams-1]   
-    order_for_mutation=sort_indexes(weight_for_exams);
-
-    vector<int> possible_timeslots;
-    for (int i=0; i<n_timeslot;i++){
-        possible_timeslots.push_back(i+1);
     }
+*/
+    sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+".sol");
 
-    int num_mutation=10;
-
-    // create a copy of initial_solution, if we do a local search we will have #copies=#neighbours 
-    Solution* copy_sol=initial_solution->copy_solution(n_exams);   
-
-    // I modify the copy of solution, so if I don't accept the new solution I have no problems with the old one
-    //vector<vector<int>>mutations_vector=neighbours_by_mutation(copy_sol, order_for_mutation, num_mutation, possible_timeslots);
-
-    // update weights in the new solution
-    //weight_for_exams=copy_sol->update_weights(n_exams);
-    
-    //obj_fun=copy_sol->objective_function(n_exams,total_number_students);
-    //cout<<"New objective function: "<<obj_fun<<"\n";
-
-    // write solution on file
-    //copy_sol->write_output_file("./instances/"+current_instance, n_exams);
-    */
    
     return 0;
 }
