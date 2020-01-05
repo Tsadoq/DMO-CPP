@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
         possible_timeslots.push_back(i+1);
     }
 */
-    sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+".sol");
+    //sa(initial_solution, start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+".sol");
 
    
     return 0;
