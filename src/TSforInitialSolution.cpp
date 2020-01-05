@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 int TSforInitialSolution::tabu_search(Solution *sol, int n_exams, int n_timeslot, vector<vector<int>> conflict_matrix){
     
     vector <int> tabu_list=vector<int>();

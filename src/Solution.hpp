@@ -10,6 +10,9 @@ class Solution{
     vector <Exam*> all_exams;
     vector <int> num_neighbours_for_exams;
 
+    int flag=1;
+    double double_obj=0;
+
     void solution_update(vector<vector<int>>, int);
     int check_feasibility(std::vector<int>, std::vector<Exam*>);
     void update_timeslots(int n_exams);

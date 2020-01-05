@@ -7,6 +7,8 @@
 #include <fstream>
 using namespace std;
 
+
+
 void Solution::solution_update(std::vector<vector<int>> conflict_matrix, int n_exams){
     // vector of exams pointer
   
@@ -26,7 +28,6 @@ void Solution::solution_update(std::vector<vector<int>> conflict_matrix, int n_e
         all_exams.push_back(exam);
         num_neighbours_for_exams.push_back(num_neighbour);
     }
- 
 }
 
 int Solution::check_feasibility(std::vector<int> t, std::vector<Exam*> e) {

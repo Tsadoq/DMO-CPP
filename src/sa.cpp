@@ -13,7 +13,7 @@ double cooling(double temperature);
 int num_mutation_changer(int num_mutation_actual, int iteration, double &perc, double improvement,double best_improvement,bool first,int n_exams);
 double temperature_shock(double temperature);
 
-void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance){
+double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance){
  
     struct timeb now;
     double prob = 0;
@@ -98,7 +98,7 @@ void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int 
         if (obj_new < best_sol){
             best_sol = obj_new;
             best_timeslot_solution=solution->timeslot_per_exams;
-            solution->write_output_file(current_instance, n_exams);
+            // solution->write_output_file(current_instance, n_exams);
             first=true;
         }
         if (obj_new > worst_sol){
@@ -121,7 +121,9 @@ void sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int 
         } 
     ftime(&now); 
     }                
-    cout<<"Best sol "<<best_sol<<endl;      
+    cout<<"Best sol "<<best_sol<<endl;   
+
+    return best_sol;  
 }
 
 /*double probability(double obj_new, double obj_old, double temperature)
