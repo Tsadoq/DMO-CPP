@@ -9,6 +9,5 @@ class TSforInitialSolution{
 public:
     int dim;
     int maxIter;
-    //vector<vector<int>> tabuList;
     int tabu_search(Solution *sol, int n_exams,int n_timeslot, vector<vector<int>> conflict_matrix);
 };

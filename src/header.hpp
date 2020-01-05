@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int read_file_exm(string file_name);
+vector<double> read_file_exm(char* file_name,int &n_exams);
 int read_file_slo(string file_name);
 vector<vector<int>> read_file_stu(char* file_name,int n_exams,int &total_number_students);
 vector<Exam*> inizialize_all_exams();

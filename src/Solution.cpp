@@ -18,7 +18,7 @@ void Solution::solution_update(std::vector<vector<int>> conflict_matrix, int n_e
         exam->id_exam=i+1;
         for(int j=0;j<n_exams;j++){
             if (conflict_matrix[i][j]>0){
-                num_neighbour++;
+                num_neighbour+=conflict_matrix[i][j];
                 exam->conflict_exams.push_back(j+1);
                 exam->conflict_weights.push_back(conflict_matrix[i][j]);
             }

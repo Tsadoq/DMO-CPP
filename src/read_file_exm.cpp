@@ -4,19 +4,18 @@
 #include <string>
 
 
-int read_file_exm(std::string file_name){
-    int n_exams = 0;     
-    std::string line;
-    std::ifstream myfile (file_name);
-    if (myfile.is_open())
-    {
-        while ( getline (myfile,line) )
-        {
-            if (line.compare("")!=0){
-                n_exams++;
-            }
-        }
-        myfile.close();
+vector<double> read_file_exm(char* file_name,int &n_exams){
+    int exam_id; 
+    int num_st;
+    vector <double> student_per_exams=vector<double>();
+    FILE *fp;
+
+    fp = fopen(file_name, "r");
+    //reading of .exm to know how many exams there are
+    while(fscanf(fp, "%d\t%d", &exam_id,&num_st)!=EOF){
+        n_exams++;
+        student_per_exams.push_back(num_st);
     }
-    return n_exams;
+    fclose(fp);
+    return student_per_exams;
 }

@@ -9,6 +9,7 @@ class Solution{
     vector <int> timeslot_per_exams;
     vector <Exam*> all_exams;
     vector <int> num_neighbours_for_exams;
+    vector <double> other_weights;
 
     void solution_update(vector<vector<int>>, int);
     int check_feasibility(std::vector<int>, std::vector<Exam*>);
