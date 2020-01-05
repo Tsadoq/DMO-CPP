@@ -36,12 +36,12 @@ int main(int argc, char **argv) {
     ftime(&start);
 
     string current_instance=argv[1];
-    string instance_exm="/home/valeria/projects/DMO-CPP/src/instances/"+current_instance+".exm";
-    string instance_slo="/home/valeria/projects/DMO-CPP/src/instances/"+current_instance+".slo";
-    string instance_stu="/home/valeria/projects/DMO-CPP/src/instances/"+current_instance+".stu";
-    //string instance_exm="./instances/"+current_instance+".exm";
-    //string instance_slo="./instances/"+current_instance+".slo";
-    //string instance_stu="./instances/"+current_instance+".stu";
+    //string instance_exm="/home/valeria/projects/DMO-CPP/src/instances/"+current_instance+".exm";
+    //string instance_slo="/home/valeria/projects/DMO-CPP/src/instances/"+current_instance+".slo";
+    //string instance_stu="/home/valeria/projects/DMO-CPP/src/instances/"+current_instance+".stu";
+    string instance_exm="./instances/"+current_instance+".exm";
+    string instance_slo="./instances/"+current_instance+".slo";
+    string instance_stu="./instances/"+current_instance+".stu";
     int timelimit = atoi(argv[2]);
     cout<<"timelimit: "<<timelimit<<endl;
     char * writable_instance_stu = new char[instance_stu.size() + 1];
@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
 
     // -----------------------------------------------------------------
 
-    int numproc = 8;
+    int numproc = 4;
  
     omp_set_dynamic(0);     // Explicitly disable dynamic teams
     omp_set_num_threads(numproc); // Use 4 threads for all consecutive parallel regions
@@ -151,6 +151,7 @@ int main(int argc, char **argv) {
         string str_id = to_string(id);
         
         double best_sol;
+        //best_sol = sa(initial_solution[id], start, timelimit, n_exams, total_number_students, n_timeslot,"/home/valeria/projects/DMO-CPP/src/instances/"+current_instance+"_"+str_id+"_"+".sol");
         best_sol = sa(initial_solution[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol");
 
         initial_solution[id]->double_obj=best_sol;
