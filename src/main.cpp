@@ -37,6 +37,10 @@ int main(int argc, char **argv) {
     cout<<"Starting"<<endl;
 
     string current_instance=argv[1];
+    string instance_exm;
+    string instance_slo;
+    string instance_stu;
+    
     if(true){
         string instance_exm="/home/parallels/DMO-CPP/src/instances/"+current_instance+".exm";
         string instance_slo="/home/parallels/DMO-CPP/src/instances/"+current_instance+".slo";
