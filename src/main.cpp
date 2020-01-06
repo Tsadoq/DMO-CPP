@@ -176,7 +176,7 @@ int main(int argc, char **argv) {
 
     // -----------------------------------------------------------------
     
-    initial_solution[index_best]->write_output_file(current_instance, n_exams);
+    initial_solution[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
 
    
     return 0;

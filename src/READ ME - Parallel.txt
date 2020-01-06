@@ -1,0 +1,8 @@
+PER COMPILARE: da linea di comando in vscode digitare(dopo essere entrati nella cartella src): 
+g++ -std=c++11 main.cpp -o main -fopenmp
+
+Se compare questo errore: c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../mingw32/bin/ld.exe: cannot find -lpthread
+SOLUZIONE: https://stackoverflow.com/questions/39185248/eclipse-mingw-c-cannot-find-lpthread
+
+PER RUNNARE: come sempre
+\main.exe instanceXX secondi
