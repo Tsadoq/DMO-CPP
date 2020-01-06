@@ -9,3 +9,5 @@ per lanciare il programma, devi aprire il terminale ed eseguire
 cd src
 ./main.exe instance01
 ```
+
+Report al link https://www.overleaf.com/4649549818jntjfswpnfmf
