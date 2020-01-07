@@ -9,11 +9,11 @@
 using namespace std;
 
 double probability(double obj_new, double obj_old, double temperature, double maxtemperature);
-double cooling(double temperature);
+double cooling(double temperature, double coeff);
 int num_mutation_changer(int num_mutation_actual, int iteration, double &perc, double improvement,double best_improvement,bool first,int n_exams);
 double temperature_shock(double temperature);
 
-Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance,double t0){
+Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance,double t0, double alpha, int mutations, double cooling_coefficient){
  
     struct timeb now;
     double prob = 0;
@@ -22,8 +22,9 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     double obj_new;
     vector<int> old_timeslot_solution;
     vector<int> best_timeslot_solution;
-    double a=0.5;
+    double a=alpha; //def = 0.5
     double t=t0;
+    double cooling_coeff = cooling_coefficient; //def = 0.8
 
     std::default_random_engine generator;
     std::uniform_real_distribution<double> distribution(0.0,1.0);
@@ -41,7 +42,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     }
 
     //int num_mutation=floor(n_exams/40);
-    int num_mutation=3;
+    int num_mutation=mutations; //def = 3
     double perc=0.2;
     int count_iter=0;
     // improvement current solution wrt worst solution
@@ -57,7 +58,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     ftime(&now); 
     Solution * best_solution=solution->copy_solution(n_exams);
     int count_local_minima=0;
-
+    
     while((int)((now.time-start.time))<timelimit){
         count_iter++;
         // sort exam wrt weigths in obj function
@@ -114,7 +115,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         improvement=obj_new-best_sol;
 
         if (count_iter>=a*n_exams){            
-            t = cooling(t);
+            t = cooling(t, cooling_coeff);
             a-=0.001;
             if (a<=0){
                 a=0.5;
@@ -157,12 +158,12 @@ double probability(double obj_new, double obj_old, double temperature, double ma
     return p;
 }
 
-double cooling(double temperature)
+double cooling(double temperature, double coeff)
 {
-    temperature = 0.8*temperature;
+    //temperature = 0.8*temperature;
     //temperature=temperature/(1+500*temperature);
     //temperature=1/((1/temperature)+0.001/2);
-    return  temperature;
+    return  temperature*coeff;
 }
 
 // FUNZIONE CHE DA' PROBLEMI: per ora mutazioni e percentuale fisse

@@ -39,7 +39,16 @@ int main(int argc, char **argv) {
     int n_exams = 0;
     int n_timeslot = 0;
     int numproc = atoi(argv[3]);
-    
+
+    double alpha = 0.5;
+    int n_mutations = 3;
+    double cooling = 0.8;
+    if(argc > 4){
+        alpha = atof(argv[4]);
+        n_mutations = atoi(argv[5]);
+        cooling = atof(argv[6]);
+    }
+
     ftime(&start);
     cout<<"Starting"<<endl;
 
@@ -47,7 +56,7 @@ int main(int argc, char **argv) {
     string instance_exm;
     string instance_slo;
     string instance_stu;
-    bool path_to_use=false;
+    bool path_to_use=true;
     
     if(path_to_use){
         instance_exm="/home/parallels/DMO-CPP/src/instances/"+current_instance+".exm";
@@ -143,7 +152,7 @@ int main(int argc, char **argv) {
     vector<Solution*> best_sol=vector<Solution*>(numproc);
     int id=0;
      //if (1==1)
-
+    cout << "Running SA with alpha: "<< alpha<<" | cooling: "<<cooling<< " | mutations: "<<n_mutations <<endl;
     // lancio in parallelo
     # pragma omp parallel private ( id ) shared(initial_solution)
     {
@@ -183,7 +192,7 @@ int main(int argc, char **argv) {
         string str_id = to_string(id);
         
         //double best_sol;
-        best_sol[id] = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol",t0);
+        best_sol[id] = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol",t0, alpha, n_mutations, cooling);
 
         //array_sol[id]->double_obj=best_sol;
 
