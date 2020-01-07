@@ -33,7 +33,7 @@ double temperature_init(Solution *solution,int n_exams, int total_number_student
         else if (min_pen > obj_new)     min_pen = obj_new;
     }
 
-    int heating_coeff = 7;
+    int heating_coeff = 1;
 
     double temp = (max_pen * heating_coeff - min_pen) / 0.25;
 

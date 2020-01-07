@@ -31,8 +31,6 @@
 // GUIDA per settare vscode e c++ da linux
 // https://code.visualstudio.com/docs/cpp/config-wsl
 
-
-
 //int read_file_stu(char *name_stu);
 int main(int argc, char **argv) {
     struct timeb start;
@@ -60,7 +58,6 @@ int main(int argc, char **argv) {
         instance_stu="./instances/"+current_instance+".stu";
     }
     
-    
     int timelimit = atoi(argv[2]);
     cout<<"timelimit: "<<timelimit<<endl;
     char * writable_instance_stu = new char[instance_stu.size() + 1];
@@ -81,41 +78,23 @@ int main(int argc, char **argv) {
     conflict_matrix=read_file_stu(writable_instance_stu,n_exams,total_number_students);
 
     cout<<"Number of students: "<<total_number_students<<endl;
-    Solution* initial_solution=new Solution();    
     
-    initial_solution->solution_update(conflict_matrix, n_exams);
-    //fprintf(stdout, "%d\n", initial_solution->num_neighbours_for_exams[1]);
-     // sort exams by decreasing value of number of neighbours
-    vector<size_t> sorted_index=vector<size_t>(n_exams);
-    // it's a vector of indexes: values in [0,n_exams-1]       
-    sorted_index=sort_indexes(initial_solution->num_neighbours_for_exams);
-    // apply greedy coloring trying to assign timeslots first to exams with higher degree
     
-    graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
-    initial_solution->update_timeslots(n_exams);
-    int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    TSforInitialSolution* TS=new TSforInitialSolution();
-    TS->dim=n_timeslot;
-    TS->maxIter=100000;
-    int ts=TS->tabu_search(initial_solution,n_exams,n_timeslot,conflict_matrix);
-    cout<<ts<<endl;
-    //initial_solution->write_output_file(current_instance, n_exams);
-    flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
-    // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
-    cout<<"Flag: "<<flag<<endl;
 
-    vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
+
+    //vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
 
     // -----------------------------------------------------------------
-    double t0 = temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
+    //TEMPERATURA INIZIALE
+    // -----------------------------------------------------------------
+    double t0 = 30;//temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
     cout<<"Temp init: "<<t0<<endl;
 
-    initial_solution->timeslot_per_exams=old_timeslot_solution;
-    initial_solution->update_timeslots(n_exams);
-    vector<double>weight_for_exams=initial_solution->update_weights(n_exams);
-    
- 
+    //initial_solution->timeslot_per_exams=old_timeslot_solution;
+    //initial_solution->update_timeslots(n_exams);
+    //vector<double>weight_for_exams=initial_solution->update_weights(n_exams);
+    // -----------------------------------------------------------------
+
     omp_set_dynamic(0);     // Explicitly disable dynamic teams
     omp_set_num_threads(numproc); // Use 4 threads for all consecutive parallel regions
  
@@ -139,26 +118,88 @@ int main(int argc, char **argv) {
     //     if (i==2): //solo TS+SA
     //     ...
     // }
-    vector<Solution*> array_sol;
+    vector<Solution*> array_sol = vector<Solution*>(numproc);
     int id=0;
+    int sa_flag = 0; //sa normale mentre pari a 1 sa modificato per random totale
      //if (1==1)
 
     // lancio in parallelo
-    # pragma omp parallel private ( id ) shared(initial_solution)
+    # pragma omp parallel private ( id ) //shared(initial_solution)
     {
         id = omp_get_thread_num();
-        //Solution *initial_solution = new Solution();
+     /*   if(id==0){
+            Solution* tmp=new Solution(); 
+            sa_flag = 1;
+            array_sol[0] = tmp;
+            array_sol[0]->timeslot_per_exams= vector<int>(n_exams,-1);
+            array_sol[0]->solution_update(conflict_matrix, n_exams);
+            for(int i=0;i<n_exams;i++){
+                array_sol[0]->timeslot_per_exams[i]=rand() % n_timeslot +1;        
+            }             
+            array_sol[0]->update_timeslots(n_exams);
+            
+            
+        }*/
+        if(id==0){
+            Solution* tmp=new Solution(); 
+            array_sol[0] = tmp;
+            array_sol[0]->timeslot_per_exams= vector<int>(n_exams,-1);
+            array_sol[0]->solution_update(conflict_matrix, n_exams);
+            for(int i=0;i<n_exams;i++){
+                array_sol[0]->timeslot_per_exams[i]=rand() % n_timeslot +1;        
+            }             
+            
+            array_sol[0]->update_timeslots(n_exams);
+            for(int i=0; i<n_exams; i++){
+                for(auto j:  array_sol[0]->all_exams[i]->conflict_times){
+                    if(j== array_sol[0]->timeslot_per_exams[i]){
+                        array_sol[0]->timeslot_per_exams[i]=-2;
+                    }
+                }
+            }
+            int flag = array_sol[0]->check_feasibility(array_sol[0]->timeslot_per_exams, array_sol[0]->all_exams);
+            TSforInitialSolution* TS=new TSforInitialSolution();
+            TS->dim=n_timeslot;
+            TS->maxIter=10000000;
+            int ts=TS->tabu_search(array_sol[0],n_exams,n_timeslot,conflict_matrix);
+            cout<<ts<<endl;
+            //initial_solution->write_output_file(current_instance, n_exams);
+            flag = array_sol[0]->check_feasibility(array_sol[0]->timeslot_per_exams, array_sol[0]->all_exams);
+            // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
+            // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
+            cout<<"Flag: "<<flag<<endl;
+        }
+        if(id==1){
+            Solution* tmp=new Solution(); 
+            array_sol[1] = tmp;   
+            array_sol[1]->timeslot_per_exams= vector<int>(n_exams,-1);
+            array_sol[1]->solution_update(conflict_matrix, n_exams);
+            //fprintf(stdout, "%d\n", initial_solution->num_neighbours_for_exams[1]);
+            // sort exams by decreasing value of number of neighbours
+            vector<size_t> sorted_index=vector<size_t>(n_exams);
+            // it's a vector of indexes: values in [0,n_exams-1]       
+            sorted_index=sort_indexes(array_sol[1]->num_neighbours_for_exams);
+            // apply greedy coloring trying to assign timeslots first to exams with higher degree
+            array_sol[1]->timeslot_per_exams= vector<int>(n_exams,-1);
 
-
-
-        //initial_solution = array[id];
-        for(int i=0; i<numproc; i++){
-            Solution* tmp= initial_solution->copy_solution(n_exams);
-            array_sol.push_back(tmp);
+            graph_coloring_greedy(array_sol[1], n_timeslot, sorted_index, n_exams); 
+            array_sol[1]->update_timeslots(n_exams);
+            int flag = array_sol[1]->check_feasibility(array_sol[1]->timeslot_per_exams, array_sol[id]->all_exams);
+            TSforInitialSolution* TS=new TSforInitialSolution();
+            TS->dim=n_timeslot;
+            TS->maxIter=10000000;
+            int ts=TS->tabu_search(array_sol[1],n_exams,n_timeslot,conflict_matrix);
+            cout<<ts<<endl;
+            //initial_solution->write_output_file(current_instance, n_exams);
+            flag = array_sol[1]->check_feasibility(array_sol[1]->timeslot_per_exams, array_sol[id]->all_exams);
+            // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
+            // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
+            cout<<"Flag: "<<flag<<endl;
         }
         
+        //Solution *initial_solution = new Solution();
+        //initial_solution = array[id];
         
-
         /*int i=0;
         while(flag==1 && i<1000){
             unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
