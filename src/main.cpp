@@ -193,10 +193,12 @@ int main(int argc, char **argv) {
     double min = 100 * best_sol[0]->double_obj;
     int index_best = 0;
     double avg =0;
+    int counter =0;
     for(int i=0; i<numproc; i++){
        // prendo il minimo
        Solution *tmp = array_sol[i];
        //double tmp_obj = tmp->double_obj;
+       counter++;
        if (best_sol[i]->double_obj < min){
            index_best = i;
            min=best_sol[i]->double_obj;
@@ -209,7 +211,7 @@ int main(int argc, char **argv) {
     
     best_sol[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
     cout<<"Best solution:\t\t"<<best_sol[index_best]->double_obj<<endl;
-    cout<<"Average solution:\t"<<avg/numproc<<endl;
+    cout<<"Average solution:\t"<<avg/counter<<endl;
 
    
     return 0;
