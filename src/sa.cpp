@@ -13,12 +13,12 @@ double cooling(double temperature);
 int num_mutation_changer(int num_mutation_actual, int iteration, double &perc, double improvement,double best_improvement,bool first,int n_exams);
 double temperature_shock(double temperature);
 
-double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance){
+double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance,double t0){
  
     struct timeb now;
     double prob = 0;
     double prob_random = 0;
-    double t0 = 30;
+    //double t0 = 30;
     double obj_new;
     vector<int> old_timeslot_solution;
     vector<int> best_timeslot_solution;

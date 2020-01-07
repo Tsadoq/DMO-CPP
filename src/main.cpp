@@ -14,6 +14,7 @@
 #include "neighbours.cpp"
 #include "sa.cpp"
 #include"TSforInitialSolution.cpp"
+#include"temperature_init.cpp"
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -37,6 +38,7 @@ int main(int argc, char **argv) {
     struct timeb start;
     int n_exams = 0;
     int n_timeslot = 0;
+    int numproc = atoi(argv[3]);
     
     ftime(&start);
     cout<<"Starting"<<endl;
@@ -103,9 +105,16 @@ int main(int argc, char **argv) {
     // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
     cout<<"Flag: "<<flag<<endl;
 
-    // -----------------------------------------------------------------
+    vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
 
-    int numproc = 4;
+    // -----------------------------------------------------------------
+    double t0 = temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
+    cout<<"Temp init: "<<t0<<endl;
+
+    initial_solution->timeslot_per_exams=old_timeslot_solution;
+    initial_solution->update_timeslots(n_exams);
+    vector<double>weight_for_exams=initial_solution->update_weights(n_exams);
+    
  
     omp_set_dynamic(0);     // Explicitly disable dynamic teams
     omp_set_num_threads(numproc); // Use 4 threads for all consecutive parallel regions
@@ -173,7 +182,7 @@ int main(int argc, char **argv) {
         string str_id = to_string(id);
         
         double best_sol;
-        best_sol = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol");
+        best_sol = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol",t0);
 
         array_sol[id]->double_obj=best_sol;
 

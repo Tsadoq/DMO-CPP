@@ -5,4 +5,4 @@ Se compare questo errore: c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../ming
 SOLUZIONE: https://stackoverflow.com/questions/39185248/eclipse-mingw-c-cannot-find-lpthread
 
 PER RUNNARE: come sempre
-\main.exe instanceXX secondi
+\main.exe instanceXX secondi numero_processori
