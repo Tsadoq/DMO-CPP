@@ -19,3 +19,4 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
 double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot, string current_instance,double t0);
 void neighbours_by_swapping(Solution* solution, int totTimeslots);
 double temperature_init(Solution *solution,int n_exams, int total_number_students, int n_timeslot);
+double sa_random(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot, string current_instance,double t0);

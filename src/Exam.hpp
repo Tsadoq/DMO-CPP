@@ -12,5 +12,5 @@ public:
     vector<int> conflict_times;
     double weight_in_obj_fun;
     int timeslot;
-    int flag_for_exams;
+    int flag_for_exams=0;
 };

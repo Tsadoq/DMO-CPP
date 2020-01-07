@@ -118,26 +118,29 @@ void Solution::write_output_file(string current_instance, int n_exams){
     }
     output_file.close();
 }
-/*
+
 int Solution::check_feasibility_weighted(std::vector<int> t, std::vector<Exam*> e) {
     int flag = 0;
+    
     for(int i=0;i<e.size();i++){
+        e[i]->flag_for_exams=0;
         for(int j=0; j<e[i]->conflict_exams.size(); j++){
             if((t[i]==e[i]->conflict_times[j]) ){  // non serve piu' controllo sul timeslot negativo perche' unfeasibilities lasciate come casuali
                 e[i]->flag_for_exams++;
-                flag=1;
+                flag++;
             }
         }
     }
     return flag;
 }
 
-double Solution::objective_function_unfeasible(int n_exams, int total_number_students){
+double Solution::objective_function_unfeasible(int n_exams, int total_number_students, int segna_conflitti){
     double obj_fun=0;
     for(int i=0;i<n_exams;i++){
         obj_fun+=all_exams[i]->weight_in_obj_fun;
     }
     obj_fun/=(2*total_number_students);
-    obj_fun = obj_fun + 3*flag*flag;
+    //obj_fun = obj_fun + 3*flag*flag;
+    obj_fun = obj_fun + 10*segna_conflitti;
     return obj_fun;
-}*/
+}

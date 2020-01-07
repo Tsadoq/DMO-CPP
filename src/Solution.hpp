@@ -18,6 +18,6 @@ class Solution{
     double objective_function(int n_exams, int total_number_student);
     Solution* copy_solution(int n_exams);
     void write_output_file(string current_instance, int n_exams);
-    //int check_feasibility_weighted(std::vector<int> t, std::vector<Exam*> e);
-    //double Solution::objective_function_unfeasible(int n_exams, int total_number_students);
+    int check_feasibility_weighted(std::vector<int> t, std::vector<Exam*> e);
+    double objective_function_unfeasible(int n_exams, int total_number_students, int segna_conflitti);
 };

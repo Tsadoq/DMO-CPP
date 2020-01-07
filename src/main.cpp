@@ -12,7 +12,8 @@
 #include "sort_indexes.cpp"
 #include "graph_coloring_greedy.cpp"
 #include "neighbours.cpp"
-#include "sa.cpp"
+//#include "sa.cpp"
+#include "sa_random.cpp"
 #include"TSforInitialSolution.cpp"
 #include"temperature_init.cpp"
 #include <fstream>
@@ -25,6 +26,8 @@
 #include <math.h>
 #include <time.h>
 #include <sys/timeb.h>
+#include <ctime>
+#include <cstdlib>
 
 #include <omp.h>
 
@@ -33,6 +36,7 @@
 
 //int read_file_stu(char *name_stu);
 int main(int argc, char **argv) {
+    srand(time(NULL));
     struct timeb start;
     int n_exams = 0;
     int n_timeslot = 0;
@@ -79,9 +83,6 @@ int main(int argc, char **argv) {
 
     cout<<"Number of students: "<<total_number_students<<endl;
     
-    
-
-
     //vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
 
     // -----------------------------------------------------------------
@@ -127,7 +128,7 @@ int main(int argc, char **argv) {
     # pragma omp parallel private ( id ) //shared(initial_solution)
     {
         id = omp_get_thread_num();
-     /*   if(id==0){
+        if(id==0){
             Solution* tmp=new Solution(); 
             sa_flag = 1;
             array_sol[0] = tmp;
@@ -137,9 +138,9 @@ int main(int argc, char **argv) {
                 array_sol[0]->timeslot_per_exams[i]=rand() % n_timeslot +1;        
             }             
             array_sol[0]->update_timeslots(n_exams);
-            
-            
-        }*/
+            double f = sa_random(array_sol[0], start,  timelimit,  n_exams,  total_number_students,  n_timeslot,  current_instance, t0);
+        }
+        /*
         if(id==0){
             Solution* tmp=new Solution(); 
             array_sol[0] = tmp;
@@ -195,7 +196,7 @@ int main(int argc, char **argv) {
             // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
             // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
             cout<<"Flag: "<<flag<<endl;
-        }
+        }*/
         
         //Solution *initial_solution = new Solution();
         //initial_solution = array[id];
@@ -210,28 +211,28 @@ int main(int argc, char **argv) {
         }*/
 
         
-    /*
+        
         //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
-        initial_solution->update_timeslots(n_exams);
+        /*initial_solution->update_timeslots(n_exams);
         vector<double> weight_for_exams=initial_solution->update_weights(n_exams);
         vector<int> possible_timeslots;
         for (int i=0; i<n_timeslot;i++){
             possible_timeslots.push_back(i+1);
-        }
-    */  
-
+        }*/
+    
+        /*
         string str_id = to_string(id);
         
         double best_sol;
         best_sol = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol",t0);
 
         array_sol[id]->double_obj=best_sol;
-
+        */
     }
  
     // seleziono miglior soluzione tra quelle feasible che ho trovato
 
-    int min = array_sol[0]->double_obj;
+    double min = array_sol[0]->double_obj;
     int index_best = 0;
     for(int i=0; i<numproc; i++){
        // prendo il minimo
