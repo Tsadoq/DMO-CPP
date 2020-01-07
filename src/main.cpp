@@ -212,7 +212,6 @@ int main(int argc, char **argv) {
     best_sol[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
     cout<<"Best solution:\t\t"<<best_sol[index_best]->double_obj<<endl;
     cout<<"Average solution:\t"<<avg/counter<<endl;
-
    
     return 0;
 }

@@ -40,6 +40,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         possible_timeslots.push_back(i+1);
     }
 
+    //int num_mutation=floor(n_exams/40);
     int num_mutation=3;
     double perc=0.2;
     int count_iter=0;
