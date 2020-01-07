@@ -33,7 +33,7 @@ int Solution::check_feasibility(std::vector<int> t, std::vector<Exam*> e){
     int flag = 0;
     for(int i=0;i<e.size();i++){
         for(int j=0; j<e[i]->conflict_exams.size(); j++){
-            if((t[i]==e[i]->conflict_times[j]) || (t[i]<0)){ 
+            if(((t[i]==e[i]->conflict_times[j]) || (t[i]<0)) && t[i]!=0){ 
                 flag=1;
                 return flag;
             }

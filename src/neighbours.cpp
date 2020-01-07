@@ -129,42 +129,38 @@ void neighbours_by_swapping(Solution* solution, int totTimeslots){
 
 void neighbour_by_crossover(Solution* actual_sol,Solution* best_sol, int n_exams, int n_timeslot){
     vector<int> best_sol_ts=best_sol->timeslot_per_exams;
-    vector<int> timeslot_crossover=vector<int>(n_exams, 0);
+    vector<int> timeslot_crossover=vector<int>(n_exams,0);
     int first_cut=round(n_exams/4.0);
     int second_cut=round(3.0*n_exams/4.0);
     for(int i=first_cut;i<second_cut;i++){
         timeslot_crossover[i]=best_sol->timeslot_per_exams[i];
     }
     int exam_no_ok=0;
-    for(int j=second_cut;j<n_exams;j++){
-        // gli esami nella actual_sol non sono tra loro in conflitto, devo solo controllare che non siano in conflitto con la best_sol
-        if(find(best_sol->all_exams[j]->conflict_times.begin(), best_sol->all_exams[j]->conflict_times.end(),
-         actual_sol->timeslot_per_exams[j]) == best_sol->all_exams[j]->conflict_times.end()){
-             timeslot_crossover[j]=actual_sol->timeslot_per_exams[j];
-        }else{
-            exam_no_ok++;
-        }
+    for(int j=0;j<n_exams;j++){
+        if(j<first_cut||j>=second_cut){
+            // gli esami nella actual_sol non sono tra loro in conflitto, devo solo controllare che non siano in conflitto con la best_sol
+            if(find(best_sol->all_exams[j]->conflict_times.begin(), best_sol->all_exams[j]->conflict_times.end(),
+            actual_sol->timeslot_per_exams[j]) == best_sol->all_exams[j]->conflict_times.end()){
+                timeslot_crossover[j]=actual_sol->timeslot_per_exams[j];
+            }else{
+                exam_no_ok++;
+            }
+        }        
     }
-    for(int j=0;j<first_cut;j++){
-        // gli esami nella actual_sol non sono tra loro in conflitto, devo solo controllare che non siano in conflitto con la best_sol
-        if(find(best_sol->all_exams[j]->conflict_times.begin(), best_sol->all_exams[j]->conflict_times.end(),
-         actual_sol->timeslot_per_exams[j]) == best_sol->all_exams[j]->conflict_times.end()){
-             timeslot_crossover[j]=actual_sol->timeslot_per_exams[j];
-        }else{
-            exam_no_ok++;
-        }
-    }
+    
     actual_sol->timeslot_per_exams=timeslot_crossover;
     actual_sol->update_timeslots(n_exams);
     int all_exam_ok=0;
+    int kk;
     for (int k=0;k<n_exams;k++){
         if(actual_sol->timeslot_per_exams[k]==0){
             for (int t=1;t<=n_timeslot;t++){
                 if (std::find(actual_sol->all_exams[k]->conflict_times.begin(), 
                 actual_sol->all_exams[k]->conflict_times.end(), t) == actual_sol->all_exams[k]->conflict_times.end()){
                     actual_sol->timeslot_per_exams[k]=t;
+                    actual_sol->update_timeslots(n_exams);
                     all_exam_ok++;
-                    t=n_timeslot;
+                    t=n_timeslot+1;
                 }
 
             }
@@ -173,6 +169,6 @@ void neighbour_by_crossover(Solution* actual_sol,Solution* best_sol, int n_exams
     }
     if(all_exam_ok<exam_no_ok){
         actual_sol->timeslot_per_exams=best_sol_ts;
-    }
+    }     
     actual_sol->update_timeslots(n_exams);
 }

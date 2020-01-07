@@ -20,7 +20,7 @@ double temperature_init(Solution *solution,int n_exams, int total_number_student
     double min_pen = obj_old;
     double max_pen = obj_old;    
 
-    while (count_iter < 2000)
+    while (count_iter < 200)
     {
         count_iter++;
         order_for_mutation = sort_indexes(weight_for_exams);
