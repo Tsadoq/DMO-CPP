@@ -13,7 +13,7 @@ double cooling(double temperature);
 int num_mutation_changer(int num_mutation_actual, int iteration, double &perc, double improvement,double best_improvement,bool first,int n_exams);
 double temperature_shock(double temperature);
 
-double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance,double t0){
+Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance,double t0){
  
     struct timeb now;
     double prob = 0;
@@ -102,7 +102,8 @@ double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, in
             best_timeslot_solution=solution->timeslot_per_exams;
             best_solution->timeslot_per_exams=solution->timeslot_per_exams;
             best_solution->update_timeslots(n_exams);
-            // solution->write_output_file(current_instance, n_exams);
+            weight_for_exams=solution->update_weights(n_exams);
+            best_solution->write_output_file(current_instance, n_exams);
             first=true;
         }
         if (obj_new > worst_sol){
@@ -120,7 +121,7 @@ double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, in
             count_iter=0;
         }
 
-        if((obj_new-best_sol)/best_sol <015){
+        if((obj_new-best_sol)/best_sol <0.10){
             count_local_minima++;
         }
         if(count_local_minima>=1000){
@@ -133,9 +134,9 @@ double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, in
         } 
     ftime(&now); 
     }                
-    cout<<"Best sol "<<best_sol<<endl;   
-
-    return best_sol;  
+    //cout<<"Best sol "<<best_sol<<endl;
+    best_solution->double_obj=best_sol;
+    return best_solution;  
 }
 
 /*double probability(double obj_new, double obj_old, double temperature)
@@ -157,7 +158,7 @@ double probability(double obj_new, double obj_old, double temperature, double ma
 
 double cooling(double temperature)
 {
-    temperature = 0.99*temperature;
+    temperature = 0.8*temperature;
     //temperature=temperature/(1+500*temperature);
     //temperature=1/((1/temperature)+0.001/2);
     return  temperature;

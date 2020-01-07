@@ -4,5 +4,9 @@ g++ -std=c++11 main.cpp -o main -fopenmp
 Se compare questo errore: c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../mingw32/bin/ld.exe: cannot find -lpthread
 SOLUZIONE: https://stackoverflow.com/questions/39185248/eclipse-mingw-c-cannot-find-lpthread
 
+Altro possibile errore: multiple definition of vsnprints
+SOLUZIONE: https://stackoverflow.com/questions/43294488/mingw-g-multiple-definition-of-vsnprintf-when-using-to-string
+Da linea di comando (non su VS code): mingw-get upgrade mingwrt=5.2.1
+
 PER RUNNARE: come sempre
 \main.exe instanceXX secondi numero_processori

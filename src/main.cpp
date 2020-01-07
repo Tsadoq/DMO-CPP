@@ -140,6 +140,7 @@ int main(int argc, char **argv) {
     //     ...
     // }
     vector<Solution*> array_sol;
+    vector<Solution*> best_sol=vector<Solution*>(numproc);
     int id=0;
      //if (1==1)
 
@@ -181,30 +182,30 @@ int main(int argc, char **argv) {
 
         string str_id = to_string(id);
         
-        double best_sol;
-        best_sol = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol",t0);
+        //double best_sol;
+        best_sol[id] = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol",t0);
 
-        array_sol[id]->double_obj=best_sol;
+        //array_sol[id]->double_obj=best_sol;
 
     }
- 
+    //Solution* best;
     // seleziono miglior soluzione tra quelle feasible che ho trovato
-
-    int min = array_sol[0]->double_obj;
+    int min = best_sol[0]->double_obj;
     int index_best = 0;
-    for(int i=0; i<numproc; i++){
+    for(int i=1; i<numproc; i++){
        // prendo il minimo
        Solution *tmp = array_sol[i];
        double tmp_obj = tmp->double_obj;
-       if (tmp_obj < min){
+       if (best_sol[i]->double_obj < min){
            index_best = i;
-       }
-       
+           //best=array_sol[i];
+       }       
     }
 
     // -----------------------------------------------------------------
     
-    array_sol[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
+    best_sol[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
+    cout<<"BEST "<<best_sol[index_best]->double_obj<<endl;
 
    
     return 0;
