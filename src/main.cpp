@@ -190,22 +190,26 @@ int main(int argc, char **argv) {
     }
     //Solution* best;
     // seleziono miglior soluzione tra quelle feasible che ho trovato
-    int min = best_sol[0]->double_obj;
+    double min = 100 * best_sol[0]->double_obj;
     int index_best = 0;
-    for(int i=1; i<numproc; i++){
+    double avg =0;
+    for(int i=0; i<numproc; i++){
        // prendo il minimo
        Solution *tmp = array_sol[i];
-       double tmp_obj = tmp->double_obj;
+       //double tmp_obj = tmp->double_obj;
        if (best_sol[i]->double_obj < min){
            index_best = i;
-           //best=array_sol[i];
-       }       
+           min=best_sol[i]->double_obj;
+       }
+       cout << "Solution of core " << i+1 << " has a score of " << best_sol[i]->double_obj << endl;
+       avg+=best_sol[i]->double_obj;
     }
 
     // -----------------------------------------------------------------
     
     best_sol[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
-    cout<<"BEST "<<best_sol[index_best]->double_obj<<endl;
+    cout<<"Best solution:\t\t"<<best_sol[index_best]->double_obj<<endl;
+    cout<<"Average solution:\t"<<avg/numproc<<endl;
 
    
     return 0;
