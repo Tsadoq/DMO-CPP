@@ -31,7 +31,7 @@
 // GUIDA per settare vscode e c++ da linux
 // https://code.visualstudio.com/docs/cpp/config-wsl
 
-
+using namespace std;
 
 //int read_file_stu(char *name_stu);
 int main(int argc, char **argv) {

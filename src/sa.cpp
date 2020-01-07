@@ -54,6 +54,8 @@ double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, in
     // number of temperature shock done
     int num_shock=0;
     ftime(&now); 
+    Solution * best_solution=solution->copy_solution(n_exams);
+    int count_local_minima=0;
 
     while((int)((now.time-start.time))<timelimit){
         count_iter++;
@@ -98,6 +100,8 @@ double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, in
         if (obj_new < best_sol){
             best_sol = obj_new;
             best_timeslot_solution=solution->timeslot_per_exams;
+            best_solution->timeslot_per_exams=solution->timeslot_per_exams;
+            best_solution->update_timeslots(n_exams);
             // solution->write_output_file(current_instance, n_exams);
             first=true;
         }
@@ -114,6 +118,14 @@ double sa(Solution* solution, struct timeb start, int timelimit, int n_exams, in
                 a=0.5;
             }
             count_iter=0;
+        }
+
+        if((obj_new-best_sol)/best_sol <015){
+            count_local_minima++;
+        }
+        if(count_local_minima>=1000){
+            count_local_minima=0;
+            neighbour_by_crossover(solution, best_solution, n_exams, n_timeslot);
         }
         //botta di calore per togliermi dal local minimum
         if(t<t0*0.001 ){ // || (best_improvement-improvement)/best_improvement<0.1         
@@ -145,7 +157,7 @@ double probability(double obj_new, double obj_old, double temperature, double ma
 
 double cooling(double temperature)
 {
-    temperature = 0.8*temperature;
+    temperature = 0.99*temperature;
     //temperature=temperature/(1+500*temperature);
     //temperature=1/((1/temperature)+0.001/2);
     return  temperature;

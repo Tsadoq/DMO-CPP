@@ -3,7 +3,7 @@
 double temperature_init(Solution *solution,int n_exams, int total_number_students, int n_timeslot)
 {
     double obj_new;
-
+    vector<int> old_timeslot_solution=solution->timeslot_per_exams;
     vector<double> weight_for_exams = solution->update_weights(n_exams);
     double obj_old = solution->objective_function(n_exams, total_number_students);
     vector<size_t> order_for_mutation = vector<size_t>(n_exams);
@@ -31,9 +31,12 @@ double temperature_init(Solution *solution,int n_exams, int total_number_student
         obj_new = solution->objective_function(n_exams, total_number_students);
         if (max_pen < obj_new)          max_pen = obj_new;
         else if (min_pen > obj_new)     min_pen = obj_new;
+        solution->timeslot_per_exams=old_timeslot_solution;
+        solution->update_timeslots(n_exams);
+        weight_for_exams=solution->update_weights(n_exams);
     }
 
-    int heating_coeff = 7;
+    int heating_coeff = 1;
 
     double temp = (max_pen * heating_coeff - min_pen) / 0.25;
 

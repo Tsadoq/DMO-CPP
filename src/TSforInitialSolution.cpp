@@ -92,6 +92,6 @@ int TSforInitialSolution::tabu_search(Solution *sol, int n_exams, int n_timeslot
             }
         }
     }
-    cout<<"Number of timeslot with problems after TS hey: "<<not_assigned_timeslot.size()<<endl;
+    cout<<"Number of timeslot with problems after TS: "<<not_assigned_timeslot.size()<<endl;
     return 5;
 }
