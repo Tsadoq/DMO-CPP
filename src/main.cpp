@@ -194,7 +194,7 @@ int main(int argc, char **argv) {
     int index_best = 0;
     for(int i=1; i<numproc; i++){
        // prendo il minimo
-       Solution *tmp = array_sol[i];
+       Solution *tmp = best_sol[i];
        double tmp_obj = tmp->double_obj;
        if (best_sol[i]->double_obj < min){
            index_best = i;
