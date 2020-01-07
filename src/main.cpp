@@ -45,16 +45,17 @@ int main(int argc, char **argv) {
     string instance_exm;
     string instance_slo;
     string instance_stu;
+    bool path_to_use=false;
     
-    if(true){
-        string instance_exm="/home/parallels/DMO-CPP/src/instances/"+current_instance+".exm";
-        string instance_slo="/home/parallels/DMO-CPP/src/instances/"+current_instance+".slo";
-        string instance_stu="/home/parallels/DMO-CPP/src/instances/"+current_instance+".stu";
+    if(path_to_use){
+        instance_exm="/home/parallels/DMO-CPP/src/instances/"+current_instance+".exm";
+        instance_slo="/home/parallels/DMO-CPP/src/instances/"+current_instance+".slo";
+        instance_stu="/home/parallels/DMO-CPP/src/instances/"+current_instance+".stu";
     }
     else{
-        string instance_exm="./instances/"+current_instance+".exm";
-        string instance_slo="./instances/"+current_instance+".slo";
-        string instance_stu="./instances/"+current_instance+".stu";
+        instance_exm="./instances/"+current_instance+".exm";
+        instance_slo="./instances/"+current_instance+".slo";
+        instance_stu="./instances/"+current_instance+".stu";
     }
     
     
@@ -76,7 +77,31 @@ int main(int argc, char **argv) {
     vector<vector<int>> conflict_matrix;
     int total_number_students=0;
     conflict_matrix=read_file_stu(writable_instance_stu,n_exams,total_number_students);
+
     cout<<"Number of students: "<<total_number_students<<endl;
+    Solution* initial_solution=new Solution();    
+    
+    initial_solution->solution_update(conflict_matrix, n_exams);
+    //fprintf(stdout, "%d\n", initial_solution->num_neighbours_for_exams[1]);
+     // sort exams by decreasing value of number of neighbours
+    vector<size_t> sorted_index=vector<size_t>(n_exams);
+    // it's a vector of indexes: values in [0,n_exams-1]       
+    sorted_index=sort_indexes(initial_solution->num_neighbours_for_exams);
+    // apply greedy coloring trying to assign timeslots first to exams with higher degree
+    
+    graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
+    initial_solution->update_timeslots(n_exams);
+    int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
+    TSforInitialSolution* TS=new TSforInitialSolution();
+    TS->dim=n_timeslot;
+    TS->maxIter=100000;
+    int ts=TS->tabu_search(initial_solution,n_exams,n_timeslot,conflict_matrix);
+    cout<<ts<<endl;
+    //initial_solution->write_output_file(current_instance, n_exams);
+    flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
+    // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
+    // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
+    cout<<"Flag: "<<flag<<endl;
 
     // -----------------------------------------------------------------
 
@@ -91,7 +116,7 @@ int main(int argc, char **argv) {
     cout << "  Number of threads =              " << omp_get_max_threads() << "\n";
 
     // qui dentro tutti i metodi...
-    vector <Solution*> initial_solution;
+    
 
     // // iniziallizzo parametri
     // for(int i=0; i<numproc; i++){
@@ -105,7 +130,7 @@ int main(int argc, char **argv) {
     //     if (i==2): //solo TS+SA
     //     ...
     // }
-
+    vector<Solution*> array_sol;
     int id=0;
      //if (1==1)
 
@@ -115,32 +140,15 @@ int main(int argc, char **argv) {
         id = omp_get_thread_num();
         //Solution *initial_solution = new Solution();
 
+
+
         //initial_solution = array[id];
         for(int i=0; i<numproc; i++){
-            Solution* tmp= new Solution();
-            initial_solution.push_back(tmp);
+            Solution* tmp= initial_solution->copy_solution(n_exams);
+            array_sol.push_back(tmp);
         }
         
-        initial_solution[id]->solution_update(conflict_matrix, n_exams);
-        //fprintf(stdout, "%d\n", initial_solution->num_neighbours_for_exams[1]);
         
-        // sort exams by decreasing value of number of neighbours
-        vector<size_t> sorted_index=vector<size_t>(n_exams);
-        // it's a vector of indexes: values in [0,n_exams-1]       
-        sorted_index=sort_indexes(initial_solution[id]->num_neighbours_for_exams);
-    
-        // apply greedy coloring trying to assign timeslots first to exams with higher degree
-        
-        graph_coloring_greedy(initial_solution[id], n_timeslot, sorted_index, n_exams); 
-        initial_solution[id]->update_timeslots(n_exams);
-        int flag = initial_solution[id]->check_feasibility(initial_solution[id]->timeslot_per_exams, initial_solution[id]->all_exams);
-        TSforInitialSolution* TS=new TSforInitialSolution();
-        TS->dim=n_timeslot;
-        TS->maxIter=100000;
-        int ts=TS->tabu_search(initial_solution[id],n_exams,n_timeslot,conflict_matrix);
-        cout<<ts<<endl;
-        //initial_solution->write_output_file(current_instance, n_exams);
-        flag = initial_solution[id]->check_feasibility(initial_solution[id]->timeslot_per_exams, initial_solution[id]->all_exams);
 
         /*int i=0;
         while(flag==1 && i<1000){
@@ -151,9 +159,7 @@ int main(int argc, char **argv) {
             i++;
         }*/
 
-        // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
-        // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
-        cout<<"Flag: "<<flag<<endl;
+        
     /*
         //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
         initial_solution->update_timeslots(n_exams);
@@ -167,19 +173,19 @@ int main(int argc, char **argv) {
         string str_id = to_string(id);
         
         double best_sol;
-        best_sol = sa(initial_solution[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol");
+        best_sol = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol");
 
-        initial_solution[id]->double_obj=best_sol;
+        array_sol[id]->double_obj=best_sol;
 
     }
  
     // seleziono miglior soluzione tra quelle feasible che ho trovato
 
-    int min = initial_solution[0]->double_obj;
+    int min = array_sol[0]->double_obj;
     int index_best = 0;
     for(int i=0; i<numproc; i++){
        // prendo il minimo
-       Solution *tmp = initial_solution[i];
+       Solution *tmp = array_sol[i];
        double tmp_obj = tmp->double_obj;
        if (tmp_obj < min){
            index_best = i;
@@ -189,7 +195,7 @@ int main(int argc, char **argv) {
 
     // -----------------------------------------------------------------
     
-    initial_solution[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
+    array_sol[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
 
    
     return 0;

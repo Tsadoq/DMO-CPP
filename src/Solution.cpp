@@ -10,8 +10,7 @@ using namespace std;
 
 
 void Solution::solution_update(std::vector<vector<int>> conflict_matrix, int n_exams){
-    // vector of exams pointer
-  
+    // vector of exams pointer  
     // initialize attributes conflict_exams and conflict_weights for each exam
     int num_neighbour;
     for(int i=0;i<n_exams;i++){
@@ -30,7 +29,7 @@ void Solution::solution_update(std::vector<vector<int>> conflict_matrix, int n_e
     }
 }
 
-int Solution::check_feasibility(std::vector<int> t, std::vector<Exam*> e) {
+int Solution::check_feasibility(std::vector<int> t, std::vector<Exam*> e){
     int flag = 0;
     for(int i=0;i<e.size();i++){
         for(int j=0; j<e[i]->conflict_exams.size(); j++){
