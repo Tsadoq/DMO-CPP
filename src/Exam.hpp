@@ -11,5 +11,5 @@ public:
     vector<int> conflict_weights;
     vector<int> conflict_times;
     double weight_in_obj_fun;
-    int timeslot;
+    int timeslot=-1;
 };

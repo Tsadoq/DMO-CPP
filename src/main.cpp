@@ -15,6 +15,7 @@
 #include "sa.cpp"
 #include"TSforInitialSolution.cpp"
 #include"temperature_init.cpp"
+#include"alternativeColoring.cpp"
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -35,6 +36,7 @@ using namespace std;
 
 //int read_file_stu(char *name_stu);
 int main(int argc, char **argv) {
+    srand(time(NULL));
     struct timeb start;
     int n_exams = 0;
     int n_timeslot = 0;
@@ -56,7 +58,7 @@ int main(int argc, char **argv) {
     string instance_exm;
     string instance_slo;
     string instance_stu;
-    bool path_to_use=true;
+    bool path_to_use=false;
     
     if(path_to_use){
         instance_exm="/home/parallels/DMO-CPP/src/instances/"+current_instance+".exm";
