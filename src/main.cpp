@@ -13,9 +13,9 @@
 #include "graph_coloring_greedy.cpp"
 #include "neighbours.cpp"
 #include "sa.cpp"
-#include"TSforInitialSolution.cpp"
-#include"temperature_init.cpp"
-#include"alternativeColoring.cpp"
+#include "TSforInitialSolution.cpp"
+#include "temperature_init.cpp"
+#include "alternativeColoring.cpp"
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -101,11 +101,15 @@ int main(int argc, char **argv) {
     // it's a vector of indexes: values in [0,n_exams-1]       
     sorted_index=sort_indexes(initial_solution->num_neighbours_for_exams);
     // apply greedy coloring trying to assign timeslots first to exams with higher degree
-    
-    graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
+    //-----------------------------------------------------------------------------------------
+    int ee=alternativeColoring(initial_solution,  n_timeslot, n_exams);
+    cout<<"ho finito coloring "<<ee<<endl;
+    //-----------------------------------------------------------------------------------------
+    //graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
     initial_solution->update_timeslots(n_exams);
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    TSforInitialSolution* TS=new TSforInitialSolution();
+    cout<<"feasibility "<<flag<<endl;
+    /*TSforInitialSolution* TS=new TSforInitialSolution();
     TS->dim=n_timeslot;
     TS->maxIter=100000;
     int ts=TS->tabu_search(initial_solution,n_exams,n_timeslot,conflict_matrix);
@@ -169,7 +173,7 @@ int main(int argc, char **argv) {
             array_sol.push_back(tmp);
         }
         
-        
+    */   
 
         /*int i=0;
         while(flag==1 && i<1000){
@@ -191,14 +195,15 @@ int main(int argc, char **argv) {
         }
     */  
 
-        string str_id = to_string(id);
+      /*  string str_id = to_string(id);
         
         //double best_sol;
         best_sol[id] = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol",t0, alpha, n_mutations, cooling);
 
         //array_sol[id]->double_obj=best_sol;
+        */
 
-    }
+   /* }
     //Solution* best;
     // seleziono miglior soluzione tra quelle feasible che ho trovato
     double min = 100 * best_sol[0]->double_obj;
@@ -223,7 +228,7 @@ int main(int argc, char **argv) {
     best_sol[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
     cout<<"Best solution:\t\t"<<best_sol[index_best]->double_obj<<endl;
     cout<<"Average solution:\t"<<avg/counter<<endl;
-   
+   */
     return 0;
 }
 
