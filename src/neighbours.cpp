@@ -7,6 +7,7 @@
 #include <vector> 
 #include <chrono>
 #include <iterator> 
+#include <algorithm>
 #include "Exam.hpp" 
 #include "Solution.hpp" 
  
@@ -178,7 +179,7 @@ void neighbour_by_crossover(Solution* actual_sol,Solution* best_sol, int n_exams
     }
     actual_sol->update_timeslots(n_exams);
 }
-
+/*
 
 void neighbours_by_double_mutation(Solution* solution, int totTimeslots, int numMutation){
     // funzione che serve a modificare la soluzione tentando di spostare esami in timeslot a prima vista non disponibili, ma che diventano disponibili facilmente
@@ -245,8 +246,7 @@ void neighbours_by_double_mutation(Solution* solution, int totTimeslots, int num
         possible_times.clear();
     }
 }
-
-
+*/
 
 
 int double_mutation(Solution* solution, int totTimeslots){
@@ -296,4 +296,42 @@ int double_mutation(Solution* solution, int totTimeslots){
         }  
     }
     return 0;
+}
+
+void unscheduling(Solution* sol, int num_unsched){
+    vector<int> positions;
+    int h;
+    for (int i= 0; i<sol->all_exams.size(); i++){
+        positions.push_back(i);
+    }
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
+    std::shuffle(positions.begin(), positions.end(),std::default_random_engine(seed) );
+    // random order so that I can choose from the num_unsch first positions
+    for (int j= 0; j < num_unsched; j++){
+        sol->timeslot_per_exams[positions[j]] = -1; // mark the unscheduled exams
+        sol->all_exams[positions[j]]->timeslot = -1;
+        // now we need to change also this timeslots in the conflict matrix of his conflictuals
+         for (auto k : sol->all_exams[positions[j]]->conflict_exams){ 
+                h=0; 
+                while(sol->all_exams[k-1]->conflict_exams[h] != sol->all_exams[positions[j]]->id_exam){ 
+                    h++;
+                } 
+                sol->all_exams[k-1]->conflict_times[h]= -1; 
+            }
+    }
+}
+
+int rescheduling(Solution* sol, int totTimeslots){
+    vector<int> unsched_exams_pos;
+    int counter = 0; // numero di esami che sono riuscito a rimettere, serve per check in SA
+    for (int i =0; i< sol->all_exams.size(); i++){
+        if (sol->timeslot_per_exams[i] == -1){
+            unsched_exams_pos.push_back(i);
+        }
+    }
+    // Non faccio un random sort perche' ho gia randomizzato l'unscheduling
+    for ( int i = 0; i < unsched_exams_pos.size(); i++){
+        counter = counter + sol->change_exam(unsched_exams_pos[i], totTimeslots);
+    }
+    return counter;
 }

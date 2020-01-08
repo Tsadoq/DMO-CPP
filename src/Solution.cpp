@@ -5,6 +5,7 @@
 #include <iostream>
 #include <math.h>
 #include <fstream>
+#include <algorithm>
 using namespace std;
 
 
@@ -117,4 +118,38 @@ void Solution::write_output_file(string current_instance, int n_exams){
         output_file << i+1 <<"\t"<< timeslot_per_exams[i]<<"\n"; 
     }
     output_file.close();
+}
+
+int Solution::change_exam(int pos_exam, int totTimeslots){
+    int k;
+    vector<int> possible_timeslots;
+    vector<int> not_available;
+    vector<int> possible_mutation;
+    for (int i = 0; i <all_exams[pos_exam]->conflict_times.size(); i++){
+        if (all_exams[pos_exam]->conflict_times[i] != -1){
+            not_available.push_back(i);
+        }    
+    }
+    // per gli spostamenti del scondo esame considerato
+    for (int i=0; i<totTimeslots;i++){
+        possible_timeslots.push_back(i+1);
+    }
+    sort(not_available.begin(), not_available.end());  
+    set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available.begin(),  
+                    not_available.end(),inserter(possible_mutation, possible_mutation.begin()));
+    if (possible_mutation.size()> 0){
+        int rand_index = rand() % possible_mutation.size();
+        all_exams[pos_exam]->timeslot = possible_mutation[rand_index];
+        timeslot_per_exams[pos_exam] = possible_mutation[rand_index];
+        for (auto j : all_exams[pos_exam]->conflict_exams){ 
+                k=0; 
+                while(all_exams[j-1]->conflict_exams[k] != all_exams[pos_exam]->id_exam){ 
+                    k++;
+                } 
+                all_exams[j-1]->conflict_times[k]=possible_mutation[rand_index];; 
+            } 
+        return 1;
+    } else {
+        return 0;
+    }
 }
