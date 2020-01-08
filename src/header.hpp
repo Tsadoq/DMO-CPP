@@ -20,3 +20,5 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
 void neighbours_by_swapping(Solution* solution, int totTimeslots);
 double temperature_init(Solution *solution,int n_exams, int total_number_students, int n_timeslot);
 void neighbour_by_crossover(Solution* actual_sol,Solution* best_sol, int n_exams, int n_timeslot);
+void unscheduling(Solution* sol, int num_unsched);
+int rescheduling(Solution* sol, int totTimeslots);

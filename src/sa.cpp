@@ -59,7 +59,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     Solution * best_solution=solution->copy_solution(n_exams);
     int count_local_minima=0;
     Solution* initial_sol=solution->copy_solution(n_exams);
-    
+    int num_unsched = 10;
     while((int)((now.time-start.time))<timelimit){
         count_iter++;
         // sort exam wrt weigths in obj function
@@ -69,6 +69,29 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         // find num_mutation and perc wrt the improvement in the current solution
         //num_mutation = num_mutation_changer(num_mutation, count_iter, perc, improvement,best_improvement,first,n_exams);
         first=false;
+//---------------------------------
+        int rescheduled = 0;
+        int counter_unsched = 0;
+        while(num_unsched > rescheduled && counter_unsched < 40){
+             unscheduling(solution, num_unsched);
+             //cout<<"Unscheduling done"<<endl;
+             rescheduled = rescheduling(solution, n_timeslot);
+             if (num_unsched != rescheduled){
+                solution->timeslot_per_exams = old_timeslot_solution;
+                solution->update_timeslots(solution->timeslot_per_exams.size());
+                //cout<<"Non sono riuscito a rimettere tutti gli esami, ma solo "<<rescheduled<<endl;
+                rescheduled = 0;
+             }
+             if (num_unsched != rescheduled){
+                 cout<<"I have rescheduled all exams!"<<endl;
+             }
+            counter_unsched++;
+        }
+        weight_for_exams=solution->update_weights(n_exams);    
+        obj_new=solution->objective_function(n_exams,total_number_students);
+        cout<<"The solution out of the new function is feasible: "<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
+//---------------------------------
+
         // create a neighbour
         vector<vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
         // update the weigths in the obj function after the mutation

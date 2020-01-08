@@ -18,4 +18,5 @@ class Solution{
     double objective_function(int n_exams, int total_number_student);
     Solution* copy_solution(int n_exams);
     void write_output_file(string current_instance, int n_exams);
+    int change_exam(int pos_exam, int totTimeslots);
 };
