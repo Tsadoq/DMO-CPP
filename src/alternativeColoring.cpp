@@ -14,12 +14,15 @@ void piazzo_random(Solution* initial_solution, vector<int> available_colors, vec
 bool swap_random(Solution* initial_solution, vector<int> available_colors);
 bool prova_a_inserire(Solution* initial_solution,  vector<int> available_colors, int TRY_PLACE, vector<Exam*> &notInPosition, Exam* exam);
 
-int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams){
+int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams,vector<size_t> sorted_index){
     srand(time(NULL));
     initial_solution->timeslot_per_exams=vector<int>(n_exams, -1);
     vector<int> seed_for_boxes{0,3,1,4,2,5};
     vector<vector<int>> boxes;
-    vector<Exam*> notInPosition = initial_solution->all_exams;
+    vector<Exam*> notInPosition;
+    for(int n=0;n<n_exams;n++){
+        notInPosition.push_back(initial_solution->all_exams[sorted_index[n]]);
+    }
     //vector<Exam*> yesInPosition;    
     //inizializzo i timeslot conflittuali
     //-------------------------------------------------------------------------------
@@ -56,6 +59,7 @@ int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams
     
     available_colors.insert(available_colors.end(), boxes[0].begin(), boxes[0].end());
     //cout<<"size di notinPos "<<notInPosition.size()<<endl;
+   
 
     while(notInPosition.size()!=0){
 
@@ -86,7 +90,9 @@ int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams
                     failures=0;
                     index_boxes=0;
                     notInPosition=vector<Exam*>();
-                    notInPosition = initial_solution->all_exams;
+                    for(int n=0;n<n_exams;n++){
+                        notInPosition.push_back(initial_solution->all_exams[sorted_index[n]]);
+                    }
                     available_colors = vector<int>();
                     available_colors.insert(available_colors.end(), boxes[0].begin(), boxes[0].end());
                     for(int i=0; i<n_exams; i++){
@@ -134,7 +140,7 @@ bool swap_random(Solution* initial_solution, vector<int> available_colors){
     index_exam = tmp[index];
     t1 = initial_solution->all_exams[index_exam]->timeslot;
     int index2 = rand() % available_colors.size();
-    t2 = available_colors[index2];
+    t2 = available_colors[index2]+1;
     int kk;
 
     if (std::find(initial_solution->all_exams[index_exam]->conflict_times.begin(), 
