@@ -3,7 +3,7 @@
 #include <iostream> 
 #include <numeric>  
 #include <random>   
-#include <algorithm> 
+//#include <algorithm> 
 #include <vector> 
 #include <chrono>
 #include <iterator> 
@@ -165,6 +165,7 @@ void neighbour_by_crossover(Solution* actual_sol,Solution* best_sol, int n_exams
                 actual_sol->all_exams[k]->conflict_times.end(), t) == actual_sol->all_exams[k]->conflict_times.end()){
                     actual_sol->timeslot_per_exams[k]=t;
                     all_exam_ok++;
+                    actual_sol->update_timeslots(n_exams);
                     t=n_timeslot;
                 }
 

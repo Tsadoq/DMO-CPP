@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     int n_timeslot = 0;
     int numproc = atoi(argv[3]);
 
-    double alpha = 0.5;
+    double alpha = 0.85;
     int n_mutations = 3;
     double cooling = 0.8;
     if(argc > 4){
@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
     string instance_exm;
     string instance_slo;
     string instance_stu;
-    bool path_to_use=true;
+    bool path_to_use=false;
     
     if(path_to_use){
         instance_exm="/home/parallels/DMO-CPP/src/instances/"+current_instance+".exm";

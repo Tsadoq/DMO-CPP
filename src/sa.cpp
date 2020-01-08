@@ -58,6 +58,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     ftime(&now); 
     Solution * best_solution=solution->copy_solution(n_exams);
     int count_local_minima=0;
+    Solution* initial_sol=solution->copy_solution(n_exams);
     
     while((int)((now.time-start.time))<timelimit){
         count_iter++;
@@ -123,7 +124,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             count_iter=0;
         }
 
-        if((obj_new-best_sol)/best_sol <0.10){
+        if((improvement)/best_sol <0.10 && improvement){
             count_local_minima++;
         }
         if(count_local_minima>=1000){
