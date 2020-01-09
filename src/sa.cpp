@@ -10,7 +10,7 @@ using namespace std;
 
 double probability(double obj_new, double obj_old, double temperature, double maxtemperature);
 double cooling(double temperature, double coeff);
-int num_mutation_changer(int num_mutation_actual, int iteration, double &perc, double improvement,double best_improvement,bool first,int n_exams);
+int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool first,int n_exams);
 double temperature_shock(double temperature);
 
 Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance,double t0, double alpha, int mutations, double cooling_coefficient){
@@ -52,7 +52,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     double best_sol = obj_old;
     double worst_sol = obj_old;
     // set perc=1.0 and num_mutation=1 when a new solution is the best one or we are at the first iteration
-    bool first=true;
+    bool big_change=true;
     // number of temperature shock done
     int num_shock=0;
     ftime(&now); 
@@ -66,8 +66,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         // save old solution
         old_timeslot_solution=solution->timeslot_per_exams; 
         // find num_mutation and perc wrt the improvement in the current solution
-        //num_mutation = num_mutation_changer(num_mutation, count_iter, perc, improvement,best_improvement,first,n_exams);
-        first=false;
+        num_mutation = num_mutation_changer(num_mutation, perc, improvement,best_improvement,big_change,n_exams);
+        big_change=false;
         // create a neighbour
         vector<vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
         // update the weigths in the obj function after the mutation
@@ -99,14 +99,13 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             obj_old=obj_new;
         }
 
-        if (obj_new < best_sol){
+        if (obj_new <= best_sol){
             best_sol = obj_new;
             best_timeslot_solution=solution->timeslot_per_exams;
             best_solution->timeslot_per_exams=solution->timeslot_per_exams;
             best_solution->update_timeslots(n_exams);
             weight_for_exams=solution->update_weights(n_exams);
             best_solution->write_output_file(current_instance, n_exams);
-            first=true;
         }
         if (obj_new > worst_sol){
             worst_sol = obj_new;
@@ -123,9 +122,11 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             count_iter=0;
         }
 
-        if((obj_new-best_sol)/best_sol <0.10){
+        if(improvement/best_sol>0.15){
             count_local_minima++;
+            big_change=true;
         }
+
         if(count_local_minima>=1000){
             count_local_minima=0;
             neighbour_by_crossover(solution, best_solution, n_exams, n_timeslot);
@@ -166,21 +167,28 @@ double cooling(double temperature, double coeff)
     return  temperature*coeff;
 }
 
-// FUNZIONE CHE DA' PROBLEMI: per ora mutazioni e percentuale fisse
-int num_mutation_changer(int num_mutation_actual, int iteration, double &perc, double improvement,double best_improvement,bool first,int n_exams){
-    int num_mutation_now;
+int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool big_change,int n_exams){
+    int num_mutation_new;
     int available_num_mutation;
-    if (first==true){
-        perc=1;
-        num_mutation_now=5;
+    if (big_change==true || improvement==0){
+        perc=1.0;
+        num_mutation_new=round(n_exams*0.05);
+        //cout<<"true "<< num_mutation_new<<" "<<perc<<endl;
     }else{    
-        perc = (best_improvement-improvement)/best_improvement;           
-        available_num_mutation=ceil(perc*n_exams*0.05);
-        num_mutation_now = rand() % available_num_mutation+1;
-        //cout<< num_mutation_now<<endl;
+        perc = improvement/best_improvement;  
+        //cout<<"improvement "<< improvement<<endl;       
+        available_num_mutation=round(perc*n_exams);
+        available_num_mutation=0.1*available_num_mutation+1;
+        if (available_num_mutation-num_mutation_actual>0){            
+            num_mutation_new =num_mutation_actual+ rand()%(available_num_mutation-num_mutation_actual)+1;
+            //cout<<"false if "<< num_mutation_new<<" "<<perc<<endl;
+        }else{
+            num_mutation_new=rand()%available_num_mutation+1;
+            //cout<<"false else "<< num_mutation_new<<" "<<perc<<endl;
+        }        
         /*cout<< num_mutation_actual<<endl;*/
     }
-    return num_mutation_now;
+    return num_mutation_new;
 }
 
 double temperature_shock(double temperature){
