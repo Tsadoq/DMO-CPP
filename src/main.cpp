@@ -102,12 +102,13 @@ int main(int argc, char **argv) {
     sorted_index=sort_indexes(initial_solution->num_neighbours_for_exams);
     // apply greedy coloring trying to assign timeslots first to exams with higher degree
     //-----------------------------------------------------------------------------------------
-    int ee=alternativeColoring(initial_solution,  n_timeslot, n_exams,sorted_index);
+    int ee=alternativeColoring(initial_solution,  n_timeslot, n_exams, sorted_index);
     cout<<"ho finito coloring "<<ee<<endl;
     //-----------------------------------------------------------------------------------------
     //graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
     initial_solution->update_timeslots(n_exams);
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
+    vector<double>weight_for_exams=initial_solution->update_weights(n_exams);
     cout<<"feasibility "<<flag<<endl;
     /*TSforInitialSolution* TS=new TSforInitialSolution();
     TS->dim=n_timeslot;
@@ -121,17 +122,15 @@ int main(int argc, char **argv) {
     cout<<"Flag: "<<flag<<endl;
     */
 
-    vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
+    //vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
 
     // -----------------------------------------------------------------
     double t0 = 30;//temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
-    cout<<"Temp init: "<<t0<<endl;
+    //cout<<"Temp init: "<<t0<<endl;
 
-    initial_solution->timeslot_per_exams=old_timeslot_solution;
-    initial_solution->update_timeslots(n_exams);
-    vector<double>weight_for_exams=initial_solution->update_weights(n_exams);
-    
- 
+    //initial_solution->timeslot_per_exams=old_timeslot_solution;
+    //initial_solution->update_timeslots(n_exams);
+   
     omp_set_dynamic(0);     // Explicitly disable dynamic teams
     omp_set_num_threads(numproc); // Use 4 threads for all consecutive parallel regions
  
@@ -166,17 +165,15 @@ int main(int argc, char **argv) {
         id = omp_get_thread_num();
         //Solution *initial_solution = new Solution();
 
-
-
         //initial_solution = array[id];
         for(int i=0; i<numproc; i++){
             Solution* tmp= initial_solution->copy_solution(n_exams);
             array_sol.push_back(tmp);
         }
-        
-    
 
+        /*
         int i=0;
+        //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
         while(flag==1 && i<1000){
             unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
             std::shuffle(sorted_index.begin(), sorted_index.end(),std::default_random_engine(seed) );
@@ -184,26 +181,18 @@ int main(int argc, char **argv) {
             initial_solution->update_timeslots(n_exams);
             i++;
         }
-
-        
-    
-        //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
-        initial_solution->update_timeslots(n_exams);
-        vector<double> weight_for_exams=initial_solution->update_weights(n_exams);
+        */
+      
         vector<int> possible_timeslots;
         for (int i=0; i<n_timeslot;i++){
             possible_timeslots.push_back(i+1);
         }
-    
 
         string str_id = to_string(id);
         
         //double best_sol;
         best_sol[id] = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol",t0, alpha, n_mutations, cooling);
-
         //array_sol[id]->double_obj=best_sol;
-        
-
     }
     //Solution* best;
     // seleziono miglior soluzione tra quelle feasible che ho trovato
