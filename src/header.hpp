@@ -21,3 +21,7 @@ void neighbours_by_swapping(Solution* solution, int totTimeslots);
 double temperature_init(Solution *solution,int n_exams, int total_number_students, int n_timeslot);
 void neighbour_by_crossover(Solution* actual_sol,Solution* best_sol, int n_exams, int n_timeslot);
 int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams,vector<size_t> sorted_index);
+void unscheduling(Solution* sol, int num_unsched);
+int rescheduling(Solution* sol, int totTimeslots);
+int directional_mutation(Solution* sol, int totTimeslots);
+double directional_mutation_final(Solution* sol, int totTimeslots, double best_obj, int num_stud);

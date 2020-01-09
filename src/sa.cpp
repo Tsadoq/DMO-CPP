@@ -58,13 +58,18 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     ftime(&now); 
     Solution * best_solution=solution->copy_solution(n_exams);
     int count_local_minima=0;
+    int numero_di_mutazioni=0;
+    int numero_di_mutazioni_TOTALI=0;
     
     while((int)((now.time-start.time))<timelimit){
         count_iter++;
+        numero_di_mutazioni=0;
+        numero_di_mutazioni_TOTALI=0;
         // sort exam wrt weigths in obj function
         order_for_mutation=sort_indexes(weight_for_exams);
         // save old solution
         old_timeslot_solution=solution->timeslot_per_exams; 
+
         // find num_mutation and perc wrt the improvement in the current solution
         num_mutation = num_mutation_changer(num_mutation, perc, improvement,best_improvement,big_change,n_exams);
         big_change=false;
@@ -72,15 +77,31 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         vector<vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
         // update the weigths in the obj function after the mutation
         weight_for_exams=solution->update_weights(n_exams);    
+        
         obj_new=solution->objective_function(n_exams,total_number_students);
+        for(int i=0; i<n_exams; i++){
+            if(old_timeslot_solution[i]!=solution->timeslot_per_exams[i]){
+                numero_di_mutazioni++;
+            }
+        }
+        //cout<<"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm "<<numero_di_mutazioni<<endl;
         //cout<<"Mutation feas? "<< solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams) <<endl; 
         //cout<<"Obj function pre swapping: "<<obj_new<<endl;
         //cout<<"Trying to do swapping"<<endl;
-        neighbours_by_swapping(solution, n_timeslot);
-        weight_for_exams=solution->update_weights(n_exams);    
+        //if(mutations_vector.size()>4){
+            neighbours_by_swapping(solution, n_timeslot);
+            weight_for_exams=solution->update_weights(n_exams);
+        //}
         obj_new=solution->objective_function(n_exams,total_number_students); 
         //cout<<"Swapping done with new obj"<<obj_new<<endl; 
         
+        for(int i=0; i<n_exams; i++){
+            if(old_timeslot_solution[i]!=solution->timeslot_per_exams[i]){
+                numero_di_mutazioni_TOTALI++;
+            }
+        }
+        //cout<<"TOTALIIIII "<<numero_di_mutazioni_TOTALI-numero_di_mutazioni<<endl;
+
         if(obj_new > obj_old){
             prob=probability(obj_new, obj_old, t, t0);
             prob_random = distribution(generator);
@@ -98,7 +119,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             //solution->write_output_file(current_instance, n_exams);
             obj_old=obj_new;
         }
-
+        cout<<"OF OLD "<<obj_old<<endl;
         if (obj_new <= best_sol){
             best_sol = obj_new;
             best_timeslot_solution=solution->timeslot_per_exams;
@@ -132,8 +153,35 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             neighbour_by_crossover(solution, best_solution, n_exams, n_timeslot);
         }
         //botta di calore per togliermi dal local minimum
-        if(t<t0*0.001 ){ // || (best_improvement-improvement)/best_improvement<0.1         
+        if(t<t0*0.01 ){ // || (best_improvement-improvement)/best_improvement<0.1  
+            cout<<"temperature "<<t;       
             t=temperature_shock(t0);
+            //---------------------------------
+        
+            int rescheduled = 0;
+            int counter_unsched = 0;
+            int num_unsched = 10;
+            while(num_unsched > rescheduled && counter_unsched < 40){
+                unscheduling(solution, num_unsched);
+                //cout<<"Unscheduling done"<<endl;
+                rescheduled = rescheduling(solution, n_timeslot);
+                if (num_unsched != rescheduled){
+                    solution->timeslot_per_exams = old_timeslot_solution;
+                    solution->update_timeslots(solution->timeslot_per_exams.size());
+                    //cout<<"Non sono riuscito a rimettere tutti gli esami, ma solo "<<rescheduled<<endl;
+                    rescheduled = 0;
+                }
+                if (num_unsched != rescheduled){
+                    //cout<<"I have rescheduled all exams!"<<endl;
+                }
+                counter_unsched++;
+            }
+            weight_for_exams=solution->update_weights(n_exams);    
+            obj_new=solution->objective_function(n_exams,total_number_students);
+            //cout<<"The solution out of the new function is feasible: "<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
+
+            //---------------------------------
+
         } 
     ftime(&now); 
     }                

@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
     vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
 
     // -----------------------------------------------------------------
-    double t0 = temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
+    double t0 = 30;//temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
     cout<<"Temp init: "<<t0<<endl;
 
     initial_solution->timeslot_per_exams=old_timeslot_solution;

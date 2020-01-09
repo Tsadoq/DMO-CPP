@@ -245,9 +245,56 @@ void neighbours_by_double_mutation(Solution* solution, int totTimeslots, int num
         possible_times.clear();
     }
 }
-
-
-
+/*
+int double_mutation(Solution* solution, int totTimeslots){
+    // funzione che serve a modificare la soluzione tentando di spostare esami in timeslot a prima vista non disponibili, ma che diventano disponibili facilmente
+    // cerco esami che hanno timeslot in cui hanno un solo conflitto
+    vector<int> times;
+    vector<int> possible_times;
+    vector<int> possible_timeslots;
+    // per gli spostamenti del scondo esame considerato
+    for (int i=0; i<totTimeslots;i++){
+        possible_timeslots.push_back(i+1);
+    }
+    int i = rand() % solution->timeslot_per_exams.size(); // scelgo un esame a caso
+    times = vector<int>(totTimeslots,0);
+    for (int j = 0; j < solution->all_exams[i]->conflict_times.size(); j++){
+        times[ solution->all_exams[i]->conflict_times[j]-1 ]++;
+    }
+    for (int j= 0; j < totTimeslots; j++){
+        if (times[j] == 1){
+            possible_times.push_back(j+1); // salvo i timeslot che hanno un solo conflitto con l'esame i (da 1 a n_timeslots)
+        }
+    }
+    // in possible times ci sono i timeslot che hanno 1 solo conflitto con l'esame i
+    if (possible_times.size() > 0){
+        int selected_time = rand() % possible_times.size();
+        int conflict_index = -1;
+        // se l'esame che e' in conlitto può spostarsi, allora sposto lui e posso inserire l'esame i nel timeslot selected time
+        for (int j= 0; j <solution->all_exams[i]->conflict_times.size(); j++){
+            if (solution->all_exams[i]->conflict_times[j]== possible_times[selected_time]){
+                conflict_index = j; // cerco la posizione dell'esame in conflitto 
+                break;
+                }
+        }
+        vector<int> possible_mutation_for_second_exam;
+        vector<int> not_available_sec = solution->all_exams[conflict_index]->conflict_times;
+        sort(not_available_sec.begin(), not_available_sec.end());  
+        set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_sec.begin(),  
+                            not_available_sec.end(),inserter(possible_mutation_for_second_exam, possible_mutation_for_second_exam.begin()));
+        if (possible_mutation_for_second_exam.size()> 0 ){
+            // se questo swap non era gia stato fatto
+            int rand_ind = rand() % possible_mutation_for_second_exam.size();
+            solution->all_exams[i]->timeslot = possible_times[selected_time];
+            solution-> all_exams[conflict_index]->timeslot = possible_mutation_for_second_exam[rand_ind ];
+            solution->update_timeslots(solution->all_exams.size());
+            cout<<endl;
+            return 1;
+        }  
+    }
+    return 0;
+}
+*/
 
 int double_mutation(Solution* solution, int totTimeslots){
     // funzione che serve a modificare la soluzione tentando di spostare esami in timeslot a prima vista non disponibili, ma che diventano disponibili facilmente
@@ -297,3 +344,110 @@ int double_mutation(Solution* solution, int totTimeslots){
     }
     return 0;
 }
+
+void unscheduling(Solution* sol, int num_unsched){
+    vector<int> positions;
+    int h;
+    for (int i= 0; i<sol->all_exams.size(); i++){
+        positions.push_back(i);
+    }
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
+    std::shuffle(positions.begin(), positions.end(),std::default_random_engine(seed) );
+    // random order so that I can choose from the num_unsch first positions
+    for (int j= 0; j < num_unsched; j++){
+        sol->timeslot_per_exams[positions[j]] = -1; // mark the unscheduled exams
+        sol->all_exams[positions[j]]->timeslot = -1;
+        // now we need to change also this timeslots in the conflict matrix of his conflictuals
+         for (auto k : sol->all_exams[positions[j]]->conflict_exams){ 
+                h=0; 
+                while(sol->all_exams[k-1]->conflict_exams[h] != sol->all_exams[positions[j]]->id_exam){ 
+                    h++;
+                } 
+                sol->all_exams[k-1]->conflict_times[h]= -1; 
+            }
+    }
+}
+
+int rescheduling(Solution* sol, int totTimeslots){
+    vector<int> unsched_exams_pos;
+    int counter = 0; // numero di esami che sono riuscito a rimettere, serve per check in SA
+    for (int i =0; i< sol->all_exams.size(); i++){
+        if (sol->timeslot_per_exams[i] == -1){
+            unsched_exams_pos.push_back(i);
+        }
+    }
+    // Non faccio un random sort perche' ho gia randomizzato l'unscheduling
+    for ( int i = 0; i < unsched_exams_pos.size(); i++){
+        counter = counter + sol->change_exam(unsched_exams_pos[i], totTimeslots);
+    }
+    return counter;
+}
+
+int directional_mutation(Solution* sol, int totTimeslots){
+    int rand_ind;
+    int counter = 0;
+    int k;
+    int flag = 0;
+    while (flag == 0 && counter < 10){
+        rand_ind = rand() % sol->all_exams.size();
+        flag = sol->probability_creator(totTimeslots, rand_ind); // trovo il timeslot in cui posso muovermi
+        counter++;
+    }
+    if (counter == 10)
+        return 0;
+    // In questo momento in flag c'e' il timeslot che diminuisce la penalita' dell'esame in questione
+    sol->timeslot_per_exams[rand_ind] = flag;  // cambio nel vettore 
+    sol->all_exams[rand_ind]->timeslot = flag;  // e all'interno dell'esame
+    for (auto j : sol->all_exams[rand_ind]->conflict_exams){ 
+            k=0; 
+            while(sol->all_exams[j-1]->conflict_exams[k] != sol->all_exams[rand_ind]->id_exam){ 
+                k++;
+            } 
+            sol->all_exams[j-1]->conflict_times[k]= flag;  // modifico nei vicini
+    } 
+    return 1;
+
+}
+
+double directional_mutation_final(Solution* sol, int totTimeslots, double best_obj, int num_stud){
+    int flag;
+    double delta;
+    int k;
+    int i;
+    vector<double> weight_for_exams=sol->update_weights(sol->all_exams.size());
+    vector<size_t> order_for_mutation = sort_indexes(weight_for_exams);
+    for (int h = 0; h < order_for_mutation.size(); h++){
+        i = order_for_mutation[h];
+        flag = sol->probability_creator(totTimeslots, i); // trovo il timeslot in cui posso muovermi
+        if (flag != 0){
+            delta = 0;
+            // Devo calcolare in maniera furba la nuova penalita', tengo traccia solo degli esami che possono portare a cambiamenti
+            for (int j = 0; j< sol->all_exams[i]->conflict_times.size(); j++){
+                // calcolo per ogni conflitto dell'esame i come cambia la penalita contro l'esame j
+                delta = delta + 2*( pow(2, 5-abs(sol->all_exams[i]->conflict_times[j] - flag)) - pow(2, 5-abs(sol->all_exams[i]->conflict_times[j] - sol->all_exams[i]->timeslot)) )* sol->all_exams[i]->conflict_weights[j];
+                // in pratica, per ogni conflitto vado a vedere come sarebbe la penalita rispetto a come e adesso, il risultato moltiplicato per due perche cosi tengo conto anche del cambiamento tra j e i
+            }
+            cout<<"Delta is "<<delta<<endl;
+            if (delta < 0){
+                cout<<"Hey, I am improving"<<endl;
+                // mi conviene fare questo cambiamento
+                sol->all_exams[i]->timeslot = flag;
+                sol->timeslot_per_exams[i] = flag;
+                for (auto j : sol->all_exams[i]->conflict_exams){ 
+                    k=0; 
+                    while(sol->all_exams[j-1]->conflict_exams[k] != sol->all_exams[i]->id_exam){ 
+                        k++;
+                    } 
+                    sol->all_exams[j-1]->conflict_times[k]= flag;  // modifico nei vicini
+                } 
+                // NB: non serve piu' cambiare i weights, aggiorno solo la fo
+                best_obj = best_obj + 2*delta/num_stud; 
+            }
+            // Altrimenti non fa nulla e passa all'esame successivo
+        }
+    }
+    cout<<"I have been there"<<endl;
+    return best_obj;
+}
+
+
