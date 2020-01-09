@@ -58,14 +58,14 @@ with open("./logs/test.log", 'w') as log:
     if isinstance(args.program_name, list):
         program = args.program_name[0]
     elif isinstance(args.program_name, str):
-        log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Program not specified. Using main as default")
+        log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Program not specified. Using main as default\n")
         program = args.program_name
 
 
     if isinstance(args.runtime, list):
         runtime = args.runtime[0]
     elif isinstance(args.runtime, int):
-        log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Runtime not specified. Using 180 as default")
+        log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Runtime not specified. Using 180 as default\n")
         runtime = args.runtime
 
     instances = args.instance
@@ -79,27 +79,27 @@ with open("./logs/test.log", 'w') as log:
 
 
     if os.path.isfile(f"./{program}"): 
-        log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Program {program} found")
+        log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Program {program} found\n")
     else:
-        log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Program {program} not found. Trying to compile {program}")
+        log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Program {program} not found. Trying to compile {program}\n")
         if which('g++-9') is not None:
-            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Compiling with g++-9")
+            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Compiling with g++-9\n")
             try:
                 if os.system(f"g++-9 -g -ggdb -o {program} {program}.cpp -fopenmp") != 0:
                     raise Exception(f"An error occured. Program {program} not compiled")
             except: 
-                log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- An error occured. Program {program} not compiled")
+                log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- An error occured. Program {program} not compiled\n")
             else:
-                log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Compiled successfully")
+                log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Compiled successfully\n")
         elif which('g++-7') is not None:
-            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Compiling with g++-7")
+            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Compiling with g++-7\n")
             try:
                 if os.system(f"g++-7 -g -ggdb -o {program} {program}.cpp -fopenmp") != 0:
                     raise Exception(f"An error occured. Program {program} not compiled")
             except: 
-                log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- An error occured. Program {program} not compiled")
+                log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- An error occured. Program {program} not compiled\n")
             else:
-                log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Compiled successfully")
+                log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Compiled successfully\n")
 
 
 
@@ -115,7 +115,7 @@ with open("./logs/test.log", 'w') as log:
         os.makedirs('logs')
 
 
-    log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running with arguments: {program} {instances} {runtime}\nalpha: {alpha}\nmutations: {mutations}\ncooling: {cooling}")
+    log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running {parallel} parallel instances with arguments: {program} {instances} {runtime}\nalpha: {alpha}\nmutations: {mutations}\ncooling: {cooling}\n")
     runs = {}
     for instance in instances:
         log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] ------ INSTANCE {instance} BEGIN ------\n")
@@ -165,11 +165,11 @@ with open("./logs/test.log", 'w') as log:
     while res:
         res = is_running()
         time.sleep(1)
-    log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- All instances are done")
+    log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] --------- All instances are done computing\n")
     for instance in instances:
         best = False
         best_score = 9999
-
+        log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] --------- Parsing solutions for instance {instance}\n")
         for filename in runs[instance]:
         # LOOK FOR BEST SOLUTION
             score = float(find_score(filename, instance))
@@ -182,7 +182,7 @@ with open("./logs/test.log", 'w') as log:
                 os.rename(f"logs/{instance}/{filename}", f"logs/{instance}/errors/{filename}")
                 log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] --ERROR-- Instance {instance} interrupted, no score provided by {filename}\n")
         if best:
-            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Best solution: {best_score} | {best_file}\n")
+            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Best solution for instance {instance}: {best_score} | {best_file}\n")
             # MOVE THE BEST TO logs/instance0#/best
             os.rename(f"logs/{instance}/{best_file}", f"logs/{instance}/best/{best_file}")
         # log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] ------ INSTANCE {instance} END ------\n")
