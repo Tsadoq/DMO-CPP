@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
     //graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
     initial_solution->update_timeslots(n_exams);
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    vector<double>weight_for_exams=initial_solution->update_weights(n_exams);
+    //vector<double>weight_for_exams=initial_solution->update_weights(n_exams);
     cout<<"feasibility "<<flag<<endl;
     /*TSforInitialSolution* TS=new TSforInitialSolution();
     TS->dim=n_timeslot;
@@ -182,12 +182,6 @@ int main(int argc, char **argv) {
             i++;
         }
         */
-      
-        vector<int> possible_timeslots;
-        for (int i=0; i<n_timeslot;i++){
-            possible_timeslots.push_back(i+1);
-        }
-
         string str_id = to_string(id);
         
         //double best_sol;

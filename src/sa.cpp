@@ -14,33 +14,15 @@ int num_mutation_changer(int num_mutation_actual, double &perc, double improveme
 double temperature_shock(double temperature);
 
 Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot,string current_instance,double t0, double alpha, int mutations, double cooling_coefficient){
- 
     struct timeb now;
     double prob = 0;
     double prob_random = 0;
-    //double t0 = 30;
     double obj_new;
     vector<int> old_timeslot_solution;
     vector<int> best_timeslot_solution;
     double a=alpha; //def = 0.5
-    double t=t0;
+    double t=t0; //def = 30
     double cooling_coeff = cooling_coefficient; //def = 0.8
-
-    std::default_random_engine generator;
-    std::uniform_real_distribution<double> distribution(0.0,1.0);
-
-    vector<double> weight_for_exams=solution->update_weights(n_exams);
-    double obj_old = solution->objective_function(n_exams,total_number_students);
-    cout<<"Initial Objective Function: "<<obj_old<<endl;
-
-    //riscrivo il file output -> da fare
-    solution->write_output_file(current_instance, n_exams);
-    vector<size_t> order_for_mutation=vector<size_t>(n_exams);
-    vector<int> possible_timeslots;
-    for (int i=0; i<n_timeslot;i++){
-        possible_timeslots.push_back(i+1);
-    }
-
     //int num_mutation=floor(n_exams/40);
     int num_mutation=mutations; //def = 3
     double perc=0.2;
@@ -49,22 +31,39 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     double improvement=0;
     // improvement best solution wrt worst solution
     double best_improvement=0;
-    double best_sol = obj_old;
-    double worst_sol = obj_old;
     // set perc=1.0 and num_mutation=1 when a new solution is the best one or we are at the first iteration
     bool big_change=true;
     // number of temperature shock done
     int num_shock=0;
-    ftime(&now); 
-    Solution * best_solution=solution->copy_solution(n_exams);
     int count_local_minima=0;
-    int numero_di_mutazioni=0;
-    int numero_di_mutazioni_TOTALI=0;
     
+    Solution* best_solution=solution->copy_solution(n_exams);
+    
+    std::default_random_engine generator;
+    std::uniform_real_distribution<double> distribution(0.0,1.0);
+
+    //aggiorno i pesi qui perché mi serve per sorted index non c'è nel main
+    vector<double> weight_for_exams=solution->update_weights(n_exams);
+    double obj_old = solution->objective_function(n_exams,total_number_students);
+    cout<<"Initial Objective Function: "<<obj_old<<endl;
+    double best_sol = obj_old;
+    double worst_sol = obj_old;
+
+    //riscrivo il file output
+    solution->write_output_file(current_instance, n_exams);
+
+    //mi servono mutation_by_neigh
+    vector<size_t> order_for_mutation=vector<size_t>(n_exams);
+    vector<int> possible_timeslots;
+    for (int i=0; i<n_timeslot;i++){
+        possible_timeslots.push_back(i+1);
+    }
+
+
+    ftime(&now); 
     while((int)((now.time-start.time))<timelimit){
         count_iter++;
-        numero_di_mutazioni=0;
-        numero_di_mutazioni_TOTALI=0;
+        
         // sort exam wrt weigths in obj function
         order_for_mutation=sort_indexes(weight_for_exams);
         // save old solution
@@ -79,11 +78,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         weight_for_exams=solution->update_weights(n_exams);    
         
         obj_new=solution->objective_function(n_exams,total_number_students);
-        for(int i=0; i<n_exams; i++){
-            if(old_timeslot_solution[i]!=solution->timeslot_per_exams[i]){
-                numero_di_mutazioni++;
-            }
-        }
+        
         //cout<<"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm "<<numero_di_mutazioni<<endl;
         //cout<<"Mutation feas? "<< solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams) <<endl; 
         //cout<<"Obj function pre swapping: "<<obj_new<<endl;
@@ -95,11 +90,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         obj_new=solution->objective_function(n_exams,total_number_students); 
         //cout<<"Swapping done with new obj"<<obj_new<<endl; 
         
-        for(int i=0; i<n_exams; i++){
-            if(old_timeslot_solution[i]!=solution->timeslot_per_exams[i]){
-                numero_di_mutazioni_TOTALI++;
-            }
-        }
+        
         //cout<<"TOTALIIIII "<<numero_di_mutazioni_TOTALI-numero_di_mutazioni<<endl;
 
         if(obj_new > obj_old){
