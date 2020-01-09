@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
     int numproc = atoi(argv[3]);
 
     double alpha = 0.5;
-    int n_mutations = 3;
-    double cooling = 0.8;
+    int n_mutations = 1;
+    double cooling = 0.998;
     if(argc > 4){
         alpha = atof(argv[4]);
         n_mutations = atoi(argv[5]);
@@ -110,6 +110,7 @@ int main(int argc, char **argv) {
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
     //vector<double>weight_for_exams=initial_solution->update_weights(n_exams);
     cout<<"feasibility "<<flag<<endl;
+    initial_solution->write_output_file("./instances/"+current_instance+".sol", n_exams);
     /*TSforInitialSolution* TS=new TSforInitialSolution();
     TS->dim=n_timeslot;
     TS->maxIter=100000;
@@ -125,7 +126,7 @@ int main(int argc, char **argv) {
     //vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
 
     // -----------------------------------------------------------------
-    double t0 = 30;//temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
+    double t0 = 5;//temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
     //cout<<"Temp init: "<<t0<<endl;
 
     //initial_solution->timeslot_per_exams=old_timeslot_solution;
@@ -182,8 +183,8 @@ int main(int argc, char **argv) {
             i++;
         }
         */
+
         string str_id = to_string(id);
-        
         //double best_sol;
         best_sol[id] = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol",t0, alpha, n_mutations, cooling);
         //array_sol[id]->double_obj=best_sol;
@@ -212,7 +213,7 @@ int main(int argc, char **argv) {
     best_sol[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
     cout<<"Best solution:\t\t"<<best_sol[index_best]->double_obj<<endl;
     cout<<"Average solution:\t"<<avg/counter<<endl;
-   
+ 
     return 0;
 }
 

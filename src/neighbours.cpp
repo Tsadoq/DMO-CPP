@@ -121,7 +121,7 @@ void neighbours_by_swapping(Solution* solution, int totTimeslots){
         solution->timeslot_per_exams[toSwappedIn2[i]]=t2;
     }
     solution->update_timeslots(solution->all_exams.size());
-    int flag = solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
+    //int flag = solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
     //cout<<"The swapped solution is feasible? "<<flag<<endl;    
     return;
 

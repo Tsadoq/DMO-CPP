@@ -79,7 +79,6 @@ int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams
                 //cout<<"aumento boxes"<<endl;
                index_boxes++;
                available_colors.insert(available_colors.end(), boxes[index_boxes].begin(), boxes[index_boxes].end());
-               //cout<<"box "<<index_boxes<<endl;
                //cout<<"num colori "<<available_colors.size()<<endl;
             }else{
                 failures++;

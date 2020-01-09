@@ -7,8 +7,8 @@
 #include <random>
 
 using namespace std;
-
-double probability(double obj_new, double obj_old, double temperature, double maxtemperature);
+double probability(double obj_new, double obj_old, double temperature);
+//double probability(double obj_new, double obj_old, double temperature, double maxtemperature);
 double cooling(double temperature, double coeff);
 int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool first,int n_exams);
 double temperature_shock(double temperature);
@@ -25,7 +25,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     double cooling_coeff = cooling_coefficient; //def = 0.8
     //int num_mutation=floor(n_exams/40);
     int num_mutation=mutations; //def = 3
-    double perc=0.2;
+    double perc=0.8;
     int count_iter=0;
     // improvement current solution wrt worst solution
     double improvement=0;
@@ -48,7 +48,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     cout<<"Initial Objective Function: "<<obj_old<<endl;
     double best_sol = obj_old;
     double worst_sol = obj_old;
-
+    int mutationi_vale = 0;
     //riscrivo il file output
     solution->write_output_file(current_instance, n_exams);
 
@@ -59,9 +59,143 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         possible_timeslots.push_back(i+1);
     }
 
-
     ftime(&now); 
+    //stampo file temperatura
+    string file_out="temperaturaVALE";
+    ofstream output_file;
+    output_file.open(file_out);
     while((int)((now.time-start.time))<timelimit){
+        count_iter++;
+        mutationi_vale++;
+        
+        // sort exam wrt weigths in obj function
+        order_for_mutation=sort_indexes(weight_for_exams);
+        // save old solution
+        old_timeslot_solution=solution->timeslot_per_exams; 
+        
+        //MUTATION
+        vector<vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, possible_timeslots,perc,n_exams);
+        // update the weigths in the obj function after the mutation
+        weight_for_exams=solution->update_weights(n_exams); 
+        //cout<<"mut "<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams)<<endl;   
+        
+        obj_new=solution->objective_function(n_exams,total_number_students);
+        
+        //SWAP
+        //if(mutationi_vale>100){
+            neighbours_by_swapping(solution, n_timeslot);
+            weight_for_exams=solution->update_weights(n_exams);
+            obj_new=solution->objective_function(n_exams,total_number_students);
+            //cout<<"valeeeeeeeeeeeeeeeee"<<mutationi_vale<<endl;
+            mutationi_vale=0;
+        //}
+        //cout<<"swap "<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams)<<endl;  
+        if(obj_new > obj_old){
+            prob=probability(obj_new,  obj_old,  t);
+            prob_random = distribution(generator);
+            if (prob_random >= prob){
+                //rifiuto, quindi risistemo la soluzione
+                solution->timeslot_per_exams=old_timeslot_solution;
+                solution->update_timeslots(n_exams);
+                weight_for_exams=solution->update_weights(n_exams);
+            }else{
+                //solution->write_output_file(current_instance, n_exams);
+                obj_old=obj_new;
+            }
+        }else{
+            //solution->write_output_file(current_instance, n_exams);
+            obj_old=obj_new;
+        }
+        //cout<<"OF OLD "<<obj_old<<endl;
+        if (obj_new <= best_sol){
+            best_sol = obj_new;
+            best_timeslot_solution=solution->timeslot_per_exams;
+            best_solution->timeslot_per_exams = solution->timeslot_per_exams;
+            best_solution->update_timeslots(n_exams);
+            weight_for_exams=solution->update_weights(n_exams);
+            best_solution->write_output_file(current_instance, n_exams);
+        }
+        t = cooling(t, cooling_coeff);
+        
+        output_file<<"temperature "<<t<<"OF OLD "<<obj_old<<"\n"; 
+        //cout<<"temperature "<<t<<"OF OLD "<<obj_old<<endl;
+        /*if (count_iter>=a*n_exams){            
+            t = cooling(t, cooling_coeff);
+            a-=0.001;
+            if (a<=0){
+                a=0.5;
+            }
+            count_iter=0;
+        }*/
+
+        //botta di calore per togliermi dal local minimum
+        if(t<0.00001 ){ // || (best_improvement-improvement)/best_improvement<0.1  
+            cout<<"temperature "<<t;       
+            t=temperature_shock(t0);
+        } 
+         
+    ftime(&now); 
+    }
+    output_file.close();                
+    //cout<<"swap "<<best_solution->check_feasibility(best_solution->timeslot_per_exams, best_solution->all_exams)<<endl;
+    best_solution->double_obj=best_sol;
+    return best_solution;  
+}
+
+double probability(double obj_new, double obj_old, double temperature)
+{
+    double e=2.71828183;
+    double p = pow(e, -((obj_new-obj_old)/temperature)); // p = exp^(-(F(x_new)-F(x_old))/T)
+    return p;
+}
+/*
+double probability(double obj_new, double obj_old, double temperature, double maxtemperature)
+{
+    double e = 2.71828183;
+
+    double bias = 0.5+(maxtemperature-temperature)/maxtemperature;
+    double p = pow(e, -((obj_new*bias - obj_old) / temperature)); // p = exp^(-(F(x_new)-F(x_old))/T)
+
+    return p;
+}
+*/
+double cooling(double temperature, double coeff)
+{
+    temperature = coeff*temperature;
+    //temperature=temperature/(1+500*temperature);
+    //temperature=1/((1/temperature)+0.001/2);
+    return  temperature;
+}
+
+int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool big_change,int n_exams){
+    int num_mutation_new;
+    int available_num_mutation;
+    if (big_change==true || improvement==0){
+        perc=1.0;
+        num_mutation_new=round(n_exams*0.05);
+        //cout<<"true "<< num_mutation_new<<" "<<perc<<endl;
+    }else{    
+        perc = improvement/best_improvement;  
+        //cout<<"improvement "<< improvement<<endl;       
+        available_num_mutation=round(perc*n_exams);
+        available_num_mutation=0.1*available_num_mutation+1;
+        if (available_num_mutation-num_mutation_actual>0){            
+            num_mutation_new =num_mutation_actual+ rand()%(available_num_mutation-num_mutation_actual)+1;
+            //cout<<"false if "<< num_mutation_new<<" "<<perc<<endl;
+        }else{
+            num_mutation_new=rand()%available_num_mutation+1;
+            //cout<<"false else "<< num_mutation_new<<" "<<perc<<endl;
+        }        
+        /*cout<< num_mutation_actual<<endl;*/
+    }
+    return num_mutation_new;
+}
+
+double temperature_shock(double temperature){
+    return 2*temperature;
+}
+/*
+while((int)((now.time-start.time))<timelimit){
         count_iter++;
         
         // sort exam wrt weigths in obj function
@@ -90,9 +224,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         obj_new=solution->objective_function(n_exams,total_number_students); 
         //cout<<"Swapping done with new obj"<<obj_new<<endl; 
         
-        
         //cout<<"TOTALIIIII "<<numero_di_mutazioni_TOTALI-numero_di_mutazioni<<endl;
-
         if(obj_new > obj_old){
             prob=probability(obj_new, obj_old, t, t0);
             prob_random = distribution(generator);
@@ -175,61 +307,4 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
 
         } 
     ftime(&now); 
-    }                
-    //cout<<"Best sol "<<best_sol<<endl;
-    best_solution->double_obj=best_sol;
-    return best_solution;  
-}
-
-/*double probability(double obj_new, double obj_old, double temperature)
-{
-    double e=2.71828183;
-    double p = pow(e, -((obj_new-obj_old)/temperature)); // p = exp^(-(F(x_new)-F(x_old))/T)
-    return p;
-}*/
-
-double probability(double obj_new, double obj_old, double temperature, double maxtemperature)
-{
-    double e = 2.71828183;
-
-    double bias = 0.5+(maxtemperature-temperature)/maxtemperature;
-    double p = pow(e, -((obj_new*bias - obj_old) / temperature)); // p = exp^(-(F(x_new)-F(x_old))/T)
-
-    return p;
-}
-
-double cooling(double temperature, double coeff)
-{
-    //temperature = 0.8*temperature;
-    //temperature=temperature/(1+500*temperature);
-    //temperature=1/((1/temperature)+0.001/2);
-    return  temperature*coeff;
-}
-
-int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool big_change,int n_exams){
-    int num_mutation_new;
-    int available_num_mutation;
-    if (big_change==true || improvement==0){
-        perc=1.0;
-        num_mutation_new=round(n_exams*0.05);
-        //cout<<"true "<< num_mutation_new<<" "<<perc<<endl;
-    }else{    
-        perc = improvement/best_improvement;  
-        //cout<<"improvement "<< improvement<<endl;       
-        available_num_mutation=round(perc*n_exams);
-        available_num_mutation=0.1*available_num_mutation+1;
-        if (available_num_mutation-num_mutation_actual>0){            
-            num_mutation_new =num_mutation_actual+ rand()%(available_num_mutation-num_mutation_actual)+1;
-            //cout<<"false if "<< num_mutation_new<<" "<<perc<<endl;
-        }else{
-            num_mutation_new=rand()%available_num_mutation+1;
-            //cout<<"false else "<< num_mutation_new<<" "<<perc<<endl;
-        }        
-        /*cout<< num_mutation_actual<<endl;*/
-    }
-    return num_mutation_new;
-}
-
-double temperature_shock(double temperature){
-    return 2*temperature;
-}
+    }    */            

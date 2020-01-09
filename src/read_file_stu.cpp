@@ -33,6 +33,7 @@ vector<vector<int>> read_file_stu(char* file_name,int n_exams, int &total_number
         exam_ids.push_back(exam_id);
         count_exams_for_student++;
     }
+    exams_for_student.push_back(count_exams_for_student);
     fclose(fp);
     
     int line_student=0;
