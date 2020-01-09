@@ -297,3 +297,52 @@ int double_mutation(Solution* solution, int totTimeslots){
     }
     return 0;
 }
+
+void neighbourhood_by_obj_fun(int index_exam, Solution* solution, int n_timeslot, vector<int> possible_timeslots, int n_exams){
+    Exam* exam=solution->all_exams[index_exam];
+    Exam* conflict_exam;
+    int distance_in_obj;
+    int timeslot=exam->id_exam;
+    vector<int> not_available_timeslots;
+    vector<int> available_timeslots;
+    int distance_in_obj_new;
+    int distance_in_obj_best;
+    int new_timeslot;
+    bool update;
+
+    for(int i=0;i<exam->conflict_times.size();i++){
+        update=false;
+        distance_in_obj =abs(timeslot-exam->conflict_times[i]);     
+        distance_in_obj_best=distance_in_obj;
+        if(distance_in_obj<=5){          
+            // select conflict exam and see in which timeslot I can put it to reduce the weight of conflict
+            conflict_exam=solution->all_exams[exam->conflict_exams[i]-1];
+            not_available_timeslots=conflict_exam->conflict_times;
+            available_timeslots=vector<int> (); 
+            // sort vector because set_difference works with sorted arrays 
+            sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
+            set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_timeslots.begin(),  
+                        not_available_timeslots.end(),inserter(available_timeslots, available_timeslots.begin())); 
+            if (available_timeslots.size()>0){
+                for(auto element : available_timeslots){
+                    distance_in_obj_new = abs(element-timeslot);
+                    if (distance_in_obj_new>distance_in_obj_best){
+                        update=true;
+                        new_timeslot=element;
+                        distance_in_obj_best=distance_in_obj_new;
+                    }
+                }
+                if(update==true){
+                    solution->timeslot_per_exams[conflict_exam->id_exam-1]=new_timeslot;
+                    solution->update_timeslots(n_exams);
+                }
+                
+            }       
+                
+
+        }
+    }
+    /*if(update==true){
+        cout<<"modifica"<<endl;
+    }*/
+}

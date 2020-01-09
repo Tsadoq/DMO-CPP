@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
     int n_timeslot = 0;
     int numproc = atoi(argv[3]);
 
-    double alpha = 0.5;
+    double alpha = 20;
     int n_mutations = 3;
     double cooling = 0.8;
     if(argc > 4){

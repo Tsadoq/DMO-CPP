@@ -75,7 +75,7 @@ int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams
         }
         num++;
         if(num > NUM){
-            if(index_boxes<6){
+            if(index_boxes<5){
                 //cout<<"aumento boxes"<<endl;
                index_boxes++;
                available_colors.insert(available_colors.end(), boxes[index_boxes].begin(), boxes[index_boxes].end());

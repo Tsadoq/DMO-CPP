@@ -58,9 +58,12 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     ftime(&now); 
     Solution * best_solution=solution->copy_solution(n_exams);
     int count_local_minima=0;
-    
+    int count_swap=0;
+    int change=0;
     while((int)((now.time-start.time))<timelimit){
+        change=0;
         count_iter++;
+        count_swap++;
         // sort exam wrt weigths in obj function
         order_for_mutation=sort_indexes(weight_for_exams);
         // save old solution
@@ -76,9 +79,25 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         //cout<<"Mutation feas? "<< solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams) <<endl; 
         //cout<<"Obj function pre swapping: "<<obj_new<<endl;
         //cout<<"Trying to do swapping"<<endl;
-        neighbours_by_swapping(solution, n_timeslot);
-        weight_for_exams=solution->update_weights(n_exams);    
+        
+    
+        
+        neighbourhood_by_obj_fun(rand()%n_exams, solution, n_timeslot, possible_timeslots, n_exams);
+        weight_for_exams=solution->update_weights(n_exams); 
         obj_new=solution->objective_function(n_exams,total_number_students); 
+
+        for(int ii=0;ii<n_exams;ii++){
+            if(old_timeslot_solution[ii]!=solution->timeslot_per_exams[ii]){
+                change++;
+            }
+        }
+
+        if(change<1){            
+            neighbours_by_swapping(solution, n_timeslot);
+            //cout<<"swap"<<endl; 
+        }
+        //cout<<change<<endl;
+        //cout<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams)<<endl;
         //cout<<"Swapping done with new obj"<<obj_new<<endl; 
         
         if(obj_new > obj_old){
@@ -113,7 +132,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         best_improvement=worst_sol-best_sol;
         improvement=obj_new-best_sol;
 
-        if (count_iter>=a*n_exams){            
+        if (count_iter>=160){            
             t = cooling(t, cooling_coeff);
             a-=0.001;
             if (a<=0){
@@ -172,7 +191,7 @@ int num_mutation_changer(int num_mutation_actual, double &perc, double improveme
     int available_num_mutation;
     if (big_change==true || improvement==0){
         perc=1.0;
-        num_mutation_new=round(n_exams*0.05);
+        num_mutation_new=round(n_exams*0.03);
         //cout<<"true "<< num_mutation_new<<" "<<perc<<endl;
     }else{    
         perc = improvement/best_improvement;  
