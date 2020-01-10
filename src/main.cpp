@@ -155,26 +155,26 @@ int main(int argc, char **argv) {
     //     if (i==2): //solo TS+SA
     //     ...
     // }
-    vector<Solution*> array_sol;
+    vector<Solution*> array_sol= vector<Solution*>(numproc);
     vector<Solution*> best_sol=vector<Solution*>(numproc);
     int id=0;
+            //initial_solution = array[id];
+    
+    // cout << "PAST THIS POINT" << endl;
      //if (1==1)
     cout << "Running SA with alpha: "<< alpha<<" | cooling: "<<cooling<< " | mutations: "<<n_mutations <<endl;
     // lancio in parallelo
-    # pragma omp parallel private ( id ) shared(initial_solution)
+    # pragma omp parallel default(shared) private(id)
     {
-        id = omp_get_thread_num();
-        //Solution *initial_solution = new Solution();
-
-
-
-        //initial_solution = array[id];
-        for(int i=0; i<numproc; i++){
-            Solution* tmp= initial_solution->copy_solution(n_exams);
-            array_sol.push_back(tmp);
-        }
-        
-    
+        id = (int)omp_get_thread_num();
+        //cout<<"THREAD ID: "<<id<<endl;
+	//Solution *initial_solution = new Solution();
+   	//vector<Solution*> array_sol= vector<Solution*>(numproc);
+	//for(int i=0; i,numproc;++i){
+            Solution* tmp= new Solution();
+            tmp = initial_solution->copy_solution(n_exams);
+            array_sol[id] = tmp;
+        //}
 
         int i=0;
         while(flag==1 && i<1000){
