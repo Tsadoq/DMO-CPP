@@ -8,7 +8,8 @@
 
 using namespace std;
 
-double probability(double obj_new, double obj_old, double temperature, double maxtemperature);
+double probability(double obj_new, double obj_old, double temperature);
+//double probability(double obj_new, double obj_old, double temperature, double maxtemperature);
 //double cooling(double temperature, double coeff);
 double cooling(double time_limit, double current_time,double t0);
 int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool first,int n_exams);
@@ -27,6 +28,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     double t;
     double cooling_coeff = cooling_coefficient; //def = 0.8
     double perc_improvement;
+    double obj_local=0;
+    double old_SA;
 
     
 
@@ -50,11 +53,23 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     //--------------------LOCAL SEARCH---------------------------
     order_for_local=sort_indexes(solution->num_neighbours_for_exams);
 
-    double obj_local=0;
-    perc_improvement=0.1; 
-    bool first_local=true; 
+    old_SA=solution->objective_function(n_exams,total_number_students);
     localSearch(solution, n_exams, possible_timeslots,order_for_local);
     obj_local=solution->objective_function(n_exams,total_number_students);
+    obj_old=old_SA;
+    /*cout<<obj_old<<" old obj"<<endl;
+        cout<<obj_local<<" local obj"<<endl;*/
+    perc_improvement=0.1;
+    while((obj_old-obj_local)/obj_local>perc_improvement){
+        //cout<<obj_local<<"dentro"<<endl;
+        obj_old=obj_local;
+        localSearch(solution, n_exams, possible_timeslots,order_for_local);
+        obj_local=solution->objective_function(n_exams,total_number_students);
+        /*cout<<obj_old<<" old obj"<<endl;
+        cout<<obj_local<<" local obj"<<endl;*/
+    }
+
+    
     cout<<"first local"<<obj_local<<endl;
 /*
     while((obj_old-obj_local)/obj_local>=perc_improvement){
@@ -68,12 +83,12 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
 
 
     // ------------------CALCOLO T0--------------------------------
-    t0=(obj_old-obj_local)/0.693747281;
+    t0=(old_SA-obj_local)/0.693747281;
     t=t0;
     cout<<"initial t0 "<<t0<<endl;
 
 
-    obj_old=obj_local;
+    //obj_old=obj_local;
     //cout<<obj_old<<"wwwwwww"<<endl;
     //int num_mutation=floor(n_exams/40);
     int num_mutation=2; //def = 3
@@ -99,11 +114,12 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     ofstream output_file;
     output_file.open(file_out);
     double rel_t;
+    old_SA=obj_local;
     
     while((int)((now.time-start.time))<timelimit){        
-        change=0;
-        count_iter++;
-        count_swap++;
+        //change=0;
+        //count_iter++;
+        //count_swap++;
         rel_t=t/t0;
         // sort exam wrt weigths in obj function
         //order_for_mutation=sort_indexes(weight_for_exams);
@@ -140,9 +156,11 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             }
             counter_unsched++;
         }
-        //weight_for_exams=solution->update_weights(n_exams);    
+        weight_for_exams=solution->update_weights(n_exams);    
         //obj_new=solution->objective_function(n_exams,total_number_students);
-        
+
+        //----------------------------------MUTATION-------------------------------
+        //vector<vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, round(n_exams*0.3), possible_timeslots,1.0,n_exams);
         
         // update the weigths in the obj function after the mutation
         //weight_for_exams=solution->update_weights(n_exams);    
@@ -151,30 +169,35 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         //cout<<"Obj function pre swapping: "<<obj_new<<endl;
         //cout<<"Trying to do swapping"<<endl;   
         neighbours_by_swapping(solution, n_timeslot);
-         
+        weight_for_exams=solution->update_weights(n_exams); 
         
 
         //--------------------------LOCAL SEARCH-------------------------------------------------
         perc_improvement=0.3*rel_t; 
-        bool first_local=true;      
+        //bool first_local=true;      
+        obj_old=solution->objective_function(n_exams,total_number_students);
         localSearch(solution, n_exams, possible_timeslots,order_for_local);
         obj_local=solution->objective_function(n_exams,total_number_students);
-        //cout<<obj_local<<"eee"<<endl;
+        /*cout<<obj_old<<" old obj"<<endl;
+        cout<<obj_local<<" local obj"<<endl;*/
 
-        while((obj_old-obj_local)/obj_local>=perc_improvement){
+        while((obj_old-obj_local)/obj_local>perc_improvement){
             //cout<<obj_local<<"dentro"<<endl;
+            obj_old=obj_local;
             localSearch(solution, n_exams, possible_timeslots,order_for_local);
             obj_local=solution->objective_function(n_exams,total_number_students);
-            obj_old=obj_local;
+            /*cout<<obj_old<<" old obj"<<endl;
+            cout<<obj_local<<" local obj"<<endl;*/
         }
         //cout<<(obj_old-obj_local)/obj_local<<" "<< 0.3*rel_t<<endl;     
         obj_new=obj_local;
+        //cout<<"------------------------------------end local-----------------------------------"<<endl;
         
        /* neighbourhood_by_obj_fun(rand()%n_exams, solution, n_timeslot, possible_timeslots, n_exams);
         weight_for_exams=solution->update_weights(n_exams); 
         obj_new=solution->objective_function(n_exams,total_number_students); */
 
-       /* for(int ii=0;ii<n_exams;ii++){
+       /*for(int ii=0;ii<n_exams;ii++){
             if(old_timeslot_solution[ii]!=solution->timeslot_per_exams[ii]){
                 change++;
             }
@@ -184,8 +207,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         //cout<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams)<<endl;
         //cout<<"Swapping done with new obj"<<obj_new<<endl; 
         
-        if(obj_new > obj_old){
-            prob=probability(obj_new, obj_old, t, t0);
+        if(obj_new > old_SA){
+            prob=(obj_new,old_SA, t);
             prob_random = distribution(generator);
             if (prob_random > prob){
                 //rifiuto, quindi risistemo la soluzione
@@ -196,12 +219,12 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             
             }else{
                 //solution->write_output_file(current_instance, n_exams);
-                obj_old=obj_new;
+                old_SA=obj_new;
                 refuse=0;
             }
         }else{
             //solution->write_output_file(current_instance, n_exams);
-            obj_old=obj_new;
+            old_SA=obj_new;
             refuse=0;
         }
 
@@ -264,19 +287,19 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     ftime(&now); 
     } 
     output_file.close();               
-    //cout<<"Best sol "<<best_sol<<endl;
+    cout<<"Best sol "<<best_sol<<endl;
     best_solution->double_obj=best_sol;
     return best_solution;  
 }
 
-/*double probability(double obj_new, double obj_old, double temperature)
+double probability(double obj_new, double obj_old, double temperature)
 {
     double e=2.71828183;
     double p = pow(e, -((obj_new-obj_old)/temperature)); // p = exp^(-(F(x_new)-F(x_old))/T)
     return p;
-}*/
+}
 
-double probability(double obj_new, double obj_old, double temperature, double maxtemperature)
+/*double probability(double obj_new, double obj_old, double temperature, double maxtemperature)
 {
     double e = 2.71828183;
 
@@ -284,7 +307,7 @@ double probability(double obj_new, double obj_old, double temperature, double ma
     double p = pow(e, -((obj_new*bias - obj_old) / temperature)); // p = exp^(-(F(x_new)-F(x_old))/T)
 
     return p;
-}
+}*/
 
 /*double cooling(double temperature, double coeff)
 {

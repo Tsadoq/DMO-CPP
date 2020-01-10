@@ -18,7 +18,7 @@ void localSearch(Solution* solution, int n_exams, vector<int> possible_timeslots
     for(int i=0;i<n_exams;i++){
         available_timeslots=vector<int> (); 
         not_available_timeslots=solution->all_exams[sorted_exams[i]]->conflict_times; 
-        not_available_timeslots.push_back(solution->all_exams[sorted_exams[i]]->timeslot); 
+        //not_available_timeslots.push_back(solution->all_exams[sorted_exams[i]]->timeslot); 
         // sort vector because set_difference works with sorted arrays 
         sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
         // find available timeslot 
