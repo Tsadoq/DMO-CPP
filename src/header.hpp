@@ -20,7 +20,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
 void neighbours_by_swapping(Solution* solution, int totTimeslots);
 double temperature_init(Solution *solution,int n_exams, int total_number_students, int n_timeslot);
 void neighbour_by_crossover(Solution* actual_sol,Solution* best_sol, int n_exams, int n_timeslot);
-int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams,vector<size_t> sorted_index);
+int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams,vector<size_t> sorted_index, int flag);
 void neighbourhood_by_obj_fun(int index_exam, Solution* solution, int n_timeslot, vector<int> possible_timeslots, int n_exams);
 void unscheduling(Solution* sol, int num_unsched);
 int rescheduling(Solution* sol, int totTimeslots);

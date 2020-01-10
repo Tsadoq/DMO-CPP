@@ -104,16 +104,27 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             num_unsched=round(n_exams*rel_t*0.3);
         }
         //cout<<"rel t: "<<rel_t<<" un "<<num_unsched<<endl;
-        //unscheduling(solution, num_unsched);
+        unscheduling(solution, num_unsched);
 
-        neighbours_by_mutation_no_order(solution,num_unsched,possible_timeslots,n_exams);
+        //vector<size_t> sorted_index = vector<size_t>(n_exams);
+       /* vector<int> tmp = vector<int>(n_exams);
+        for(int yy=0; yy<n_exams; yy++){
+            if(solution->all_exams[yy]->timeslot == -1){
+                tmp.push_back(solution->num_neighbours_for_exams[yy]);
+            }
+        }
+        
+        sorted_index = sort_indexes(tmp);*/
+       /* sorted_index = sort_indexes(solution->num_neighbours_for_exams);
+        int ee = alternativeColoring(solution,  n_timeslot,  n_exams, sorted_index);
+        //neighbours_by_mutation_no_order(solution,num_unsched,possible_timeslots,n_exams);
         solution->update_weights(n_exams);
-
-        /*while(num_unsched > rescheduled && counter_unsched < 40){
+*/
+        while(num_unsched > rescheduled && counter_unsched < 40){
             //cout<<"ddddddd"<<endl;
             
             //cout<<"Unscheduling done"<<endl;
-            rescheduled = rescheduling(solution, n_timeslot);
+            rescheduled = rescheduling(solution, n_timeslot, old_timeslot);
             
             if (num_unsched != rescheduled){
                 solution->timeslot_per_exams = old_timeslot_solution;
@@ -128,7 +139,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         }
         weight_for_exams=solution->update_weights(n_exams);    
         //obj_new=solution->objective_function(n_exams,total_number_students);
-        */
+        
         
         for(int hh=0;hh<n_exams;hh++){
             if (old_timeslot_solution[hh]==solution->timeslot_per_exams[hh]){

@@ -370,22 +370,61 @@ void unscheduling(Solution* sol, int num_unsched){
     }
 }
 
-int rescheduling(Solution* sol, int totTimeslots){
+int rescheduling(Solution* sol, int totTimeslots, vector<int> old_timeslot){
     vector<int> unsched_exams_pos;
-    
-    int counter = 0; // numero di esami che sono riuscito a rimettere, serve per check in SA
-    for (int i =0; i < sol->all_exams.size(); i++){
+    int k;
+    int counter = 0; 
+    for (int i =0; i< sol->all_exams.size(); i++){
         if (sol->timeslot_per_exams[i] == -1){
             unsched_exams_pos.push_back(i);
         }
     }
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
     std::shuffle(unsched_exams_pos.begin(), unsched_exams_pos.end(),std::default_random_engine(seed) );
+    // Per ogni esame non ancora rischedulato
+    vector<int> possible_timeslots;
+    for (int i=0; i<totTimeslots;i++){  // possible timeslot rimane uguale per tutti, e il vettore [1, ntimeslot]
+            possible_timeslots.push_back(i+1);
+    }
     
     for ( int i = 0; i < unsched_exams_pos.size(); i++){
-        counter = counter + sol->change_exam(unsched_exams_pos[i], totTimeslots);
+        //cout<<"I am there for the "<<i+1<<" time(s)"<<endl;
+        vector<int> not_available;
+        vector<int> possible_mutation;
+        int pos = unsched_exams_pos[i];
+        // vado a vedere quali timeslot sono disponibili
+        for (int j = 0; j <sol->all_exams[pos]->conflict_times.size(); j++){
+            if (sol->all_exams[pos]->conflict_times[j] != -1){
+                not_available.push_back(sol->all_exams[pos]->conflict_times[j]);  // mi segno i timeslot non disponibili
+                //cout<<"I am there too for the "<<j+1<<" time(s)"<<endl;
+            }    
+        }
+        sort(not_available.begin(), not_available.end());  
+        set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available.begin(),  
+                    not_available.end(),inserter(possible_mutation, possible_mutation.begin()));
+        if (possible_mutation.size()> 0){
+            int rand_index = rand() % possible_mutation.size();
+            sol->all_exams[pos]->timeslot = possible_mutation[rand_index];
+            sol->timeslot_per_exams[pos] = possible_mutation[rand_index];
+            for (auto h : sol->all_exams[pos]->conflict_exams){ 
+                k=0; 
+                while(sol->all_exams[h-1]->conflict_exams[k] != sol->all_exams[pos]->id_exam){ 
+                    k++;
+                } 
+                sol->all_exams[h-1]->conflict_times[k]=possible_mutation[rand_index];
+            } 
+        counter++;
+        }
+        not_available.clear();
+        possible_mutation.clear();
     }
-    return counter;
+    if (counter == unsched_exams_pos.size())
+        return counter;
+    else{
+        sol->timeslot_per_exams = old_timeslot;
+        sol->update_timeslots(old_timeslot.size());
+        return 0;
+    }
 }
 
 int directional_mutation(Solution* sol, int totTimeslots){
