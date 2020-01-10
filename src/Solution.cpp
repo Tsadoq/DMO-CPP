@@ -5,6 +5,7 @@
 #include <iostream>
 #include <math.h>
 #include <fstream>
+#include<algorithm>
 using namespace std;
 
 
@@ -118,3 +119,68 @@ void Solution::write_output_file(string current_instance, int n_exams){
     }
     output_file.close();
 }
+
+int Solution::change_exam(int pos_exam, int totTimeslots){
+    int k;
+    vector<int> possible_timeslots;
+    vector<int> not_available;
+    vector<int> possible_mutation;
+    for (int i = 0; i <all_exams[pos_exam]->conflict_times.size(); i++){
+        if (all_exams[pos_exam]->conflict_times[i] != -1){
+            not_available.push_back(i);
+        }    
+    }
+    // per gli spostamenti del scondo esame considerato
+    for (int i=0; i<totTimeslots;i++){
+        possible_timeslots.push_back(i+1);
+    }
+    sort(not_available.begin(), not_available.end());  
+    set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available.begin(),  
+                    not_available.end(),inserter(possible_mutation, possible_mutation.begin()));
+    if (possible_mutation.size()> 0){
+        int rand_index = rand() % possible_mutation.size();
+        all_exams[pos_exam]->timeslot = possible_mutation[rand_index];
+        timeslot_per_exams[pos_exam] = possible_mutation[rand_index];
+        for (auto j : all_exams[pos_exam]->conflict_exams){ 
+                k=0; 
+                while(all_exams[j-1]->conflict_exams[k] != all_exams[pos_exam]->id_exam){ 
+                    k++;
+                } 
+                all_exams[j-1]->conflict_times[k]=possible_mutation[rand_index];; 
+            } 
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+int Solution::probability_creator(int n_timeslot, int pos_exam){
+    int min = 200000;
+    vector<int> probabilities;
+    vector<int> notAvailable = all_exams[pos_exam]->conflict_times;
+    vector<int> possible_mutation;
+    notAvailable.push_back(timeslot_per_exams[pos_exam]);
+    vector<int> possible_timeslots;
+    // per gli spostamenti del scondo esame considerato
+    for (int i=0; i<n_timeslot;i++){
+        possible_timeslots.push_back(i+1);
+    }
+    sort(notAvailable.begin(), notAvailable.end());  
+    set_difference(possible_timeslots.begin(), possible_timeslots.end(), notAvailable.begin(), notAvailable.end(),inserter(possible_mutation, possible_mutation.begin()));
+    if (possible_mutation.size()> 0){
+        vector<int> penalties = vector<int>(possible_mutation.size(),0);
+        for (int i = 0; i <penalties.size(); i++){
+            for (int j = 0; j<all_exams[pos_exam]->conflict_times.size(); j++){
+                if ( abs( all_exams[pos_exam]->conflict_times[j] - possible_mutation[i]) <= 5) {
+                    penalties[i] = penalties[i] + pow(2, 5-abs(all_exams[pos_exam]->conflict_times[j] - possible_mutation[i])) * all_exams[pos_exam]->conflict_weights[j];
+                }
+            }
+            if (penalties[i]<= min){
+                min = i;
+            }
+        }
+        return possible_mutation[min];
+    }
+    else
+        return 0;
+ }

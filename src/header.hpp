@@ -22,3 +22,8 @@ double temperature_init(Solution *solution,int n_exams, int total_number_student
 void neighbour_by_crossover(Solution* actual_sol,Solution* best_sol, int n_exams, int n_timeslot);
 int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams,vector<size_t> sorted_index);
 void neighbourhood_by_obj_fun(int index_exam, Solution* solution, int n_timeslot, vector<int> possible_timeslots, int n_exams);
+void unscheduling(Solution* sol, int num_unsched);
+int rescheduling(Solution* sol, int totTimeslots);
+int directional_mutation(Solution* sol, int totTimeslots);
+double directional_mutation_final(Solution* sol, int totTimeslots, double best_obj, int num_stud);
+void localSearch(Solution* solution, int n_exams, vector<int> possible_timeslots,vector<size_t> sorted_exams);

@@ -11,6 +11,7 @@
 #include "read_file_stu.cpp"
 #include "sort_indexes.cpp"
 #include "graph_coloring_greedy.cpp"
+#include "localSearch.cpp"
 #include "neighbours.cpp"
 #include "sa.cpp"
 #include "TSforInitialSolution.cpp"
@@ -43,7 +44,7 @@ int main(int argc, char **argv) {
     int numproc = atoi(argv[3]);
 
     double alpha = 20;
-    int n_mutations = 3;
+    int n_mutations = 2;
     double cooling = 0.8;
     if(argc > 4){
         alpha = atof(argv[4]);
@@ -124,7 +125,7 @@ int main(int argc, char **argv) {
     vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
 
     // -----------------------------------------------------------------
-    double t0 = temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
+    double t0 = 2;//temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
     cout<<"Temp init: "<<t0<<endl;
 
     initial_solution->timeslot_per_exams=old_timeslot_solution;
