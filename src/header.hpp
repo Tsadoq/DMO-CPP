@@ -27,3 +27,5 @@ int rescheduling(Solution* sol, int totTimeslots);
 int directional_mutation(Solution* sol, int totTimeslots);
 double directional_mutation_final(Solution* sol, int totTimeslots, double best_obj, int num_stud);
 void localSearch(Solution* solution, int n_exams, vector<int> possible_timeslots,vector<size_t> sorted_exams);
+bool neighbours_by_swapping_single(Solution* solution, int ii, int jj, double obj_pre_swap, int total_number_student);
+void neighbours_by_mutation_no_order(Solution* solution,int num_mutation,vector<int> possible_timeslots,int n_exams);

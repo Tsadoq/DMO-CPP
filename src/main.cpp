@@ -103,7 +103,7 @@ int main(int argc, char **argv) {
     sorted_index=sort_indexes(initial_solution->num_neighbours_for_exams);
     // apply greedy coloring trying to assign timeslots first to exams with higher degree
     //-----------------------------------------------------------------------------------------
-    int ee=alternativeColoring(initial_solution,  n_timeslot, n_exams,sorted_index);
+    int ee =alternativeColoring(initial_solution,  n_timeslot, n_exams,sorted_index);
     cout<<"ho finito coloring "<<ee<<endl;
     //-----------------------------------------------------------------------------------------
     //graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
