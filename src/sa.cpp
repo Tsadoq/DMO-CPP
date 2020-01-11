@@ -4,14 +4,13 @@
 #include <cmath>
 #include <random>
 
-using namespace std;
 
 double probability(double obj_new, double obj_old, double temperature);
 double cooling(double time_limit, double current_time,double t0);
 int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool first,int n_exams);
 double temperature_shock(double temperature);
 
-Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int n_timeslot,string current_instance){
+Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int n_timeslot,std::string current_instance){
  
     struct timeb now;
     double prob = 0;
@@ -30,24 +29,24 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     double obj_SA;
     
     // prealloco tutti i vettori
-    vector<int> timeslot_pre_swap=vector<int>(n_exams);    
-    vector<int> old_timeslot_solution=vector<int>(n_exams);
-    vector<int> best_timeslot_solution=vector<int>(n_exams);    
-    vector<size_t> order_for_local=vector<size_t>(n_exams);    
-    vector <int> old_ts_pre_swap=vector<int>(n_exams);
+    std::vector<int> timeslot_pre_swap=std::vector<int>(n_exams);    
+    std::vector<int> old_timeslot_solution=std::vector<int>(n_exams);
+    std::vector<int> best_timeslot_solution=std::vector<int>(n_exams);    
+    std::vector<size_t> order_for_local=std::vector<size_t>(n_exams);    
+    std::vector <int> old_ts_pre_swap=std::vector<int>(n_exams);
 
     std::default_random_engine generator;
     std::uniform_real_distribution<double> distribution(0.0,1.0);
 
     solution->update_weights();
     obj_SA = solution->objective_function();
-    cout<<"Initial Objective Function: "<<obj_SA<<endl;
+    std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
 
     
 
     solution->write_output_file(current_instance);
    
-    vector<int> possible_timeslots;
+    std::vector<int> possible_timeslots;
     for (int i=0; i<n_timeslot;i++){
         possible_timeslots.push_back(i+1);
     }
@@ -65,12 +64,12 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         localSearch(solution,possible_timeslots,order_for_local,n_timeslot);
         obj_local=solution->objective_function();  
     }
-    cout<<"SA "<<obj_SA<<"local "<<obj_local<<endl;
+    std::cout<<"SA "<<obj_SA<<"local "<<obj_local<<std::endl;
 
     // ------------------CALCOLO T0--------------------------------
     t0=(obj_SA-obj_local)/0.693747281;
     t=t0;
-    cout<<"initial t0 "<<t0<<endl;
+    std::cout<<"initial t0 "<<t0<<std::endl;
     // --------------------------------------------------
 
     best_sol = obj_old;
@@ -80,8 +79,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
 
     //-------------------------SCRITTURA SU FILE
   
-    string file_out="temperaturaVALE1";
-    ofstream output_file;
+    std::string file_out="temperaturaVALE1";
+    std::ofstream output_file;
     output_file.open(file_out);
 
     
@@ -187,7 +186,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     ftime(&now); 
     } 
     //output_file.close();               
-    cout<<"Best sol "<<best_sol<<endl;
+    std::cout<<"Best sol "<<best_sol<<std::endl;
     best_solution->double_obj=best_sol;
     return best_solution;  
 }

@@ -6,19 +6,19 @@
 #include <iterator>
 #include <vector>
 
-using namespace std;
 
-vector<vector<int>> read_file_stu(char* file_name,int n_exams, int &total_number_students){
-    vector<vector<int>> conflict_matrix = vector<vector<int>> (n_exams,vector<int>(n_exams, 0));
-    vector <int> exam_ids; 
-    vector <int> exams_for_student;
+
+std::vector<std::vector<int>> read_file_stu(char* file_name,int n_exams, int &total_number_students){
+    std::vector<std::vector<int>> conflict_matrix = std::vector<std::vector<int>> (n_exams,std::vector<int>(n_exams, 0));
+    std::vector <int> exam_ids; 
+    std::vector <int> exams_for_student;
     FILE *fp;
     char stud_id[10];
-    string stud_id_string="";
+    std::string stud_id_string="";
     int exam_id;
 
     fp = fopen(file_name, "r");
-    string current_student="";
+    std::string current_student="";
     int count_exams_for_student=0;
     //reading of .exm to know how many exams there are
     while(fscanf(fp, "%s\t%d", stud_id, &exam_id)!=EOF){

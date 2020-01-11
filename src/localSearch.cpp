@@ -10,11 +10,11 @@
 #include "Exam.hpp" 
 #include "Solution.hpp" 
 
-void localSearch(Solution* solution, vector<int> possible_timeslots,vector<size_t> sorted_exams,int n_timeslot){
+void localSearch(Solution* solution, std::vector<int> possible_timeslots,std::vector<size_t> sorted_exams,int n_timeslot){
     //double starting_obj=solution->double_obj;
-    vector<int> not_available_timeslots;
+    std::vector<int> not_available_timeslots;
     not_available_timeslots.reserve(n_timeslot);
-    vector<int> available_timeslots;
+    std::vector<int> available_timeslots;
     available_timeslots.reserve(n_timeslot);
     double cost_in_obj;
     int n_exams=solution->n_exams;

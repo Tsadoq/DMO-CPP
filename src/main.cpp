@@ -25,7 +25,6 @@
 #include <sys/timeb.h>
 #include <omp.h>
 
-using namespace std;
 
 //int read_file_stu(char *name_stu);
 int main(int argc, char **argv) {
@@ -37,12 +36,12 @@ int main(int argc, char **argv) {
 
 
     ftime(&start);
-    cout<<"Starting"<<endl;
+    std::cout<<"Starting"<<std::endl;
 
-    string current_instance=argv[1];
-    string instance_exm;
-    string instance_slo;
-    string instance_stu;
+    std::string current_instance=argv[1];
+    std::string instance_exm;
+    std::string instance_slo;
+    std::string instance_stu;
     bool path_to_use=false;
     
     if(path_to_use){
@@ -58,7 +57,7 @@ int main(int argc, char **argv) {
     
     //--------------------------------------- READ FILES------------------------------------------------------
     int timelimit = atoi(argv[2]);
-    cout<<"timelimit: "<<timelimit<<endl;
+    std::cout<<"timelimit: "<<timelimit<<std::endl;
     char * writable_instance_stu = new char[instance_stu.size() + 1];
     std::copy(instance_stu.begin(), instance_stu.end(), writable_instance_stu);
     writable_instance_stu[instance_stu.size()] = '\0';
@@ -75,29 +74,28 @@ int main(int argc, char **argv) {
     //--------------------------------- FIXED VALUES CONSTRUCTION--------------------------------------------
 
     // create the conflict matrix: for each pair of exams the number of students willing to give both exams
-    vector<vector<int>> conflict_matrix;
+    std::vector<std::vector<int>> conflict_matrix;
     int total_number_students=0;
     conflict_matrix=read_file_stu(writable_instance_stu,n_exams,total_number_students);
 
-    cout<<"Number of students: "<<total_number_students<<endl;
+    std::cout<<"Number of students: "<<total_number_students<<std::endl;
     Solution* initial_solution=new Solution();    
     
-    initial_solution->solution_update(conflict_matrix, n_exams, total_number_students);
+    initial_solution->solution_update(conflict_matrix,n_exams, total_number_students);
 
     //-------------------------------- VARIABLE VALUES INITIALIZATION --------------------------------------------
      // sort exams by decreasing value of number of neighbours
-    vector<size_t> sorted_index=vector<size_t>(n_exams);
+    std::vector<size_t> sorted_index=std::vector<size_t>(n_exams);
     // it's a vector of indexes: values in [0,n_exams-1]       
     sorted_index=sort_indexes(initial_solution->num_neighbours_for_exams);
     
     //-----------------------------------------------------------------------------------------
     // apply a variant of greedy coloring trying to assign timeslots first to exams with higher degree
     alternativeColoring(initial_solution,  n_timeslot, n_exams,sorted_index);
-    cout<<"ho finito coloring "<<endl;
     //-----------------------------------------------------------------------------------------
     initial_solution->update_timeslots();
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    cout<<"feasibility "<<flag<<endl;
+    std::cout<<"feasibility "<<flag<<std::endl;
 
     //---------------------------------- MULTI-THREAD -----------------------------------------------------------
  
@@ -106,11 +104,11 @@ int main(int argc, char **argv) {
  
     int mysize;
     mysize = omp_get_num_threads();
-    cout << "  Number of processors available = " << omp_get_num_procs() << "\n";
-    cout << "  Number of threads =              " << omp_get_max_threads() << "\n";
+    std::cout << "  Number of processors available = " << omp_get_num_procs() << "\n";
+    std::cout << "  Number of threads =              " << omp_get_max_threads() << "\n";
 
-    vector<Solution*> array_sol= vector<Solution*>(numproc);
-    vector<Solution*> best_sol=vector<Solution*>(numproc);
+    std::vector<Solution*> array_sol= std::vector<Solution*>(numproc);
+    std::vector<Solution*> best_sol=std::vector<Solution*>(numproc);
     int id=0;
 
     // lancio in parallelo
@@ -123,7 +121,7 @@ int main(int argc, char **argv) {
         array_sol[id] = tmp;
            
 
-        string str_id = to_string(id);
+        std::string str_id = std::to_string(id);
         
         //double best_sol;
         best_sol[id] = sa(array_sol[id], start, timelimit, n_exams, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol");
@@ -146,15 +144,15 @@ int main(int argc, char **argv) {
            index_best = i;
            min=best_sol[i]->double_obj;
        }
-       cout << "Solution of core " << i+1 << " has a score of " << best_sol[i]->double_obj << endl;
+       std::cout << "Solution of core " << i+1 << " has a score of " << best_sol[i]->double_obj << std::endl;
        avg+=best_sol[i]->double_obj;
     }
 
     // -----------------------------------------------------------------
     
     best_sol[index_best]->write_output_file("./instances/"+current_instance+".sol");
-    cout<<"Best solution:\t\t"<<best_sol[index_best]->double_obj<<endl;
-    cout<<"Average solution:\t"<<avg/counter<<endl;
+    std::cout<<"Best solution:\t\t"<<best_sol[index_best]->double_obj<<std::endl;
+    std::cout<<"Average solution:\t"<<avg/counter<<std::endl;
    
     return 0;
 }

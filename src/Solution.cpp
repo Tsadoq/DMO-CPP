@@ -7,14 +7,16 @@
 #include <stdio.h>
 #include <fstream>
 #include<algorithm>
+#include<bitset>
 
 
-
-void Solution::solution_update(std::vector<vector<int>> conflict_matrix, int n_ex, int tot_num_students){
+void Solution::solution_update(std::vector<std::vector<int>> conflict_matrix, int n_ex, int tot_num_students){
     
     // initialize fixed values
     total_number_students=tot_num_students;
     n_exams=n_ex;
+
+    std::cout<<"num es"<<n_ex<<std::endl;
 
     // initialize attributes conflict_exams and conflict_weights for each exam
     int num_neighbour;
@@ -59,8 +61,8 @@ int Solution::check_feasibility(std::vector<int> t, std::vector<Exam*> e){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Solution::update_timeslots(){    
-    for(int i=0;i<n_exams;i++){   
-        vector <int> conflict_times_new=vector<int>(all_exams[i]->num_conflict);
+    for(int i=0;i< n_exams;i++){   
+        std::vector <int> conflict_times_new=std::vector<int>(all_exams[i]->num_conflict);
         // save timeslot for current exam 
         for (auto j:all_exams[i]->conflict_exams){
             // save timeslot of conflicting exams
@@ -71,9 +73,9 @@ void Solution::update_timeslots(){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Solution::write_output_file(string current_instance){
-    string file_out=current_instance;
-    ofstream output_file;
+void Solution::write_output_file(std::string current_instance){
+    std::string file_out=current_instance;
+    std::ofstream output_file;
     output_file.open (file_out);
     for(int i=0; i<n_exams;i++){    
         output_file << i+1 <<"\t"<< timeslot_per_exams[i]<<"\n"; 
@@ -89,19 +91,21 @@ void Solution::update_weights(){
     int neighbour_exam_timeslot;
     double neighbour_exam_weight;
     double weight_for_exam;
-
+    int diff;
+    
+    //std::cout<<"n_esami "<<n_exams<<std::endl;
     for(int i=0;i<n_exams;i++){
         weight_for_exam=0;
         current_exam_timeslot=timeslot_per_exams[i];
         for (int j=0;j<all_exams[i]->conflict_exams.size();j++){
-            // save timeslot of conflicting exams
-            if(j>i){                
-                neighbour_exam_timeslot=all_exams[i]->conflict_times[j];
-                neighbour_exam_weight=all_exams[i]->conflict_weights[j];
-                if (abs(neighbour_exam_timeslot-current_exam_timeslot)<=5){
-                    // bitshift operation
-                    weight_for_exam += (1<<(5-abs(neighbour_exam_timeslot-current_exam_timeslot)))*neighbour_exam_weight;
-                }
+            // save timeslot of conflicting exams               
+            neighbour_exam_timeslot=all_exams[i]->conflict_times[j];
+            neighbour_exam_weight=all_exams[i]->conflict_weights[j];
+            diff=abs(neighbour_exam_timeslot-current_exam_timeslot);
+            if (diff<=5){
+                // bitshift operation
+                diff=1<<diff;
+                weight_for_exam += diff*neighbour_exam_weight;
             }
         }
         all_exams[i]->weight_in_obj_fun=weight_for_exam;
@@ -115,13 +119,13 @@ double Solution::objective_function(){
     for(int i=0;i<n_exams;i++){
         obj_fun+=all_exams[i]->weight_in_obj_fun;
     }
-    obj_fun/=total_number_students;
+    obj_fun/=(2*total_number_students);
     return obj_fun;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Solution* Solution::copy_solution(){
-    vector <Exam*> copy_all_exams=vector<Exam*>();
+    std::vector <Exam*> copy_all_exams=std::vector<Exam*>();
     // create a copy of all_exam, if we do a local search we will have #copies=#neighbours generated
     Exam* copy_exam;
     for(int i=0; i<n_exams;i++){
@@ -137,6 +141,8 @@ Solution* Solution::copy_solution(){
     copy_sol->all_exams=copy_all_exams;
     copy_sol->timeslot_per_exams=timeslot_per_exams;
     copy_sol->num_neighbours_for_exams=num_neighbours_for_exams;
+    copy_sol->n_exams=n_exams;
+    copy_sol->total_number_students=total_number_students;
     return copy_sol;
 }
 

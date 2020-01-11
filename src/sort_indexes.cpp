@@ -4,14 +4,14 @@
 #include <numeric>      // std::iota
 #include <algorithm>    // std::sort
 
-using namespace std;
+
 
 template <typename T>
-vector<size_t> sort_indexes(const vector<T> &v) {
+std::vector<size_t> sort_indexes(const std::vector<T> &v) {
 
   // initialize original index locations
-  vector<size_t> idx(v.size());
-  iota(idx.begin(), idx.end(), 0);
+  std::vector<size_t> idx(v.size());
+  std::iota(idx.begin(), idx.end(), 0);
 
   // sort indexes based on comparing values in v
   sort(idx.begin(), idx.end(),

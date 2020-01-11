@@ -9,11 +9,12 @@
 #include <iterator> 
 #include "Exam.hpp" 
 #include "Solution.hpp" 
+
  
-using namespace std; 
+
  
 bool unscheduling(Solution* sol, int num_unsched){
-    vector<int> positions=vector<int>(sol->n_exams);
+    std::vector<int> positions=std::vector<int>(sol->n_exams);
     int h;
     if (num_unsched==0){
         return true;
@@ -45,7 +46,7 @@ bool rescheduling(Solution* sol, int totTimeslots){
     int n_exams=sol->n_exams;
     int fail=0;
     int max_fail=n_exams/3;
-    vector<Exam*> unsched_exams=vector<Exam*>();
+    std::vector<Exam*> unsched_exams=std::vector<Exam*>();
     unsched_exams.reserve(n_exams);
     int k;
     int counter = 0; 
@@ -56,20 +57,20 @@ bool rescheduling(Solution* sol, int totTimeslots){
         }
     }   
 
-    vector<int> possible_timeslots=vector<int>(totTimeslots);
+    std::vector<int> possible_timeslots=std::vector<int>(totTimeslots);
     for (int i=0; i<totTimeslots;i++){  // possible timeslot rimane uguale per tutti, e il vettore [1, ntimeslot]
             possible_timeslots.push_back(i+1);
     }
 
-    vector<int> not_available;
+    std::vector<int> not_available=std::vector<int>();
     not_available.reserve(totTimeslots);
-    vector<int> possible_mutation;
+    std::vector<int> possible_mutation=std::vector<int>();
     possible_mutation.reserve(totTimeslots);
-    vector<size_t> order_not_schedule;
+    std::vector<size_t> order_not_schedule=std::vector<size_t>();
     order_not_schedule.reserve(n_exams);
-    vector<int> not_available_time;
+    std::vector<int> not_available_time=std::vector<int>();
     not_available_time.reserve(totTimeslots);
-    vector<int> available_time;
+    std::vector<int> available_time=std::vector<int>();
     available_time.reserve(totTimeslots);
 
 
@@ -97,8 +98,6 @@ bool rescheduling(Solution* sol, int totTimeslots){
             std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_time.begin(),  
                     not_available_time.end(),inserter(available_time, available_time.begin()));
                     un_ex->available_times=available_time.size();
-            available_time=vector<int>();
-            not_available_time=vector<int>();
         }
 
         std::sort(unsched_exams.begin(), unsched_exams.end(), [](Exam* a, Exam* b) {
@@ -155,7 +154,7 @@ bool rescheduling(Solution* sol, int totTimeslots){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool neighbours_by_swapping_single(Solution* solution, int ii, int jj, double obj_pre_swap){
-    vector<int> exams = solution->timeslot_per_exams;
+    std::vector<int> exams = solution->timeslot_per_exams;
     
     int t1 = ii+1;
     int t2 = jj+1;

@@ -2,14 +2,14 @@
 #include <vector>
 #include <iostream>
 
-using namespace std;
+
 
 class Solution{
     public:
     // valori variabili all'interno dell'algoritmo
-    vector <int> timeslot_per_exams;
-    vector <Exam*> all_exams;
-    vector <int> num_neighbours_for_exams;
+    std::vector <int> timeslot_per_exams;
+    std::vector <Exam*> all_exams;
+    std::vector <int> num_neighbours_for_exams;
     double double_obj=0;
 
     // valori fissi all'interno dell'algoritmo
@@ -17,13 +17,13 @@ class Solution{
     int total_number_students;
 
     // aggiorno i valori che rimarranno fissi per tutto l'algoritmo
-    void solution_update(vector<vector<int>> conflict_matrix, int n_exams, int total_number_students);
+    void solution_update(std::vector<std::vector<int>> conflict_matrix, int n_exams, int total_number_students);
     // check della feasibility della soluzione
     int check_feasibility(std::vector<int> t, std::vector<Exam*> e);
     // aggiornamento timeslot per chiamata iniziale
     void update_timeslots();
     // scrittura su file
-    void write_output_file(string current_instance);
+    void write_output_file(std::string current_instance);
     // aggiornamento dei pesi per chiamata iniziale
     void update_weights();
     // calcolo della funzione obiettivo per la chiamata iniziale
