@@ -1,22 +1,18 @@
 #include "Exam.hpp"
 #include "Solution.hpp"
 #include "header.hpp"
+
 #include "Exam.cpp"
 #include "Solution.cpp"
-#include "TabuSearch.hpp"
-#include "TabuSearch.cpp"
-#include"TSforInitialSolution.hpp"
 #include "read_file_slo.cpp"
 #include "read_file_exm.cpp"
 #include "read_file_stu.cpp"
 #include "sort_indexes.cpp"
-#include "graph_coloring_greedy.cpp"
 #include "localSearch.cpp"
 #include "neighbours.cpp"
 #include "sa.cpp"
-#include "TSforInitialSolution.cpp"
-#include "temperature_init.cpp"
 #include "alternativeColoring.cpp"
+
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -27,11 +23,7 @@
 #include <math.h>
 #include <time.h>
 #include <sys/timeb.h>
-
 #include <omp.h>
-
-// GUIDA per settare vscode e c++ da linux
-// https://code.visualstudio.com/docs/cpp/config-wsl
 
 using namespace std;
 
@@ -43,14 +35,6 @@ int main(int argc, char **argv) {
     int n_timeslot = 0;
     int numproc = atoi(argv[3]);
 
-    double alpha = 20;
-    int n_mutations = 2;
-    double cooling = 0.8;
-    if(argc > 4){
-        alpha = atof(argv[4]);
-        n_mutations = atoi(argv[5]);
-        cooling = atof(argv[6]);
-    }
 
     ftime(&start);
     cout<<"Starting"<<endl;
@@ -72,7 +56,7 @@ int main(int argc, char **argv) {
         instance_stu="./instances/"+current_instance+".stu";
     }
     
-    
+    //--------------------------------------- READ FILES------------------------------------------------------
     int timelimit = atoi(argv[2]);
     cout<<"timelimit: "<<timelimit<<endl;
     char * writable_instance_stu = new char[instance_stu.size() + 1];
@@ -87,6 +71,9 @@ int main(int argc, char **argv) {
     n_exams=read_file_exm(instance_exm);
     fprintf(stdout, "Number of exams: %d\n", n_exams);
     
+
+    //--------------------------------- FIXED VALUES CONSTRUCTION--------------------------------------------
+
     // create the conflict matrix: for each pair of exams the number of students willing to give both exams
     vector<vector<int>> conflict_matrix;
     int total_number_students=0;
@@ -95,39 +82,27 @@ int main(int argc, char **argv) {
     cout<<"Number of students: "<<total_number_students<<endl;
     Solution* initial_solution=new Solution();    
     
-    initial_solution->solution_update(conflict_matrix, n_exams);
-    //fprintf(stdout, "%d\n", initial_solution->num_neighbours_for_exams[1]);
+    initial_solution->solution_update(conflict_matrix, n_exams, total_number_students);
+
+    //-------------------------------- VARIABLE VALUES INITIALIZATION--------------------------------------------
      // sort exams by decreasing value of number of neighbours
     vector<size_t> sorted_index=vector<size_t>(n_exams);
     // it's a vector of indexes: values in [0,n_exams-1]       
     sorted_index=sort_indexes(initial_solution->num_neighbours_for_exams);
-    // apply greedy coloring trying to assign timeslots first to exams with higher degree
+    
     //-----------------------------------------------------------------------------------------
- 
-    int ee =alternativeColoring(initial_solution,  n_timeslot, n_exams,sorted_index);
-    cout<<"ho finito coloring "<<ee<<endl;
+    // apply a variant of greedy coloring trying to assign timeslots first to exams with higher degree
+    alternativeColoring(initial_solution,  n_timeslot, n_exams,sorted_index);
+    cout<<"ho finito coloring "<<endl;
     //-----------------------------------------------------------------------------------------
-    //graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
     initial_solution->update_timeslots(n_exams);
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
     cout<<"feasibility "<<flag<<endl;
-    /*TSforInitialSolution* TS=new TSforInitialSolution();
-    TS->dim=n_timeslot;
-    TS->maxIter=100000;
-    int ts=TS->tabu_search(initial_solution,n_exams,n_timeslot,conflict_matrix);
-    cout<<ts<<endl;
-    //initial_solution->write_output_file(current_instance, n_exams);
-    flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    // AGGIUNGERE TS O QUALCOS'ALTRO PER ASSICURARSI CHE LA SOLUZIONE INIZIALE SIA FEASIBLE
-    // O GESTIRE LE PENALITA' NELLA OBJ FUNCTION PER CONVERGERE ALLA FEASIBILITY
-    cout<<"Flag: "<<flag<<endl;
-    */
 
     vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
 
     // -----------------------------------------------------------------
-    double t0 = 2;//temperature_init(initial_solution,n_exams,total_number_students,n_timeslot);
-    cout<<"Temp init: "<<t0<<endl;
+    double t0 = 2;
 
     initial_solution->timeslot_per_exams=old_timeslot_solution;
     initial_solution->update_timeslots(n_exams);
@@ -142,61 +117,20 @@ int main(int argc, char **argv) {
     cout << "  Number of processors available = " << omp_get_num_procs() << "\n";
     cout << "  Number of threads =              " << omp_get_max_threads() << "\n";
 
-    // qui dentro tutti i metodi...
-    
-
-    // // iniziallizzo parametri
-    // for(int i=0; i<numproc; i++){
-        
-    //     array[i].set_TS()
-
-
-    //     if (i==0): //solo TS
-    //         array[i].set_TS()
-    //     if (i==1): //solo SA
-    //     if (i==2): //solo TS+SA
-    //     ...
-    // }
     vector<Solution*> array_sol= vector<Solution*>(numproc);
     vector<Solution*> best_sol=vector<Solution*>(numproc);
     int id=0;
-            //initial_solution = array[id];
-    
-    // cout << "PAST THIS POINT" << endl;
-     //if (1==1)
+
     cout << "Running SA with alpha: "<< alpha<<" | cooling: "<<cooling<< " | mutations: "<<n_mutations <<endl;
     // lancio in parallelo
     # pragma omp parallel default(shared) private(id)
     {
         id = (int)omp_get_thread_num();
-        //cout<<"THREAD ID: "<<id<<endl;
-	//Solution *initial_solution = new Solution();
-   	//vector<Solution*> array_sol= vector<Solution*>(numproc);
-	//for(int i=0; i,numproc;++i){
-            Solution* tmp= new Solution();
-            tmp = initial_solution->copy_solution(n_exams);
-            array_sol[id] = tmp;
-        //}
 
-        int i=0;
-        while(flag==1 && i<1000){
-            unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
-            std::shuffle(sorted_index.begin(), sorted_index.end(),std::default_random_engine(seed) );
-            graph_coloring_greedy(initial_solution, n_timeslot, sorted_index, n_exams); 
-            initial_solution->update_timeslots(n_exams);
-            i++;
-        }
-
-        
-    
-        //PROVIAMO A MODIFICARE LA SOLUZIONE INIZIALE DI TANTO PRIMA DI LANCIARE
-        initial_solution->update_timeslots(n_exams);
-        vector<double> weight_for_exams=initial_solution->update_weights(n_exams);
-        vector<int> possible_timeslots;
-        for (int i=0; i<n_timeslot;i++){
-            possible_timeslots.push_back(i+1);
-        }
-    
+        Solution* tmp= new Solution();
+        tmp = initial_solution->copy_solution(n_exams);
+        array_sol[id] = tmp;
+           
 
         string str_id = to_string(id);
         
@@ -207,7 +141,6 @@ int main(int argc, char **argv) {
         
 
     }
-    //Solution* best;
     // seleziono miglior soluzione tra quelle feasible che ho trovato
     double min = 100 * best_sol[0]->double_obj;
     int index_best = 0;
