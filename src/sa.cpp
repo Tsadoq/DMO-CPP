@@ -120,9 +120,9 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             res=rescheduling(solution, n_timeslot, n_exams);
             unres=un||res;
             first=0;
-            cout<<"jjjjjjjjjjj"<<un<<" "<<res<<" "<<unres<<endl;
+            //cout<<"jjjjjjjjjjj"<<un<<" "<<res<<" "<<unres<<endl;
         }
-        cout<<"uscitaaaaaaaaaaaaaaaaaaaaaaaaaaa"<<endl;
+        //cout<<"uscitaaaaaaaaaaaaaaaaaaaaaaaaaaa"<<endl;
         
         
         weight_for_exams=solution->update_weights(n_exams);

@@ -412,11 +412,11 @@ bool rescheduling(Solution* sol, int totTimeslots, int n_exams){
     int pos_conf;
     
     while (unsched_exams.size()!=0){
-        cout<<unsched_exams.size()<<endl;
+        //cout<<unsched_exams.size()<<endl;
         //cout<<unsched_exams_pos.size()<<endl;
 
         if (fail>=max_fail){
-            cout<<"fail "<<unsched_exams.size()<<endl;
+            //cout<<"fail "<<unsched_exams.size()<<endl;
             return false;
         }
 
@@ -432,12 +432,18 @@ bool rescheduling(Solution* sol, int totTimeslots, int n_exams){
             std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_time.begin(),  
                     not_available_time.end(),inserter(available_time, available_time.begin()));
                     un_ex->available_times=available_time.size();
+            available_time=vector<int>();
+            not_available_time=vector<int>();
         }
 
         std::sort(unsched_exams.begin(), unsched_exams.end(), [](Exam* a, Exam* b) {
             if ( a->available_times!= b->available_times) return a->available_times < b->available_times;
                 return a->num_conflict > b->num_conflict;
         });
+
+        /*for(auto u:unsched_exams){
+            cout<<"exam "<<u->id_exam<<" available time "<<u->available_times<<" num conf "<<u->num_conflict<<endl;
+        }*/
         //order_not_schedule=sort_indexes(weight_unsched);        
         
         // esame più difficile da piazzare
@@ -471,9 +477,10 @@ bool rescheduling(Solution* sol, int totTimeslots, int n_exams){
             unsched_exams.erase(unsched_exams.begin());
         }else{
             fail++;
+            //cout<<"numero conflittuali "<<sol->all_exams[pos]->conflict_times.size()<<" esame "<<sol->all_exams[pos]->id_exam<<endl;
             // unschedulo tutti i conflittuali di pos
             for (int j = 0; j <sol->all_exams[pos]->conflict_times.size(); j++){
-                cout<<"numero conflittuali"<<sol->all_exams[pos]->conflict_times.size()<<endl;
+                
                 if(sol->all_exams[pos]->conflict_times[j]!=-1){ 
                     //cout<<"unsched"<<endl;                      
                     sol->all_exams[pos]->conflict_times[j]=-1;
