@@ -18,10 +18,17 @@ class Solution{
 
     // aggiorno i valori che rimarranno fissi per tutto l'algoritmo
     void solution_update(vector<vector<int>> conflict_matrix, int n_exams, int total_number_students);
+    // check della feasibility della soluzione
     int check_feasibility(std::vector<int> t, std::vector<Exam*> e);
-    void update_timeslots(int n_exams);
-    vector<double> update_weights(int n_exams);
-    double objective_function(int n_exams, int total_number_student);
-    Solution* copy_solution(int n_exams);
-    void write_output_file(string current_instance, int n_exams);
+    // aggiornamento timeslot per chiamata iniziale
+    void update_timeslots();
+    // scrittura su file
+    void write_output_file(string current_instance);
+    // aggiornamento dei pesi per chiamata iniziale
+    void update_weights();
+    // calcolo della funzione obiettivo per la chiamata iniziale
+    double objective_function();
+    // creo una copia della soluzione iniziale
+    Solution* copy_solution();
+    
 };

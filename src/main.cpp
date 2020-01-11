@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
     
     initial_solution->solution_update(conflict_matrix, n_exams, total_number_students);
 
-    //-------------------------------- VARIABLE VALUES INITIALIZATION--------------------------------------------
+    //-------------------------------- VARIABLE VALUES INITIALIZATION --------------------------------------------
      // sort exams by decreasing value of number of neighbours
     vector<size_t> sorted_index=vector<size_t>(n_exams);
     // it's a vector of indexes: values in [0,n_exams-1]       
@@ -95,19 +95,11 @@ int main(int argc, char **argv) {
     alternativeColoring(initial_solution,  n_timeslot, n_exams,sorted_index);
     cout<<"ho finito coloring "<<endl;
     //-----------------------------------------------------------------------------------------
-    initial_solution->update_timeslots(n_exams);
+    initial_solution->update_timeslots();
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
     cout<<"feasibility "<<flag<<endl;
 
-    vector<int> old_timeslot_solution=initial_solution->timeslot_per_exams;
-
-    // -----------------------------------------------------------------
-    double t0 = 2;
-
-    initial_solution->timeslot_per_exams=old_timeslot_solution;
-    initial_solution->update_timeslots(n_exams);
-    vector<double>weight_for_exams=initial_solution->update_weights(n_exams);
-    
+    //---------------------------------- MULTI-THREAD -----------------------------------------------------------
  
     omp_set_dynamic(0);     // Explicitly disable dynamic teams
     omp_set_num_threads(numproc); // Use 4 threads for all consecutive parallel regions
@@ -121,21 +113,20 @@ int main(int argc, char **argv) {
     vector<Solution*> best_sol=vector<Solution*>(numproc);
     int id=0;
 
-    cout << "Running SA with alpha: "<< alpha<<" | cooling: "<<cooling<< " | mutations: "<<n_mutations <<endl;
     // lancio in parallelo
     # pragma omp parallel default(shared) private(id)
     {
         id = (int)omp_get_thread_num();
 
         Solution* tmp= new Solution();
-        tmp = initial_solution->copy_solution(n_exams);
+        tmp = initial_solution->copy_solution();
         array_sol[id] = tmp;
            
 
         string str_id = to_string(id);
         
         //double best_sol;
-        best_sol[id] = sa(array_sol[id], start, timelimit, n_exams, total_number_students, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol",t0, alpha, n_mutations, cooling);
+        best_sol[id] = sa(array_sol[id], start, timelimit, n_exams, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol");
 
         //array_sol[id]->double_obj=best_sol;
         
@@ -161,7 +152,7 @@ int main(int argc, char **argv) {
 
     // -----------------------------------------------------------------
     
-    best_sol[index_best]->write_output_file("./instances/"+current_instance+".sol", n_exams);
+    best_sol[index_best]->write_output_file("./instances/"+current_instance+".sol");
     cout<<"Best solution:\t\t"<<best_sol[index_best]->double_obj<<endl;
     cout<<"Average solution:\t"<<avg/counter<<endl;
    

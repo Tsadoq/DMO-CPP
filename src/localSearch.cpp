@@ -10,15 +10,22 @@
 #include "Exam.hpp" 
 #include "Solution.hpp" 
 
-void localSearch(Solution* solution, int n_exams, vector<int> possible_timeslots,vector<size_t> sorted_exams){
+void localSearch(Solution* solution, vector<int> possible_timeslots,vector<size_t> sorted_exams,int n_timeslot){
     //double starting_obj=solution->double_obj;
     vector<int> not_available_timeslots;
+    not_available_timeslots.reserve(n_timeslot);
     vector<int> available_timeslots;
+    available_timeslots.reserve(n_timeslot);
     double cost_in_obj;
+    int n_exams=solution->n_exams;
+    Exam* sort_exam;
+    
     for(int i=0;i<n_exams;i++){
-        available_timeslots=vector<int> (); 
-        not_available_timeslots=solution->all_exams[sorted_exams[i]]->conflict_times; 
-        not_available_timeslots.push_back(solution->all_exams[sorted_exams[i]]->timeslot); 
+        available_timeslots.clear(); 
+        not_available_timeslots.clear();
+        sort_exam=solution->all_exams[sorted_exams[i]];
+        not_available_timeslots=sort_exam->conflict_times; 
+        not_available_timeslots.push_back(solution->timeslot_per_exams[sorted_exams[i]]); 
         // sort vector because set_difference works with sorted arrays 
         sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
         // find available timeslot 
@@ -26,17 +33,19 @@ void localSearch(Solution* solution, int n_exams, vector<int> possible_timeslots
                         not_available_timeslots.end(),inserter(available_timeslots, available_timeslots.begin())); 
         for(auto time:available_timeslots){
             cost_in_obj=0;
-            for(int j=0; j<solution->all_exams[sorted_exams[i]]->conflict_times.size();j++){
-                if(abs(time-solution->all_exams[sorted_exams[i]]->conflict_times[j])<=5){
-                    cost_in_obj=cost_in_obj+pow(2,5-abs(time-solution->all_exams[sorted_exams[i]]->conflict_times[j]))*solution->all_exams[sorted_exams[i]]->conflict_weights[j];
+            for(int j=0; j<sort_exam->conflict_times.size();j++){
+                if(abs(time-sort_exam->conflict_times[j])<=5){
+                    if(i>j){
+                        cost_in_obj+=(1<<(5-abs(time-sort_exam->conflict_times[j])))*sort_exam->conflict_weights[j];                        
+                    }                    
                 }                
             }
-            if (solution->all_exams[sorted_exams[i]]->weight_in_obj_fun>cost_in_obj){
-                solution->all_exams[sorted_exams[i]]->weight_in_obj_fun=cost_in_obj;
+            if (sort_exam->weight_in_obj_fun>cost_in_obj){
+                sort_exam->weight_in_obj_fun=cost_in_obj;
                 solution->timeslot_per_exams[sorted_exams[i]]=time;
             }
         }
-        solution->update_timeslots(n_exams);
-        solution->update_weights(n_exams);
+        solution->update_timeslots();
+        solution->update_weights();
     }
 }
