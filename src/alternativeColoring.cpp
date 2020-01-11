@@ -14,45 +14,24 @@ void piazzo_random(Solution* initial_solution, vector<int> available_colors, vec
 bool swap_random(Solution* initial_solution, vector<int> available_colors);
 bool prova_a_inserire(Solution* initial_solution,  vector<int> available_colors, int TRY_PLACE, vector<Exam*> &notInPosition, Exam* exam);
 
-int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams,vector<size_t> sorted_index, int flag){
+int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams,vector<size_t> sorted_index){
     srand(time(NULL));
     initial_solution->timeslot_per_exams=vector<int>(n_exams, -1);
     vector<int> seed_for_boxes{0,3,1,4,2,5};
     vector<vector<int>> boxes;
     vector<Exam*> notInPosition;
-    //per ricostruzione della soluzione passata
-    //--------------------------------------------------------------
-    /*vector<int> old_timeslot =  initial_solution->timeslot_per_exams;
-    vector<vector<int>> old_conflict_time;
-    for(auto kk: initial_solution->all_exams){
-        
-    }*/
-    //--------------------------------------------------------------
-    int dim=0;
-    if(flag=1){
-        for(int n=0;n<n_exams;n++){
-            if(initial_solution->all_exams[sorted_index[n]]->timeslot==-1){
-                notInPosition.push_back(initial_solution->all_exams[sorted_index[n]]);
-                //inizializzo i timeslot degli esami che devo ancora piazzare
-                dim=initial_solution->all_exams[n]->conflict_exams.size();
-                initial_solution->all_exams[n]->conflict_times=vector<int>(dim,-1);
-                initial_solution->all_exams[n]->timeslot=-1;
-            }
-        }
-    }else{
-        for(int n=0;n<n_exams;n++){
-           notInPosition.push_back(initial_solution->all_exams[sorted_index[n]]);
-        }
-        //inizializzo i timeslot conflittuali
-    //-------------------------------------------------------------------------------
-        for(int i=0; i<n_exams; i++){
-            dim=initial_solution->all_exams[i]->conflict_exams.size();
-            initial_solution->all_exams[i]->conflict_times=vector<int>(dim,-1);
-            initial_solution->all_exams[i]->timeslot=-1;
-        }
+    for(int n=0;n<n_exams;n++){
+        notInPosition.push_back(initial_solution->all_exams[sorted_index[n]]);
     }
     //vector<Exam*> yesInPosition;    
-    
+    //inizializzo i timeslot conflittuali
+    //-------------------------------------------------------------------------------
+    int dim=0;
+    for(int i=0; i<n_exams; i++){
+        dim=initial_solution->all_exams[i]->conflict_exams.size();
+        initial_solution->all_exams[i]->conflict_times=vector<int>(dim,-1);
+        initial_solution->all_exams[i]->timeslot=-1;
+    }
     //-------------------------------------------------------------------------------
     //inizializzo i boxes
     //-------------------------------------------------------------------------------
@@ -80,6 +59,7 @@ int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams
     
     available_colors.insert(available_colors.end(), boxes[0].begin(), boxes[0].end());
     //cout<<"size di notinPos "<<notInPosition.size()<<endl;
+   
 
     while(notInPosition.size()!=0){
 
@@ -115,15 +95,10 @@ int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams
                     }
                     available_colors = vector<int>();
                     available_colors.insert(available_colors.end(), boxes[0].begin(), boxes[0].end());
-                    if(flag=1){
-                        //il problema è ricostruire i vicini di ciascun nodo
-                        
-                    }else{
-                         for(int i=0; i<n_exams; i++){
-                            dim=initial_solution->all_exams[i]->conflict_exams.size();
-                            initial_solution->all_exams[i]->conflict_times.assign(dim,-1);
-                            initial_solution->all_exams[i]->timeslot=-1;
-                        }
+                    for(int i=0; i<n_exams; i++){
+                        dim=initial_solution->all_exams[i]->conflict_exams.size();
+                        initial_solution->all_exams[i]->conflict_times.assign(dim,-1);
+                        initial_solution->all_exams[i]->timeslot=-1;
                     }
                     //cout<<"riga 105"<<endl;
                     initial_solution->timeslot_per_exams.assign(n_exams,-1);
@@ -227,4 +202,3 @@ bool prova_a_inserire(Solution* initial_solution,  vector<int> available_colors,
     return false;
             
 }
- 

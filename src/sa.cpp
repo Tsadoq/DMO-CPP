@@ -28,6 +28,9 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     double perc_improvement;
     double obj_local=0;
     double obj_old;
+    bool un;
+    bool res;
+    bool unres;
 
     std::default_random_engine generator;
     std::uniform_real_distribution<double> distribution(0.0,1.0);
@@ -104,10 +107,29 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             num_unsched=round(n_exams*rel_t*0.3);
         }
         //cout<<"rel t: "<<rel_t<<" un "<<num_unsched<<endl;
-        unscheduling(solution, num_unsched);
+        unres=false;
+        bool first=true;
+        while(!unres){
+            cout<<!unres<<endl;
+            if (first==false){               
+                solution->timeslot_per_exams=old_timeslot_solution;
+                solution->update_timeslots(n_exams);
+                solution->update_weights(n_exams);
+                cout<<"ciao"<<endl;
+            }
+            un=unscheduling(solution, num_unsched);
+            res=rescheduling(solution, n_timeslot, n_exams);
+            unres=un||res;
+            first=false;
+            cout<<un<<" "<<res<<" "<<unres<<endl;
+        }
+        cout<<"uscitaaaaaaaaaaaaaaaaaaaaaaaaaaa"<<endl;
+        
+        
+        weight_for_exams=solution->update_weights(n_exams);
 
-        //vector<size_t> sorted_index = vector<size_t>(n_exams);
-       /* vector<int> tmp = vector<int>(n_exams);
+        /*vector<size_t> sorted_index = vector<size_t>(n_exams);
+        vector<int> tmp = vector<int>(n_exams);
         for(int yy=0; yy<n_exams; yy++){
             if(solution->all_exams[yy]->timeslot == -1){
                 tmp.push_back(solution->num_neighbours_for_exams[yy]);
@@ -120,11 +142,11 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         //neighbours_by_mutation_no_order(solution,num_unsched,possible_timeslots,n_exams);
         solution->update_weights(n_exams);
 */
-        while(num_unsched > rescheduled && counter_unsched < 40){
+       /* while(rescheduled==0 && counter_unsched < 40){
             //cout<<"ddddddd"<<endl;
-            
+            unscheduling(solution, num_unsched);
             //cout<<"Unscheduling done"<<endl;
-            rescheduled = rescheduling(solution, n_timeslot, old_timeslot);
+            rescheduled = rescheduling(solution, n_timeslot, old_timeslot_solution);
             
             if (num_unsched != rescheduled){
                 solution->timeslot_per_exams = old_timeslot_solution;
@@ -137,7 +159,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             }
             counter_unsched++;
         }
-        weight_for_exams=solution->update_weights(n_exams);    
+        weight_for_exams=solution->update_weights(n_exams);  */  
         //obj_new=solution->objective_function(n_exams,total_number_students);
         
         

@@ -39,9 +39,9 @@ vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> or
         not_available_timeslots=exam_mutate->conflict_times; 
         not_available_timeslots.push_back(exam_mutate->timeslot); 
         // sort vector because set_difference works with sorted arrays 
-        sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
+        std::sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
         // find available timeslot 
-        set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_timeslots.begin(),  
+        std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_timeslots.begin(),  
                         not_available_timeslots.end(),inserter(available_timeslots, available_timeslots.begin())); 
         
         if(available_timeslots.size()==0){ 
@@ -221,9 +221,9 @@ void neighbours_by_double_mutation(Solution* solution, int totTimeslots, int num
             }
             vector<int> possible_mutation_for_second_exam;
             vector<int> not_available_sec = solution->all_exams[conflict_index]->conflict_times;
-            sort(not_available_sec.begin(), not_available_sec.end()); 
+            std::sort(not_available_sec.begin(), not_available_sec.end()); 
             // find available timeslot 
-            set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_sec.begin(),  
+            std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_sec.begin(),  
                             not_available_sec.end(),inserter(possible_mutation_for_second_exam, possible_mutation_for_second_exam.begin()));
             
             vector<int> toavoid = {i, conflict_index};
@@ -282,8 +282,8 @@ int double_mutation(Solution* solution, int totTimeslots){
         }
         vector<int> possible_mutation_for_second_exam;
         vector<int> not_available_sec = solution->all_exams[conflict_index]->conflict_times;
-        sort(not_available_sec.begin(), not_available_sec.end());  
-        set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_sec.begin(),  
+        std::sort(not_available_sec.begin(), not_available_sec.end());  
+        std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_sec.begin(),  
                             not_available_sec.end(),inserter(possible_mutation_for_second_exam, possible_mutation_for_second_exam.begin()));
         if (possible_mutation_for_second_exam.size()> 0 ){
             // se questo swap non era gia stato fatto
@@ -320,8 +320,8 @@ void neighbourhood_by_obj_fun(int index_exam, Solution* solution, int n_timeslot
             not_available_timeslots=conflict_exam->conflict_times;
             available_timeslots=vector<int> (); 
             // sort vector because set_difference works with sorted arrays 
-            sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
-            set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_timeslots.begin(),  
+            std::sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
+            std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_timeslots.begin(),  
                         not_available_timeslots.end(),inserter(available_timeslots, available_timeslots.begin())); 
             if (available_timeslots.size()>0){
                 for(auto element : available_timeslots){
@@ -347,9 +347,12 @@ void neighbourhood_by_obj_fun(int index_exam, Solution* solution, int n_timeslot
     }*/
 }
 
-void unscheduling(Solution* sol, int num_unsched){
+bool unscheduling(Solution* sol, int num_unsched){
     vector<int> positions;
     int h;
+    if (num_unsched==0){
+        return true;
+    }
     for (int i= 0; i<sol->all_exams.size(); i++){
         positions.push_back(i);
     }
@@ -368,30 +371,55 @@ void unscheduling(Solution* sol, int num_unsched){
                 sol->all_exams[k-1]->conflict_times[h]= -1; 
             }
     }
+    return true;
 }
 
-int rescheduling(Solution* sol, int totTimeslots, vector<int> old_timeslot){
+bool rescheduling(Solution* sol, int totTimeslots, int n_exams){
+
+    int fail=0;
+    int max_fail=n_exams/3;
     vector<int> unsched_exams_pos;
+    vector<int> weight_unsched;
     int k;
     int counter = 0; 
+
     for (int i =0; i< sol->all_exams.size(); i++){
         if (sol->timeslot_per_exams[i] == -1){
             unsched_exams_pos.push_back(i);
+            // numero di conflitti per l'esame i
+            weight_unsched.push_back(sol->all_exams[i]->conflict_exams.size());
         }
-    }
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
-    std::shuffle(unsched_exams_pos.begin(), unsched_exams_pos.end(),std::default_random_engine(seed) );
-    // Per ogni esame non ancora rischedulato
+    }   
+
     vector<int> possible_timeslots;
     for (int i=0; i<totTimeslots;i++){  // possible timeslot rimane uguale per tutti, e il vettore [1, ntimeslot]
             possible_timeslots.push_back(i+1);
     }
+
+    vector<int> not_available;
+    vector<int> possible_mutation;
+    vector<size_t> order_not_schedule;
+
+    int pos;
+    int kk;
+    int rand_index;
+    int pos_conf;
     
-    for ( int i = 0; i < unsched_exams_pos.size(); i++){
-        //cout<<"I am there for the "<<i+1<<" time(s)"<<endl;
-        vector<int> not_available;
-        vector<int> possible_mutation;
-        int pos = unsched_exams_pos[i];
+    while (unsched_exams_pos.size()!=0){
+        //cout<<unsched_exams_pos.size()<<endl;
+
+        if (fail>=max_fail){
+            //cout<<"fail"<<endl;
+            return false;
+        }
+
+        not_available=vector<int>();
+        possible_mutation=vector<int>();
+        order_not_schedule=sort_indexes(weight_unsched);        
+        
+        // esame più difficile da piazzare
+        //cout<<"size: "<<unsched_exams_pos.size()<<endl;
+        pos = unsched_exams_pos[order_not_schedule[0]];
         // vado a vedere quali timeslot sono disponibili
         for (int j = 0; j <sol->all_exams[pos]->conflict_times.size(); j++){
             if (sol->all_exams[pos]->conflict_times[j] != -1){
@@ -399,32 +427,56 @@ int rescheduling(Solution* sol, int totTimeslots, vector<int> old_timeslot){
                 //cout<<"I am there too for the "<<j+1<<" time(s)"<<endl;
             }    
         }
-        sort(not_available.begin(), not_available.end());  
-        set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available.begin(),  
+        std::sort(not_available.begin(), not_available.end());  
+        std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available.begin(),  
                     not_available.end(),inserter(possible_mutation, possible_mutation.begin()));
         if (possible_mutation.size()> 0){
-            int rand_index = rand() % possible_mutation.size();
+            //cout<<"ok"<<endl;
+            rand_index = rand() % possible_mutation.size();
             sol->all_exams[pos]->timeslot = possible_mutation[rand_index];
             sol->timeslot_per_exams[pos] = possible_mutation[rand_index];
             for (auto h : sol->all_exams[pos]->conflict_exams){ 
                 k=0; 
                 while(sol->all_exams[h-1]->conflict_exams[k] != sol->all_exams[pos]->id_exam){ 
                     k++;
+                    //cout<<"riga 438"<<endl;
                 } 
                 sol->all_exams[h-1]->conflict_times[k]=possible_mutation[rand_index];
             } 
-        counter++;
+            //cout<<"riga 442"<<endl;
+            //cout<<"pos "<<pos<<endl;
+            unsched_exams_pos.erase(unsched_exams_pos.begin()+order_not_schedule[0]);
+            //cout<<"riga 444"<<endl;
+            weight_unsched.erase(weight_unsched.begin()+order_not_schedule[0]);
+            //cout<<"riga 446"<<endl;
+        }else{
+            fail++;
+            // unschedulo tutti i conflittuali di pos
+            for (int j = 0; j <sol->all_exams[pos]->conflict_times.size(); j++){
+                if(sol->all_exams[pos]->conflict_times[j]!=-1){ 
+                    //cout<<"unsched"<<endl;                      
+                    sol->all_exams[pos]->conflict_times[j]=-1;
+                    pos_conf=sol->all_exams[pos]->conflict_exams[j]-1;
+                    unsched_exams_pos.push_back(pos_conf);
+                    weight_unsched.push_back(sol->all_exams[pos_conf]->conflict_exams.size());
+                    sol->timeslot_per_exams[pos_conf]=-1;
+                    sol->all_exams[pos_conf]->timeslot=-1;
+                    // dico a tutti gli esami conflittuali dell'esame unschedulato che l'ho unschedulato
+                    for(auto conf_exam : sol->all_exams[pos_conf]->conflict_exams){
+                        kk=0; 
+                        while(sol->all_exams[conf_exam-1]->conflict_exams[kk] != pos_conf+1){ 
+                            kk++;
+                        } 
+                        sol->all_exams[conf_exam-1]->conflict_times[kk]=-1;                        
+                    }
+                }
+            }    
         }
-        not_available.clear();
-        possible_mutation.clear();
+        
+        //not_available.clear();
+        //possible_mutation.clear();
     }
-    if (counter == unsched_exams_pos.size())
-        return counter;
-    else{
-        sol->timeslot_per_exams = old_timeslot;
-        sol->update_timeslots(old_timeslot.size());
-        return 0;
-    }
+    return true;
 }
 
 int directional_mutation(Solution* sol, int totTimeslots){
@@ -582,9 +634,9 @@ void neighbours_by_mutation_no_order(Solution* solution,int num_mutation,vector<
         not_available_timeslots=exam_mutate->conflict_times; 
         not_available_timeslots.push_back(exam_mutate->timeslot); 
         // sort vector because set_difference works with sorted arrays 
-        sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
+        std::sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
         // find available timeslot 
-        set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_timeslots.begin(),  
+        std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_timeslots.begin(),  
                         not_available_timeslots.end(),inserter(available_timeslots, available_timeslots.begin())); 
         
         if(available_timeslots.size()==0){ 
