@@ -104,7 +104,7 @@ void Solution::update_weights(){
             diff=abs(neighbour_exam_timeslot-current_exam_timeslot);
             if (diff<=5){
                 // bitshift operation
-                diff=1<<diff;
+                diff=1<<5-diff;
                 weight_for_exam += diff*neighbour_exam_weight;
             }
         }
