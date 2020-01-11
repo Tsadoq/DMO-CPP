@@ -371,27 +371,29 @@ bool unscheduling(Solution* sol, int num_unsched){
                 sol->all_exams[k-1]->conflict_times[h]= -1; 
             }
     }
-    return true;
+    return false;
 }
 
 bool rescheduling(Solution* sol, int totTimeslots, int n_exams){
 
     int fail=0;
     int max_fail=n_exams/3;
-    vector<int> unsched_exams_pos;
-    vector<int> weight_unsched;
+    //vector<int> unsched_exams_pos=vector<int>();
+    vector<Exam*> unsched_exams=vector<Exam*>();
+    //vector<int> num_available=vector<int>();
     int k;
     int counter = 0; 
 
     for (int i =0; i< sol->all_exams.size(); i++){
         if (sol->timeslot_per_exams[i] == -1){
-            unsched_exams_pos.push_back(i);
+            //unsched_exams_pos.push_back(i);
             // numero di conflitti per l'esame i
-            weight_unsched.push_back(sol->all_exams[i]->conflict_exams.size());
+            unsched_exams.push_back(sol->all_exams[i]);
         }
+        sol->all_exams[i]->num_conflict = sol->all_exams[i]->conflict_exams.size();
     }   
 
-    vector<int> possible_timeslots;
+    vector<int> possible_timeslots=vector<int>();
     for (int i=0; i<totTimeslots;i++){  // possible timeslot rimane uguale per tutti, e il vettore [1, ntimeslot]
             possible_timeslots.push_back(i+1);
     }
@@ -399,27 +401,48 @@ bool rescheduling(Solution* sol, int totTimeslots, int n_exams){
     vector<int> not_available;
     vector<int> possible_mutation;
     vector<size_t> order_not_schedule;
+    vector<int> not_available_time;
+    vector<int> available_time;
+
+
 
     int pos;
     int kk;
     int rand_index;
     int pos_conf;
     
-    while (unsched_exams_pos.size()!=0){
+    while (unsched_exams.size()!=0){
+        cout<<unsched_exams.size()<<endl;
         //cout<<unsched_exams_pos.size()<<endl;
 
         if (fail>=max_fail){
-            //cout<<"fail"<<endl;
+            cout<<"fail "<<unsched_exams.size()<<endl;
             return false;
         }
 
         not_available=vector<int>();
         possible_mutation=vector<int>();
-        order_not_schedule=sort_indexes(weight_unsched);        
+        not_available_time=vector<int>();
+        available_time=vector<int>();
+        order_not_schedule=vector<size_t>();
+
+        for(auto un_ex: unsched_exams){
+            not_available_time=un_ex->conflict_times;
+            std::sort(not_available_time.begin(), not_available_time.end());  
+            std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_time.begin(),  
+                    not_available_time.end(),inserter(available_time, available_time.begin()));
+                    un_ex->available_times=available_time.size();
+        }
+
+        std::sort(unsched_exams.begin(), unsched_exams.end(), [](Exam* a, Exam* b) {
+            if ( a->available_times!= b->available_times) return a->available_times < b->available_times;
+                return a->num_conflict > b->num_conflict;
+        });
+        //order_not_schedule=sort_indexes(weight_unsched);        
         
         // esame più difficile da piazzare
         //cout<<"size: "<<unsched_exams_pos.size()<<endl;
-        pos = unsched_exams_pos[order_not_schedule[0]];
+        pos = unsched_exams[0]->id_exam-1;
         // vado a vedere quali timeslot sono disponibili
         for (int j = 0; j <sol->all_exams[pos]->conflict_times.size(); j++){
             if (sol->all_exams[pos]->conflict_times[j] != -1){
@@ -445,20 +468,18 @@ bool rescheduling(Solution* sol, int totTimeslots, int n_exams){
             } 
             //cout<<"riga 442"<<endl;
             //cout<<"pos "<<pos<<endl;
-            unsched_exams_pos.erase(unsched_exams_pos.begin()+order_not_schedule[0]);
-            //cout<<"riga 444"<<endl;
-            weight_unsched.erase(weight_unsched.begin()+order_not_schedule[0]);
-            //cout<<"riga 446"<<endl;
+            unsched_exams.erase(unsched_exams.begin());
         }else{
             fail++;
             // unschedulo tutti i conflittuali di pos
             for (int j = 0; j <sol->all_exams[pos]->conflict_times.size(); j++){
+                cout<<"numero conflittuali"<<sol->all_exams[pos]->conflict_times.size()<<endl;
                 if(sol->all_exams[pos]->conflict_times[j]!=-1){ 
                     //cout<<"unsched"<<endl;                      
                     sol->all_exams[pos]->conflict_times[j]=-1;
                     pos_conf=sol->all_exams[pos]->conflict_exams[j]-1;
-                    unsched_exams_pos.push_back(pos_conf);
-                    weight_unsched.push_back(sol->all_exams[pos_conf]->conflict_exams.size());
+                    unsched_exams.push_back(sol->all_exams[pos_conf]);
+                    //weight_unsched.push_back(sol->all_exams[pos_conf]->conflict_exams.size());
                     sol->timeslot_per_exams[pos_conf]=-1;
                     sol->all_exams[pos_conf]->timeslot=-1;
                     // dico a tutti gli esami conflittuali dell'esame unschedulato che l'ho unschedulato

@@ -98,30 +98,29 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         uguali=0;
 
         //--------------------------------------- RESCHEDULING----------------
-        int rescheduled = -1;
-        int counter_unsched = 0;
+        
         int num_unsched;
-        if (rel_t*0.3<0.1){
+        if (rel_t*0.2<0.1){
             num_unsched=round(n_exams*0.1);
         }else{
-            num_unsched=round(n_exams*rel_t*0.3);
+            num_unsched=round(n_exams*rel_t*0.2);
         }
         //cout<<"rel t: "<<rel_t<<" un "<<num_unsched<<endl;
         unres=false;
-        bool first=true;
+        int first=2;
         while(!unres){
-            cout<<!unres<<endl;
-            if (first==false){               
+            //cout<<!unres<<endl;
+            if (first==0){               
                 solution->timeslot_per_exams=old_timeslot_solution;
                 solution->update_timeslots(n_exams);
                 solution->update_weights(n_exams);
-                cout<<"ciao"<<endl;
+                //cout<<"ciao"<<endl;
             }
             un=unscheduling(solution, num_unsched);
             res=rescheduling(solution, n_timeslot, n_exams);
             unres=un||res;
-            first=false;
-            cout<<un<<" "<<res<<" "<<unres<<endl;
+            first=0;
+            cout<<"jjjjjjjjjjj"<<un<<" "<<res<<" "<<unres<<endl;
         }
         cout<<"uscitaaaaaaaaaaaaaaaaaaaaaaaaaaa"<<endl;
         

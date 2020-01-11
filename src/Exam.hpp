@@ -12,4 +12,6 @@ public:
     vector<int> conflict_times;
     double weight_in_obj_fun;
     int timeslot=-1;
+    size_t num_conflict;
+    size_t available_times;
 };
