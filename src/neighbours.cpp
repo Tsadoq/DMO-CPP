@@ -41,8 +41,8 @@ bool unscheduling(Solution* sol, int num_unsched){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool rescheduling(Solution* sol, int totTimeslots){
-
+bool rescheduling(Solution* sol, int totTimeslots, std::vector<int> possible_timeslots){
+  
     int n_exams=sol->n_exams;
     int fail=0;
     int max_fail=n_exams/3;
@@ -57,11 +57,6 @@ bool rescheduling(Solution* sol, int totTimeslots){
         }
     }   
 
-    std::vector<int> possible_timeslots=std::vector<int>(totTimeslots);
-    for (int i=0; i<totTimeslots;i++){  // possible timeslot rimane uguale per tutti, e il vettore [1, ntimeslot]
-            possible_timeslots.push_back(i+1);
-    }
-
     std::vector<int> not_available=std::vector<int>();
     not_available.reserve(totTimeslots);
     std::vector<int> possible_mutation=std::vector<int>();
@@ -72,7 +67,7 @@ bool rescheduling(Solution* sol, int totTimeslots){
     not_available_time.reserve(totTimeslots);
     std::vector<int> available_time=std::vector<int>();
     available_time.reserve(totTimeslots);
-    
+
     int pos;
     int kk;
     int rand_index;
@@ -89,21 +84,24 @@ bool rescheduling(Solution* sol, int totTimeslots){
         not_available_time.clear();
         available_time.clear();
         order_not_schedule.clear();
-
+        
         for(auto un_ex: unsched_exams){
+            //std::cout<<un_ex->id_exam<<" "<<un_ex->conflict_times.size()<<std::endl;
+            //std::cout<<un_ex->conflict_times.size()<<std::endl;
             not_available_time=un_ex->conflict_times;
             std::sort(not_available_time.begin(), not_available_time.end());  
             std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available_time.begin(),  
-                    not_available_time.end(),inserter(available_time, available_time.begin()));
-                    un_ex->available_times=available_time.size();
+                    not_available_time.end(),std::inserter(available_time, available_time.begin()));
+            
+            un_ex->available_times=available_time.size();
+            available_time.clear();
         }
 
         std::sort(unsched_exams.begin(), unsched_exams.end(), [](Exam* a, Exam* b) {
             if ( a->available_times!= b->available_times) return a->available_times < b->available_times;
-                return a->num_conflict > b->num_conflict;
-        });
+                return a->num_conflict > b->num_conflict;});
 
-        exam= unsched_exams[0];
+        exam = unsched_exams[0];
         pos = exam->id_exam;
         
         // vado a vedere quali timeslot sono disponibili
@@ -112,6 +110,7 @@ bool rescheduling(Solution* sol, int totTimeslots){
                 not_available.push_back(exam->conflict_times[j]);  // mi segno i timeslot non disponibili
             }    
         }
+
         std::sort(not_available.begin(), not_available.end());  
         std::set_difference(possible_timeslots.begin(), possible_timeslots.end(), not_available.begin(),  
                     not_available.end(),inserter(possible_mutation, possible_mutation.begin()));

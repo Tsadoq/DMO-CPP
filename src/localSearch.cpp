@@ -20,26 +20,15 @@ void localSearch(Solution* solution, std::vector<int> possible_timeslots,std::ve
     int n_exams=solution->n_exams;
     Exam* sort_exam;
     int diff;
-
-    std::cout<<"######################################"<<std::endl;
-    std::cout<<n_exams<<std::endl;
-    std::cout<<"######################################"<<std::endl;
     
     for(int i=0;i<n_exams;i++){
         available_timeslots.clear(); 
-        // not_available_timeslots.clear();
+        not_available_timeslots.clear();
         sort_exam=solution->all_exams[sorted_exams[i]];
-        // std::cout<<"--------------------------------------"<<std::endl;
         
         not_available_timeslots=sort_exam->conflict_times; // PROBLEMA
-        
-        // std::cout<<not_available_timeslots.size()<<std::endl;
-
         not_available_timeslots.push_back(solution->timeslot_per_exams[sorted_exams[i]]);
-        // std::cout<<not_available_timeslots.size()<<std::endl;
-
-        // std::cout<<"--------------------------------------"<<std::endl;
-
+        
         // sort vector because set_difference works with sorted arrays 
         sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
         // find available timeslot 
@@ -48,7 +37,6 @@ void localSearch(Solution* solution, std::vector<int> possible_timeslots,std::ve
                          not_available_timeslots.begin(),not_available_timeslots.end(),
                          inserter(available_timeslots, available_timeslots.begin())   ); 
 
-        // std::cout<<i<<std::endl;
         for(auto time: available_timeslots){
             cost_in_obj=0;
            
@@ -64,8 +52,6 @@ void localSearch(Solution* solution, std::vector<int> possible_timeslots,std::ve
                 solution->timeslot_per_exams[sorted_exams[i]]=time;
             }
         }
-
-        std::cout<<"eee"<<"\n";  
         solution->update_timeslots();
         solution->update_weights();
     }

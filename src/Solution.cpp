@@ -65,11 +65,13 @@ void Solution::update_timeslots(){
     std::vector <int> conflict_times_new;
 
     for(int i=0;i< n_exams;i++){
-        conflict_times_new = std::vector<int>(all_exams[i]->num_conflict);
+        all_exams[i]->conflict_times.clear();
         // save timeslot for current exam 
+ 
         for (auto j:all_exams[i]->conflict_exams){
             // save timeslot of conflicting exams
-            all_exams[i]->conflict_times.push_back(timeslot_per_exams[j]);            
+            all_exams[i]->conflict_times.push_back(timeslot_per_exams[j]);        
+            //std::cout<<all_exams[i]->id_exam<<" "<<timeslot_per_exams[j]<<std::endl; 
         }
     }
 }
@@ -137,6 +139,7 @@ Solution* Solution::copy_solution(){
         copy_exam->conflict_times=all_exams[i]->conflict_times;
         copy_exam->conflict_weights=all_exams[i]->conflict_weights;
         copy_exam->weight_in_obj_fun=all_exams[i]->weight_in_obj_fun;
+        copy_exam->num_conflict= all_exams[i]->num_conflict;
         copy_exam->id_exam=all_exams[i]->id_exam;
         copy_all_exams.push_back(copy_exam);
     }

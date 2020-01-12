@@ -43,7 +43,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
 
     solution->write_output_file(current_instance);
-    std::cout<<"aaa"<<"\n";
+   
     std::vector<int> possible_timeslots;
     for (int i=0; i<n_timeslot;i++){
         possible_timeslots.push_back(i+1);
@@ -51,11 +51,9 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
 
     //--------------------LOCAL SEARCH INIZIALE---------------------------
     order_for_local=sort_indexes(solution->num_neighbours_for_exams);
-    std::cout<<"bbb"<<"\n";
     localSearch(solution,possible_timeslots,order_for_local,n_timeslot);
-    std::cout<<"ddd"<<"\n";
     obj_local=solution->objective_function();
-    std::cout<<"ccc"<<"\n";
+    std::cout<<obj_local<<std::endl;
     obj_old=obj_SA;
     
     perc_improvement=0.1;
@@ -65,7 +63,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         obj_local=solution->objective_function();  
     }
     std::cout<<"SA "<<obj_SA<<"local "<<obj_local<<std::endl;
-
+    
     // ------------------CALCOLO T0--------------------------------
     t0=(obj_SA-obj_local)/0.693747281;
     t=t0;
@@ -73,7 +71,6 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     // --------------------------------------------------
 
     best_sol = obj_old;
-
     ftime(&now); 
     Solution * best_solution=solution->copy_solution();
 
@@ -82,15 +79,12 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     std::string file_out="temperaturaVALE1";
     std::ofstream output_file;
     output_file.open(file_out);
-
     
     obj_SA=obj_local;
-
     
     while((int)((now.time-start.time))<timelimit){        
         rel_t=t/t0;
         old_timeslot_solution=solution->timeslot_per_exams; 
-        
 
         //--------------------------------------- RESCHEDULING----------------
         
@@ -110,11 +104,10 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
                 solution->update_weights();
             }
             un=unscheduling(solution, num_unsched);
-            res=rescheduling(solution, n_timeslot);
+            res=rescheduling(solution, n_timeslot, possible_timeslots);
             unres=un||res;
             first=0;
         }
-        
         
         solution->update_weights();
         
