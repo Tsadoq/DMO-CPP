@@ -10,6 +10,34 @@ double cooling(double time_limit, double current_time,double t0);
 int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool first,int n_exams);
 double temperature_shock(double temperature);
 
+
+
+Solution* func_local_search(Solution* solution, double perc_improvement)
+{   
+    double obj_SA = solution->double_obj;
+    int n_exams=solution->n_exams;
+    double obj_local=0;
+    std::vector<size_t> order_for_local=std::vector<size_t>(n_exams);    
+
+    order_for_local=sort_indexes(solution->num_neighbours_for_exams);
+    localSearch(solution,order_for_local);
+    obj_local=solution->objective_function();
+    double obj_old=obj_SA;
+    
+    while((obj_old-obj_local)/obj_local>perc_improvement){
+        obj_old=obj_local;
+        localSearch(solution,order_for_local);
+        obj_local=solution->objective_function();
+        solution->double_obj = obj_local;
+    }
+    
+    return solution;
+}
+
+
+
+
+
 Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance){
  
     struct timeb now;
@@ -57,22 +85,10 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     obj_SA = solution->objective_function();
     std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
 
-    solution->write_output_file(current_instance);
-
     //--------------------LOCAL SEARCH INIZIALE---------------------------
-    order_for_local=sort_indexes(solution->num_neighbours_for_exams);
-    localSearch(solution,order_for_local);
-    obj_local=solution->objective_function();
-    std::cout<<obj_local<<std::endl;
-    obj_old=obj_SA;
-     
-    perc_improvement=0.1;
-    while((obj_old-obj_local)/obj_local>perc_improvement){
-        obj_old=obj_local;
-        localSearch(solution,order_for_local);
-        obj_local=solution->objective_function();  
-    }
-    std::cout<<"SA "<<obj_SA<<"local "<<obj_local<<std::endl;
+    perc_improvement = 0.1;
+    solution = func_local_search(solution, perc_improvement);
+    obj_local = solution->double_obj;
     
     // ------------------CALCOLO T0--------------------------------
     t0=(obj_SA-obj_local)/0.693747281;
@@ -80,7 +96,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     std::cout<<"initial t0 "<<t0<<std::endl;
     // --------------------------------------------------
 
-    best_sol = obj_old;
+    best_sol = obj_SA;
     ftime(&now); 
     Solution * best_solution=solution->copy_solution();
 
@@ -156,21 +172,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
         
         //--------------------------LOCAL SEARCH-------------------------------------------------
         perc_improvement=0.1*rel_t; 
-        //bool first_local=true;      
-        obj_old=solution->objective_function();
-        localSearch(solution, order_for_local);
-        obj_local=solution->objective_function();
-
-
-        while((obj_old-obj_local)/obj_local>perc_improvement){
-      
-            obj_old=obj_local;
-            localSearch(solution,order_for_local);
-            obj_local=solution->objective_function();
-        
-        }
-        
-        obj_new=obj_local;
+        solution = func_local_search(solution, perc_improvement);
+        obj_new = solution->double_obj;
 
         //-------------------------SA--------------------------------------------------------
 
