@@ -293,15 +293,15 @@ Solution* sa_v1(Solution* solution, struct timeb start, int timelimit,std::strin
         // int idx = choose_function(rel_t, iter, perc_improvement, fail_sa);
         // solution = get_new_solution(idx , solution, timeslot_pre_swap, old_timeslot_solution, rel_t, perc_improvement, now, current_instance);
 
-        if (fail_sa < 100){
+        //if (fail_sa < 100){
             solution = func_chiara(solution, timeslot_pre_swap, perc_improvement, old_timeslot_solution, rel_t);
-        } else {
-            // LABBBOTTA
-            double tmp_rel_t = 1;
-            // solution = func_rescheduling(solution, old_timeslot_solution, tmp_rel_t);
-            fail_sa = 0;
-            t0_iter = t0;
-        }
+        // } else {
+        //     // LABBBOTTA
+        //     double tmp_rel_t = 1;
+        //     // solution = func_rescheduling(solution, old_timeslot_solution, tmp_rel_t);
+        //     fail_sa = 0;
+        //     t0_iter = t0;
+        // }
         
 
 
