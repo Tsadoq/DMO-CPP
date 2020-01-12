@@ -35,7 +35,7 @@ Solution* func_local_search(Solution* solution, double perc_improvement)
 }
 
 
-Solution* func_rescheduling(Solution* solution, std::vector<int> old_timeslot_solution, double rel_t)
+Solution* func_rescheduling(Solution* solution, std::vector<int> old_timeslot_solution, double rel_t, int inception)
 {   
     int n_exams=solution->n_exams;
 
@@ -50,11 +50,40 @@ Solution* func_rescheduling(Solution* solution, std::vector<int> old_timeslot_so
 
     
     int num_unsched;
-    if (rel_t*0.3<0.1){
-        num_unsched=round(n_exams*0.1);
-    }else{
-        num_unsched=round(n_exams*rel_t*0.3);
+
+    switch (inception)
+    {
+    case 0:
+        if (rel_t*0.3<0.1){
+            num_unsched=round(n_exams*0.1);
+        }else{
+            num_unsched=round(n_exams*rel_t*0.3);
+        }
+        break;
+    case 1:
+       
+        if (rel_t*0.3<0.1){
+            num_unsched=round(n_exams*0.1);
+        }else{
+            num_unsched=round(n_exams*rel_t*0.3);
+        }
+    case 2:
+        if (rel_t*0.3<0.1){
+            num_unsched=3;
+        }else{
+            num_unsched=4;
+        }
+    default:
+        if (rel_t*0.3<0.1){
+            num_unsched=round(n_exams*0.1);
+        }else{
+            num_unsched=round(n_exams*rel_t*0.3);
+        }
     }
+
+    
+
+    // ------------------------------------------------------------
     
     unres=false;
     int first=2;
@@ -101,26 +130,41 @@ Solution* func_mutation(Solution* solution)
 }
 
 
-Solution* func_swap_deterministic(Solution* solution, std::vector<int> timeslot_pre_swap)
+Solution* func_swap_deterministic(Solution* solution, std::vector<int> timeslot_pre_swap, int inception)
 {   
-    double n_timeslot = solution->n_timeslot;
-    timeslot_pre_swap=solution->timeslot_per_exams;
-    double obj_pre_swap=solution->objective_function();
-    bool better;
-    for(int k=0; k<n_timeslot-1; k++){
-        for(int q=k+1; q<n_timeslot; q++){
-            better = neighbours_by_swapping_single(solution, k, q, obj_pre_swap);
-            if(better==false){
-                // DECIDERE CHE FARE QUA
-                solution->timeslot_per_exams= timeslot_pre_swap;
-                solution->update_timeslots();
-                solution->update_weights();
-            }else{
-                obj_pre_swap=solution->objective_function();
-                timeslot_pre_swap=solution->timeslot_per_exams;
+    int iii;
+    
+    switch (inception)
+    {
+    case 0:
+        iii =0;
+    case 1:
+        double n_timeslot = solution->n_timeslot;
+        timeslot_pre_swap=solution->timeslot_per_exams;
+        double obj_pre_swap=solution->objective_function();
+        bool better;
+        for(int k=0; k<n_timeslot-1; k++){
+            for(int q=k+1; q<n_timeslot; q++){
+                better = neighbours_by_swapping_single(solution, k, q, obj_pre_swap);
+                if(better==false){
+                    // DECIDERE CHE FARE QUA
+                    solution->timeslot_per_exams= timeslot_pre_swap;
+                    solution->update_timeslots();
+                    solution->update_weights();
+                }else{
+                    obj_pre_swap=solution->objective_function();
+                    timeslot_pre_swap=solution->timeslot_per_exams;
+                }
             }
         }
+
+        solution->update_weights();
+        break;
+    case 2:
+        iii =0;
+        break;
     }
+    
 
     return solution;
 }
@@ -136,19 +180,87 @@ Solution* func_swap_random(Solution* solution)
 }
 
 
-int choose_function(double rel_t, int iter, double perc_improvement)
+
+
+Solution* func_alberto(Solution* solution, std::vector<int> timeslot_pre_swap, 
+        std::vector<int> old_timeslot_solution, double rel_t, double perc_improvement, 
+        int inception, struct timeb now, std::string current_instance)
+{   
+
+    solution = func_rescheduling(solution, old_timeslot_solution, rel_t, inception);
+    solution = func_swap_deterministic(solution, timeslot_pre_swap, inception);
+    solution = func_local_search(solution, perc_improvement);
+    
+    if (inception==1){
+        ftime(&now);
+        inception=2;
+        solution = sa(solution, now, 1, current_instance, inception);
+    }
+    
+    if (inception==2){
+        solution = func_local_search(solution, perc_improvement);
+    }
+
+    return solution;
+}
+
+
+
+int choose_function(double rel_t, int iter, double perc_improvement, int inception)
 {   
     // CAMBIA PARAMETRO SE AGGIUNGI O TOGLI FUNZIONI!!!
-    int num_func = 5;
+    int num_func = 6;
 
-    int idx_func = rand() % num_func;
+    // int idx_func = rand() % num_func;
+    //idx_func = idx_func + 1
 
-    return idx_func + 1;
+    // solo alberto
+    int idx_func = num_func-1;
+
+
+    return idx_func;
 
 }
 
 
-Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance){
+
+Solution* get_new_solution(int idx , Solution* solution, std::vector<int> timeslot_pre_swap,
+         std::vector<int> old_timeslot_solution, double rel_t, double perc_improvement, 
+         int inception, struct timeb now, std::string current_instance)
+{   
+
+    switch (idx)
+        {
+        case 0:     
+            solution = func_rescheduling(solution, old_timeslot_solution, rel_t, inception);
+            break;
+        case 1:
+            solution = func_swap_deterministic(solution, timeslot_pre_swap, inception);
+            break;
+        case 2:
+            solution = func_swap_random(solution);
+            break;
+        case 3:
+            solution = func_mutation(solution);
+            break;
+        case 4:
+            solution = func_local_search(solution, perc_improvement);
+            break;
+        case 5:
+            // la prima volta inception = 0 (guarda main.cpp)
+            inception += 1;
+            solution = func_alberto(solution, timeslot_pre_swap, old_timeslot_solution, rel_t,perc_improvement, 
+            inception, now, current_instance);
+        default:
+            break;
+        }
+
+    return solution;
+}
+
+
+
+Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance, int inception){
  
     struct timeb now;
     double prob = 0;
@@ -176,7 +288,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     std::default_random_engine generator;
     std::uniform_real_distribution<double> distribution(0.0,1.0);
 
-
+    // TODO: what if inception==1?
 
     solution->update_weights();
     obj_SA = solution->objective_function();
@@ -194,52 +306,23 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     // --------------------------------------------------
 
     best_sol = obj_SA;
-    ftime(&now); 
     Solution * best_solution=solution->copy_solution();
-
-    //-------------------------SCRITTURA SU FILE
       
     int iter=0;
     obj_SA=obj_local;
-    
+
+    ftime(&now);
     while((int)((now.time-start.time))<timelimit){      
 
         rel_t=t/t0;
         iter++;
         perc_improvement = 0.1*rel_t;
 
-        int idx = choose_function(rel_t, iter, perc_improvement);
+        old_timeslot_solution=solution->timeslot_per_exams; 
 
-        switch (idx)
-        {
-        case 1:
-            //--------------------------------------- RESCHEDULING----------------
-            
-            // riusciamo a metterlo dentro?
-            old_timeslot_solution=solution->timeslot_per_exams; 
-    
-            solution = func_rescheduling(solution, old_timeslot_solution, rel_t);
-            break;
-        case 2:
-            //----------------------------------DETERMINISTIC SWAP-------------------------------
-            solution = func_swap_deterministic(solution, timeslot_pre_swap);
-            break;
-        case 3:
-            //----------------------------------RANDOM SWAP-------------------------------
-            solution = func_swap_random(solution);
-            break;
-        case 4:
-            //--------------------------MUTATION-------------------------------------------------
-            solution = func_mutation(solution);
-            break;
-        case 5:
-            //--------------------------LOCAL SEARCH-------------------------------------------------
-            solution = func_local_search(solution, perc_improvement);
-            break;
-        default:
-            break;
-        }
-
+        int idx = choose_function(rel_t, iter, perc_improvement, inception);
+        
+        solution = get_new_solution(idx , solution, timeslot_pre_swap, old_timeslot_solution, rel_t, perc_improvement, inception, now, current_instance);
     
         //-------------------------SA--------------------------------------------------------
 

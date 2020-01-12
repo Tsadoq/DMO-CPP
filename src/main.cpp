@@ -166,7 +166,8 @@ int main(int argc, char **argv) {
         std::string str_id = std::to_string(id);
         
         //double best_sol;
-        best_sol[id] = sa(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol");
+        int inception = 0;
+        best_sol[id] = sa(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol", inception);
 
         //array_sol[id]->double_obj=best_sol;
         
