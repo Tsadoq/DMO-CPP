@@ -28,9 +28,13 @@ def is_running():
         return 1
 
 total_instances=["instance01", "instance02", "instance03", "instance04", "instance05", "instance06", "instance07", "instance08" ]
-def_alpha = [0.5, 10, 50, 100]
-def_mutations = [2, 7, 12]
-def_cooling = [0.75, 0.85, 0.9, 0.95]
+# def_alpha = [0.5, 10, 50, 100]
+# def_mutations = [2, 7, 12]
+# def_cooling = [0.75, 0.85, 0.9, 0.95]
+
+def_temp = [30, 40, 50, 60, 70]
+def_num_before_swap = [5, 10, 15, 20]
+def_num_max_mutations = [8, 10, 12]
 
 parser = argparse.ArgumentParser(description='Grid search for hyperparameters.')
 
@@ -42,12 +46,12 @@ parser.add_argument('-t', metavar='runtime', type=int, default=180, nargs=1, des
                     help='an integer for the program run time in s. If missing, 180s (3m) will be used.')
 parser.add_argument('--clean-logs', action="store_true", default=False, dest='clean',
                     help='a flag to clean previous log files')
-parser.add_argument('--alpha', metavar='alpha', type=float, default=def_alpha, nargs='+', dest='alpha',
-                    help='a list of floats to be tried as alpha values.')
-parser.add_argument('--mutations', metavar='mutations', type=int, default=def_mutations, nargs='+', dest='mutations',
+parser.add_argument('--temp', metavar='temp', type=float, default=def_temp, nargs='+', dest='temp',
+                    help='a list of floats to be tried as temp values.')
+parser.add_argument('--num_before_swap', metavar='num_before_swap', type=int, default=def_num_before_swap, nargs='+', dest='num_before_swap',
                     help='a list of ints to be tried as number of mutations.')
-parser.add_argument('--cooling', metavar='cooling', type=float, default=def_cooling, nargs='+', dest='cooling',
-                    help='a list of floats to be tried as cooling coefficients.')
+parser.add_argument('--num_max_mutations', metavar='num_max_mutations', type=float, default=def_num_max_mutations, nargs='+', dest='num_max_mutations',
+                    help='a list of floats to be tried as num_max_mutations coefficients.')
 parser.add_argument('--shutdown', action="store_true", default=False, dest='shutdown',
                     help='a flag shutdown the machine at the end of the task (SUGGESTED FOR GOOGLE CLOUD VM)')
 
@@ -72,9 +76,9 @@ with open("./logs/test.log", 'w') as log:
     clean = args.clean
     shutdown = args.shutdown
 
-    alpha = args.alpha
-    mutations = args.mutations
-    cooling = args.cooling
+    temp = args.temp
+    num_before_swap = args.num_before_swap
+    num_max_mutations = args.num_max_mutations
 
 
 
@@ -104,18 +108,18 @@ with open("./logs/test.log", 'w') as log:
 
 
     # TEST VALUES
-    # alpha = [0.5, 10]
+    # temp = [0.5, 10]
     # mutations = [2, 7]
     # cooling = [0.75]
 
-    combinations = list(itertools.product(alpha, mutations, cooling))
+    combinations = list(itertools.product(temp, num_before_swap, num_max_mutations))
     i=0
 
     if not os.path.exists('logs'):
         os.makedirs('logs')
 
 
-    log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running {parallel} parallel instances with arguments: {program} {instances} {runtime}\nalpha: {alpha}\nmutations: {mutations}\ncooling: {cooling}\n")
+    log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running {parallel} parallel instances with arguments: {program} {instances} {runtime}\ntemp: {temp}\nnum_before_swap: {num_before_swap}\nnum_max_mutations: {num_max_mutations}\n")
     runs = {}
     for instance in instances:
         log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] ------ INSTANCE {instance} BEGIN ------\n")
@@ -148,8 +152,8 @@ with open("./logs/test.log", 'w') as log:
             if i == parallel:
                 time.sleep(runtime + 1)
                 i=0
-            filename=f"log_{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}_alpha{a}_mut{mut}_cool{cool}.txt"
-            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running with alpha: {a}, cool: {cool}, mut: {mut}\n")
+            filename=f"log_{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}_temp{a}_mut{mut}_cool{cool}.txt"
+            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running with temp: {a}, cool: {cool}, mut: {mut}\n")
             os.system(f"./{program} {instance} {runtime} 4 {a} {mut} {cool} > logs/{instance}/{filename} &")
             if instance not in runs.keys():
                 runs[instance] = [filename]

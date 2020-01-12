@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     if(argc > 4){
         t0 = atof(argv[4]);
         num_max_mutations = atoi(argv[5]);
-        num_before_swap = atof(argv[6]);
+        num_before_swap = atoi(argv[6]);
     }
 
     ftime(&start);
