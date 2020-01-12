@@ -65,9 +65,9 @@ int main(int argc, char **argv) {
 
 
     
-    std::string instance_exm="./"+current_instance+".exm";
-    std::string instance_slo="./"+current_instance+".slo";
-    std::string instance_stu="./"+current_instance+".stu";
+    std::string instance_exm="./instances./"+current_instance+".exm";
+    std::string instance_slo="./instances./"+current_instance+".slo";
+    std::string instance_stu="./instances./"+current_instance+".stu";
     
     //--------------------------------------- READ FILES------------------------------------------------------
     std::cout<<"Time limit: "<<timelimit<<std::endl;

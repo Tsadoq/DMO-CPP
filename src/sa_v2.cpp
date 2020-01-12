@@ -194,6 +194,7 @@ Solution* sa_v2(Solution* solution, struct timeb start, int timelimit,std::strin
                 solution->timeslot_per_exams=old_timeslot_solution;
                 solution->update_timeslots();
                 solution->update_weights();
+                solution->objective_function();
             }else{
                 obj_SA=obj_new;  
             }
@@ -207,7 +208,7 @@ Solution* sa_v2(Solution* solution, struct timeb start, int timelimit,std::strin
             best_solution->timeslot_per_exams=solution->timeslot_per_exams;
             best_solution->update_timeslots();
             solution->update_weights();
-            // best_solution->write_output_file(current_instance);
+            best_solution->objective_function();
         }
         
         t = cooling(timelimit, now.time-start.time,t0);
@@ -217,7 +218,6 @@ Solution* sa_v2(Solution* solution, struct timeb start, int timelimit,std::strin
     } 
     //output_file.close();               
     //std::cout<<"Best sol "<<best_sol<<std::endl;
-    best_solution->double_obj=best_sol;
     //std::cout<<iter<<std::endl;
     return best_solution;  
 }
