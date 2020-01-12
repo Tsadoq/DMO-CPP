@@ -28,9 +28,9 @@ def is_running():
         return 1
 
 total_instances=["instance01", "instance02", "instance03", "instance04", "instance05", "instance06", "instance07", "instance08" ]
-def_alpha = [0.5, 10, 50, 100]
-def_mutations = [2, 7, 12]
-def_cooling = [0.75, 0.85, 0.9, 0.95]
+def_alpha = [ 1 ]
+def_mutations = [ 1 ]
+def_cooling = [ 1 ]
 
 parser = argparse.ArgumentParser(description='Grid search for hyperparameters.')
 
@@ -51,7 +51,10 @@ parser.add_argument('--cooling', metavar='cooling', type=float, default=def_cool
 parser.add_argument('--shutdown', action="store_true", default=False, dest='shutdown',
                     help='a flag shutdown the machine at the end of the task (SUGGESTED FOR GOOGLE CLOUD VM)')
 
-parallel = multiprocessing.cpu_count()/4
+parallel = multiprocessing.cpu_count()/6
+
+if not os.path.exists('logs/'):
+            os.makedirs('logs/')
 
 args = parser.parse_args()
 with open("./logs/test.log", 'w') as log:
@@ -146,11 +149,14 @@ with open("./logs/test.log", 'w') as log:
             cool=comb[2]
             
             if i == parallel:
-                time.sleep(runtime + 1)
+                res = is_running()
+                while res:
+                    res = is_running()
+                    time.sleep(1)
                 i=0
-            filename=f"log_{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}_alpha{a}_mut{mut}_cool{cool}.txt"
-            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running with alpha: {a}, cool: {cool}, mut: {mut}\n")
-            os.system(f"./{program} {instance} {runtime} 4 {a} {mut} {cool} > logs/{instance}/{filename} &")
+            filename=f"log_{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}_{instance}_{a}.txt"
+            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running instance {instance}\n")
+            os.system(f"./{program} {instance} {runtime} 6 {a} > logs/{instance}/{filename} &")
             if instance not in runs.keys():
                 runs[instance] = [filename]
             else: 
@@ -158,7 +164,6 @@ with open("./logs/test.log", 'w') as log:
             i+=1
 
         # WAIT FOR LAST INSTANCES TO FINISH
-        time.sleep(runtime+1)
 
     # WAIT FOR ALL INSTANCES TO FINISH SINCE TIMER DEPENDS ON INITIAL SOLUTION
     res = is_running()
