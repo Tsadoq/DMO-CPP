@@ -35,6 +35,95 @@ Solution* func_local_search(Solution* solution, double perc_improvement)
 }
 
 
+Solution* func_rescheduling(Solution* solution, std::vector<int> old_timeslot_solution, double rel_t)
+{   
+    int n_exams=solution->n_exams;
+
+    double obj_local=0;
+    
+    bool un;
+    bool res;
+    bool unres;
+
+    
+    double obj_SA = solution->double_obj;
+
+    
+    int num_unsched;
+    if (rel_t*0.3<0.1){
+        num_unsched=round(n_exams*0.1);
+    }else{
+        num_unsched=round(n_exams*rel_t*0.3);
+    }
+    
+    unres=false;
+    int first=2;
+    while(!unres){
+        if (first==0){        
+            // DECIDERE CHE FARE QUA       
+            solution->timeslot_per_exams=old_timeslot_solution;
+            solution->update_timeslots();
+            solution->update_weights();
+        }
+        un=unscheduling(solution, num_unsched);
+        res=rescheduling(solution);
+        unres=un||res;
+        first=0;
+    }
+    
+    solution->update_weights();
+
+    return solution;
+}
+
+Solution* func_mutation(Solution* solution)
+{   
+    int n_exams=solution->n_exams;
+    std::vector<double> weight_for_exams = std::vector<double>();
+
+    //per mutation--------------------------------------------------
+    for(auto u: solution->all_exams){
+       weight_for_exams.push_back(u->weight_in_obj_fun);
+    }
+
+    weight_for_exams.reserve(n_exams);
+    //fine per mutation--------------------------------------------------
+
+    //da inizializzare in SA se usiamo questa funzione
+    std::vector<size_t> order_for_mutation=std::vector<size_t>(n_exams);
+    order_for_mutation=sort_indexes(weight_for_exams);
+    int num_mutation = 1;
+    double perc = 1;
+    neighbours_by_mutation(solution, order_for_mutation, num_mutation, perc);
+    solution->update_weights();
+    
+    return solution;
+}
+
+
+Solution* func_swap_deterministic(Solution* solution, std::vector<int> timeslot_pre_swap)
+{   
+    double n_timeslot = solution->n_timeslot;
+    timeslot_pre_swap=solution->timeslot_per_exams;
+    double obj_pre_swap=solution->objective_function();
+    bool better;
+    for(int k=0; k<n_timeslot-1; k++){
+        for(int q=k+1; q<n_timeslot; q++){
+            better = neighbours_by_swapping_single(solution, k, q, obj_pre_swap);
+            if(better==false){
+                // DECIDERE CHE FARE QUA
+                solution->timeslot_per_exams= timeslot_pre_swap;
+                solution->update_timeslots();
+                solution->update_weights();
+            }else{
+                obj_pre_swap=solution->objective_function();
+                timeslot_pre_swap=solution->timeslot_per_exams;
+            }
+        }
+    }
+
+    return solution;
+}
 
 
 
@@ -49,9 +138,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     double perc_improvement;
     double obj_local=0;
     double obj_old;
-    bool un;
-    bool res;
-    bool unres;
+
     double rel_t;
     double best_sol;
     double obj_SA;
@@ -61,26 +148,18 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     // prealloco tutti i vettori
     std::vector<int> timeslot_pre_swap=std::vector<int>(n_exams);    
     std::vector<int> old_timeslot_solution=std::vector<int>(n_exams);
-    std::vector<int> best_timeslot_solution=std::vector<int>(n_exams);    
-    std::vector<size_t> order_for_local=std::vector<size_t>(n_exams);    
+    std::vector<int> best_timeslot_solution=std::vector<int>(n_exams);       
     std::vector <int> old_ts_pre_swap=std::vector<int>(n_exams);
     
     // per mutation_by_
     std::default_random_engine generator;
     std::uniform_real_distribution<double> distribution(0.0,1.0);
 
-    //per mutation--------------------------------------------------
-    std::vector<double> weight_for_exams = std::vector<double>();
-    weight_for_exams.reserve(n_exams);
-    //fine per mutation--------------------------------------------------
+
 
     solution->update_weights();
 
-    //per mutation--------------------------------------------------
-    for(auto u: solution->all_exams){
-       weight_for_exams.push_back(u->weight_in_obj_fun);
-    }
-    //fine per mutation--------------------------------------------------
+
     
     obj_SA = solution->objective_function();
     std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
@@ -107,53 +186,16 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     
     while((int)((now.time-start.time))<timelimit){        
         rel_t=t/t0;
-        old_timeslot_solution=solution->timeslot_per_exams; 
+        
         iter++;
         //--------------------------------------- RESCHEDULING----------------
         
-        int num_unsched;
-        if (rel_t*0.3<0.1){
-            num_unsched=round(n_exams*0.1);
-        }else{
-            num_unsched=round(n_exams*rel_t*0.3);
-        }
-        
-        unres=false;
-        int first=2;
-        while(!unres){
-            if (first==0){        
-                // DECIDERE CHE FARE QUA       
-                solution->timeslot_per_exams=old_timeslot_solution;
-                solution->update_timeslots();
-                solution->update_weights();
-            }
-            un=unscheduling(solution, num_unsched);
-            res=rescheduling(solution);
-            unres=un||res;
-            first=0;
-        }
-        
-        solution->update_weights();
+        old_timeslot_solution=solution->timeslot_per_exams; 
+        solution = func_rescheduling(solution, old_timeslot_solution, rel_t);
         
         //----------------------------------DETERMINISTIC SWAP-------------------------------
 
-        timeslot_pre_swap=solution->timeslot_per_exams;
-        double obj_pre_swap=solution->objective_function();
-        bool better;
-        for(int k=0; k<n_timeslot-1; k++){
-            for(int q=k+1; q<n_timeslot; q++){
-                better = neighbours_by_swapping_single(solution, k, q, obj_pre_swap);
-                if(better==false){
-                    // DECIDERE CHE FARE QUA
-                    solution->timeslot_per_exams= timeslot_pre_swap;
-                    solution->update_timeslots();
-                    solution->update_weights();
-                }else{
-                    obj_pre_swap=solution->objective_function();
-                    timeslot_pre_swap=solution->timeslot_per_exams;
-                }
-            }
-        }
+        solution = func_swap_deterministic(solution, timeslot_pre_swap);
 
         //----------------------------------RANDOM SWAP-------------------------------
         
@@ -162,13 +204,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
 
         //--------------------------MUTATION-------------------------------------------------
         
-        //da inizializzare in SA se usiamo questa funzione
-        std::vector<size_t> order_for_mutation=std::vector<size_t>(n_exams);
-        order_for_mutation=sort_indexes(weight_for_exams);
-        int num_mutation = 1;
-        double perc = 1;
-        neighbours_by_mutation(solution, order_for_mutation, num_mutation, perc);
-        solution->update_weights();
+        solution = func_mutation(solution);
         
         //--------------------------LOCAL SEARCH-------------------------------------------------
         perc_improvement=0.1*rel_t; 
