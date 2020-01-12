@@ -48,9 +48,9 @@ parser.add_argument('--clean-logs', action="store_true", default=False, dest='cl
                     help='a flag to clean previous log files')
 parser.add_argument('--temp', metavar='temp', type=float, default=def_temp, nargs='+', dest='temp',
                     help='a list of floats to be tried as temp values.')
-parser.add_argument('--num_before_swap', metavar='num_before_swap', type=int, default=def_num_before_swap, nargs='+', dest='num_before_swap',
+parser.add_argument('--num-before-swap', metavar='num_before_swap', type=int, default=def_num_before_swap, nargs='+', dest='num_before_swap',
                     help='a list of ints to be tried as number of mutations.')
-parser.add_argument('--num_max_mutations', metavar='num_max_mutations', type=float, default=def_num_max_mutations, nargs='+', dest='num_max_mutations',
+parser.add_argument('--num-max-mutations', metavar='num_max_mutations', type=float, default=def_num_max_mutations, nargs='+', dest='num_max_mutations',
                     help='a list of floats to be tried as num_max_mutations coefficients.')
 parser.add_argument('--shutdown', action="store_true", default=False, dest='shutdown',
                     help='a flag shutdown the machine at the end of the task (SUGGESTED FOR GOOGLE CLOUD VM)')
@@ -150,7 +150,11 @@ with open("./logs/test.log", 'w') as log:
             cool=comb[2]
             
             if i == parallel:
-                time.sleep(runtime + 1)
+                res = is_running()
+                while res:
+                    res = is_running()
+                    time.sleep(1)
+                    # time.sleep(runtime + 1)
                 i=0
             filename=f"log_{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}_temp{a}_mut{mut}_cool{cool}.txt"
             log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running with temp: {a}, cool: {cool}, mut: {mut}\n")
