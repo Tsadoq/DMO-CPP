@@ -241,8 +241,6 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     std::default_random_engine generator;
     std::uniform_real_distribution<double> distribution(0.0,1.0);
 
-    // TODO: what if inception==1?
-
     solution->update_weights();
     obj_SA = solution->objective_function();
     std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
@@ -287,7 +285,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
 
         int idx = choose_function(rel_t, iter, perc_improvement, fail);
         
-        solution = get_new_solution(idx , solution, timeslot_pre_swap, old_timeslot_solution, rel_t, perc_improvement, inception, now, current_instance);
+        solution = get_new_solution(idx , solution, timeslot_pre_swap, old_timeslot_solution, rel_t, perc_improvement, now, current_instance);
     
         //-------------------------SA--------------------------------------------------------
 
