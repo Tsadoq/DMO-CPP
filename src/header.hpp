@@ -20,3 +20,4 @@ bool unscheduling(Solution* sol, int num_unsched);
 bool rescheduling(Solution* sol);
 void localSearch(Solution* solution, std::vector<size_t> sorted_exams);
 bool neighbours_by_swapping_single(Solution* solution, int ii, int jj, double obj_pre_swap);
+void neighbours_by_mutation(Solution* solution, std::vector<size_t>  order_for_mutation, int num_mutation, double perc);

@@ -36,16 +36,28 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     std::vector<int> best_timeslot_solution=std::vector<int>(n_exams);    
     std::vector<size_t> order_for_local=std::vector<size_t>(n_exams);    
     std::vector <int> old_ts_pre_swap=std::vector<int>(n_exams);
-
+    
+    // per mutation_by_
     std::default_random_engine generator;
     std::uniform_real_distribution<double> distribution(0.0,1.0);
 
+    //per mutation--------------------------------------------------
+    std::vector<double> weight_for_exams = std::vector<double>();
+    weight_for_exams.reserve(n_exams);
+    //fine per mutation--------------------------------------------------
+
     solution->update_weights();
+
+    //per mutation--------------------------------------------------
+    for(auto u: solution->all_exams){
+       weight_for_exams.push_back(u->weight_in_obj_fun);
+    }
+    //fine per mutation--------------------------------------------------
+    
     obj_SA = solution->objective_function();
     std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
 
     solution->write_output_file(current_instance);
-   
 
     //--------------------LOCAL SEARCH INIZIALE---------------------------
     order_for_local=sort_indexes(solution->num_neighbours_for_exams);
@@ -53,7 +65,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     obj_local=solution->objective_function();
     std::cout<<obj_local<<std::endl;
     obj_old=obj_SA;
-    
+     
     perc_improvement=0.1;
     while((obj_old-obj_local)/obj_local>perc_improvement){
         obj_old=obj_local;
@@ -130,7 +142,17 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
                 }
             }
         }
+
+        //--------------------------MUTATION-------------------------------------------------
         
+        //da inizializzare in SA se usiamo questa funzione
+        std::vector<size_t> order_for_mutation=std::vector<size_t>(n_exams);
+        order_for_mutation=sort_indexes(weight_for_exams);
+        int num_mutation = 1;
+        double perc = 1;
+        neighbours_by_mutation(solution, order_for_mutation, num_mutation, perc);
+        solution->update_weights();
+        //std::cout<<"Attenzioneeeeeeeeeeee:"<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
         //--------------------------LOCAL SEARCH-------------------------------------------------
         perc_improvement=0.1*rel_t; 
         //bool first_local=true;      

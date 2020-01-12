@@ -9,9 +9,6 @@
 #include <iterator> 
 #include "Exam.hpp" 
 #include "Solution.hpp" 
-
- 
-
  
 bool unscheduling(Solution* sol, int num_unsched){
     std::vector<int> positions=std::vector<int>(sol->n_exams);
@@ -151,4 +148,73 @@ bool neighbours_by_swapping_single(Solution* solution, int ii, int jj, double ob
     }else{
         return false;
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void neighbours_by_mutation(Solution* solution, std::vector<size_t> order_for_mutation, int num_mutation, double perc){ 
+    
+    //da inizializzare in SA se usiamo questa funzione
+    //std::vector<size_t> order_for_mutation=std::vector<size_t>(n_exams);
+    //order_for_mutation=sort_indexes(weight_for_exams);
+    //std::vector<std::vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, perc);
+                         
+    //std::vector<std::vector<int>> mutations_vector = std::vector<std::vector<int>> ();  
+    //mutations_vector.reserve(solution->n_exams);
+    //std::vector<int> single_mutation=std::vector<int> (2);                                        
+    Exam* exam_mutate; 
+    int is_void=0; 
+    int totTimeslot = solution->n_timeslot;
+
+    std::vector<int> not_available_timeslots = std::vector<int>();
+    not_available_timeslots.reserve(totTimeslot);
+    std::vector<int> available_timeslots=std::vector<int>();
+    available_timeslots.reserve(totTimeslot);
+
+    int k; 
+    int new_timeslot; 
+    int randomIndex; 
+    int size_random=(int) (perc*solution->n_exams); 
+    std::vector<int> indexes= std::vector<int>(size_random); 
+    std::iota(indexes.begin(), indexes.end(), 0); 
+    // obtain a time-based seed:
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
+    std::shuffle(indexes.begin(), indexes.end(),std::default_random_engine(seed) ); 
+    //std::random_shuffle(indexes.begin(), indexes.end()); 
+         
+    for(int i=0;i<num_mutation+is_void && i<size_random;i++){ 
+        // exam I'm trying to mutate 
+        available_timeslots.clear(); 
+        exam_mutate=solution->all_exams[order_for_mutation[indexes[i]]];
+        not_available_timeslots=exam_mutate->conflict_times; 
+        not_available_timeslots.push_back(solution->timeslot_per_exams[exam_mutate->id_exam]); 
+        // sort vector because set_difference works with sorted arrays 
+        sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
+        // find available timeslot 
+        set_difference(solution->possible_timeslot.begin(), solution->possible_timeslot.end(), not_available_timeslots.begin(),  
+                        not_available_timeslots.end(),inserter(available_timeslots, available_timeslots.begin())); 
+        
+        if(available_timeslots.size()==0){ 
+            is_void++; 
+        }else{ 
+            randomIndex = rand() % available_timeslots.size(); 
+            new_timeslot=available_timeslots[randomIndex]; 
+            solution->update_single_exam(exam_mutate->id_exam, new_timeslot);
+            // update timeslot in all exam in conflict with respect to exam_mutate 
+
+           /* for (auto j : exam_mutate->conflict_exams){ 
+                k=0; 
+                while(solution->all_exams[j]->conflict_exams[k] != exam_mutate->id_exam){ 
+                    k++;
+                } 
+                solution->all_exams[j]->conflict_times[k]=new_timeslot; 
+            } */
+            // insert exam I want to mutate 
+            //single_mutation[0]=exam_mutate->id_exam; 
+            // insert time slot in which I want to schedule exam 
+            //single_mutation[1]=new_timeslot; 
+            solution->timeslot_per_exams[exam_mutate->id_exam]=new_timeslot;       
+            //mutations_vector.push_back(single_mutation); 
+        } 
+    } 
 }
