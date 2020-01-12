@@ -195,7 +195,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
             best_sol = obj_new;
             best_solution->timeslot_per_exams=solution->timeslot_per_exams;
             best_solution->update_timeslots();
-            solution->update_weights();
+            best_solution->update_weights();
+            best_solution->objective_function();
             best_solution->write_output_file(current_instance);
         }
         
@@ -204,7 +205,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     } 
     //output_file.close();               
     //std::cout<<"Best sol "<<best_sol<<std::endl;
-    best_solution->double_obj=best_sol;
+    
     std::cout<<iter<<std::endl;
     return best_solution;  
 }
