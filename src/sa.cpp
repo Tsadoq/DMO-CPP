@@ -198,10 +198,9 @@ Solution* func_alberto(Solution* solution, std::vector<int> timeslot_pre_swap,
     
     if (inception==1){
         ftime(&now);
-        inception=2;
         solution = sa(solution, now, 1, current_instance, inception);
         // devo resettare inception da qualche parte?????? dopo sa interno???  DOMANDA!!!!!!!!!
-        inception = 0; // controola qua
+        inception = 0; // controlla qua
     }
     
     if (inception==2){
@@ -216,7 +215,7 @@ Solution* func_alberto(Solution* solution, std::vector<int> timeslot_pre_swap,
 int choose_function(double rel_t, int iter, double perc_improvement, int inception)
 {   
     // CAMBIA PARAMETRO SE AGGIUNGI O TOGLI FUNZIONI!!!
-    int num_func = 6;
+    int num_func = 5;
     int idx_func;
     
     // 0    -> rescheduling
@@ -224,23 +223,22 @@ int choose_function(double rel_t, int iter, double perc_improvement, int incepti
     // 2    -> swap random
     // 3    -> mutation
     // 4    -> local search greedy
-    // 5    -> func alberto
 
 
+    
     if (perc_improvement == 0){
         idx_func = 3;
     } else {
         // solo alberto
-        idx_func = num_func-1;
+        idx_func = rand() % num_func;
     }
 
-
     // quando uso func_alberto ho rel_t = -nan
-    std::cout << "rel_t:\t" << rel_t << std::endl;
+    // std::cout << "rel_t:\t" << rel_t << std::endl;
 
     // idx_func = rand() % num_func;
 
-    std::cout << "chosen:\t" << idx_func << std::endl;
+    // std::cout << "chosen:\t" << idx_func << std::endl;
     
     return idx_func;
 }
@@ -302,6 +300,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     int n_exams=solution->n_exams;
     int n_timeslot=solution->n_timeslot;
     
+    int fail = 0;
+
     // prealloco tutti i vettori
     std::vector<int> timeslot_pre_swap=std::vector<int>(n_exams);    
     std::vector<int> old_timeslot_solution=std::vector<int>(n_exams);
@@ -353,7 +353,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
 
         old_timeslot_solution=solution->timeslot_per_exams; 
 
-        int idx = choose_function(rel_t, iter, perc_improvement, inception);
+        int idx = choose_function(rel_t, iter, perc_improvement, inception, fail);
         
         solution = get_new_solution(idx , solution, timeslot_pre_swap, old_timeslot_solution, rel_t, perc_improvement, inception, now, current_instance);
     
@@ -379,11 +379,14 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
         }
 
         if (obj_new <= best_sol){
+            fail = 0;
             best_sol = obj_new;
             best_solution->timeslot_per_exams=solution->timeslot_per_exams;
             best_solution->update_timeslots();
             solution->update_weights();
             best_solution->write_output_file(current_instance);
+        }else{
+            fail++;
         }
         
         t = cooling(timelimit, now.time-start.time,t0);
