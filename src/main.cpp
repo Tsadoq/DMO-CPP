@@ -84,20 +84,6 @@ int main(int argc, char **argv) {
     initial_solution->solution_update(conflict_matrix,n_exams, total_number_students,n_timeslot);
     std::cout<<"dopo"<<std::endl;
 
-  /*//-------------------------------- VARIABLE VALUES INITIALIZATION --------------------------------------------
-    // sort exams by decreasing value of number of neighbours
-    std::vector<size_t> sorted_index=std::vector<size_t>(n_exams);
-    // it's a vector of indexes: values in [0,n_exams-1]       
-    sorted_index=sort_indexes(initial_solution->num_neighbours_for_exams);
-    
-    //-----------------------------------------------------------------------------------------
-    // apply a variant of greedy coloring trying to assign timeslots first to exams with higher degree
-    alternativeColoring(initial_solution,sorted_index);
-    //-----------------------------------------------------------------------------------------
-    initial_solution->update_timeslots();
-    int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
-    std::cout<<"feasibility "<<flag<<std::endl;
-*/
     //---------------------------------- MULTI-THREAD -----------------------------------------------------------
  
     omp_set_dynamic(0);     // Explicitly disable dynamic teams
@@ -139,7 +125,8 @@ int main(int argc, char **argv) {
         std::string str_id = std::to_string(id);
         
         //double best_sol;
-        best_sol[id] = sa(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol");
+        double cooling_coeff=0.9;
+        best_sol[id] = sa(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol",cooling_coeff);
 
         //array_sol[id]->double_obj=best_sol;
         

@@ -10,7 +10,7 @@ double cooling(double time_limit, double current_time,double t0);
 int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool first,int n_exams);
 double temperature_shock(double temperature);
 
-Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance){
+Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance,double cool_coef){
  
     struct timeb now;
     double prob = 0;
@@ -29,6 +29,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     double obj_SA;
     int n_exams=solution->n_exams;
     int n_timeslot=solution->n_timeslot;
+    double alpha;
+    double t0_iter;
     
     // prealloco tutti i vettori
     std::vector<int> timeslot_pre_swap=std::vector<int>(n_exams);    
@@ -76,6 +78,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     
     // ------------------CALCOLO T0--------------------------------
     t0=(obj_SA-obj_local)/0.693747281;
+    // rialzo la temperatura in modo che ci sia una probabilità di 0.3 di accettare soluzioni peggioranti
+    alpha=(obj_SA-obj_local)/(t0*1.38629436);
     t=t0;
     std::cout<<"initial t0 "<<t0<<std::endl;
     // --------------------------------------------------
@@ -89,8 +93,9 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     obj_SA=obj_local;
     best_sol = obj_SA;
     
+    t0_iter=t0;
     while((int)((now.time-start.time))<timelimit){        
-        rel_t=t/t0;
+        rel_t=t/t0_iter;
         old_timeslot_solution=solution->timeslot_per_exams; 
         iter++;
         //--------------------------------------- RESCHEDULING----------------
@@ -140,23 +145,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
             }
         }
 
-        //----------------------------------RANDOM SWAP-------------------------------
-        
-        /*neighbours_by_swapping(solution);
-        solution->update_weights();*/
-
-        //--------------------------MUTATION-------------------------------------------------
-        
-        //da inizializzare in SA se usiamo questa funzione
-        /*std::vector<size_t> order_for_mutation=std::vector<size_t>(n_exams);
-        order_for_mutation=sort_indexes(weight_for_exams);
-        int num_mutation = 1;
-        double perc = 1;
-        neighbours_by_mutation(solution, order_for_mutation, num_mutation, perc);
-        solution->update_weights();*/
-
         //--------------------------LOCAL SEARCH-------------------------------------------------
-        perc_improvement=0.1*rel_t; 
+        perc_improvement=0.3*rel_t; 
         //bool first_local=true;      
         obj_old=solution->double_obj;
         localSearch(solution, order_for_local);
@@ -200,7 +190,13 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
             best_solution->write_output_file(current_instance);
         }
         
-        t = cooling(timelimit, now.time-start.time,t0);
+        t *= cool_coef;
+
+        if(t<=t0_iter*0.01){
+            t0_iter=t0*alpha;
+            t=t0_iter;
+        }
+
     ftime(&now); 
     } 
     //output_file.close();               
@@ -217,8 +213,8 @@ double probability(double obj_new, double obj_old, double temperature)
     return p;
 }
 
-double cooling(double time_limit, double current_time,double t0)
+/*double cooling(double time_limit, double current_time,double t0, double cool_coef)
 {
     double coeff=(time_limit-current_time)/time_limit;
     return  t0*coeff;
-}
+}*/

@@ -14,7 +14,7 @@ std::vector<std::vector<int>> read_file_stu(char* file_name,int n_exams,int &tot
 std::vector<Exam*> inizialize_all_exams();
 template <typename T>
 std::vector<size_t> sort_indexes(const std::vector<T> &v) ;
-Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance);
+Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance,double cool_coef);
 void alternativeColoring(Solution* initial_solution, std::vector<size_t> sorted_index);
 bool unscheduling(Solution* sol, int num_unsched);
 bool rescheduling(Solution* sol);
