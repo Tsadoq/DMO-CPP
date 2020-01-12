@@ -229,6 +229,9 @@ int choose_function(double rel_t, int iter, double perc_improvement, int incepti
 
     if (perc_improvement == 0){
         idx_func = 3;
+    } else {
+        // solo alberto
+        idx_func = num_func-1;
     }
 
 
@@ -236,10 +239,6 @@ int choose_function(double rel_t, int iter, double perc_improvement, int incepti
     std::cout << "rel_t:\t" << rel_t << std::endl;
 
     // idx_func = rand() % num_func;
-
-
-    // solo alberto
-    idx_func = num_func-1;
 
     std::cout << "chosen:\t" << idx_func << std::endl;
     
