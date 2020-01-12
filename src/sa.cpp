@@ -305,11 +305,11 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
         if (fail_sa < 100){
             solution = func_chiara(solution, timeslot_pre_swap, perc_improvement, old_timeslot_solution, rel_t);
         } else {
+            // LABBBOTTA
             double tmp_rel_t = 1;
-            solution = func_rescheduling(solution, old_timeslot_solution, tmp_rel_t);
+            // solution = func_rescheduling(solution, old_timeslot_solution, tmp_rel_t);
             fail_sa = 0;
             t0_iter = t0;
-
         }
         
 
