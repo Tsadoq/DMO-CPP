@@ -137,6 +137,18 @@ Solution* func_swap_deterministic(Solution* solution, std::vector<int> timeslot_
 
 
 
+Solution* func_chiara(Solution* solution, std::vector<int> timeslot_pre_swap, double perc_improvement,
+    std::vector<int> old_timeslot_solution, double rel_t)
+{   
+    solution = func_rescheduling(solution, old_timeslot_solution, rel_t);
+    solution = func_swap_deterministic(solution, timeslot_pre_swap);
+    solution = func_local_search(solution, perc_improvement);
+
+    return solution;
+}
+
+
+
 Solution* func_swap_random(Solution* solution)
 {   
     neighbours_by_swapping(solution);
@@ -149,7 +161,7 @@ Solution* func_swap_random(Solution* solution)
 int choose_function(double rel_t, int iter, double perc_improvement, int fail)
 {   
     // CAMBIA PARAMETRO SE AGGIUNGI O TOGLI FUNZIONI!!!
-    int num_func = 5;
+    int num_func = 6;
     int idx_func;
     
     // 0    -> rescheduling
@@ -157,13 +169,16 @@ int choose_function(double rel_t, int iter, double perc_improvement, int fail)
     // 2    -> swap random
     // 3    -> mutation
     // 4    -> local search greedy
+    // 5    -> func_chiara
 
-    if (perc_improvement == 0){
-        idx_func = 3;
-    } else {
-        // solo alberto
-        idx_func = rand() % num_func;
-    }
+    // if (perc_improvement == 0){
+    //     idx_func = 3;
+    // } else {
+    //     // solo alberto
+    //     idx_func = rand() % num_func;
+    // }
+
+    idx_func = 5;
 
     // quando uso func_alberto ho rel_t = -nan
     // std::cout << "rel_t:\t" << rel_t << std::endl;
@@ -199,6 +214,9 @@ Solution* get_new_solution(int idx , Solution* solution, std::vector<int> timesl
         case 4:
             solution = func_local_search(solution, perc_improvement);
             break;
+        case 5:
+            solution = func_chiara(solution, timeslot_pre_swap, perc_improvement,
+                old_timeslot_solution, rel_t);
         default:
             break;
         }
