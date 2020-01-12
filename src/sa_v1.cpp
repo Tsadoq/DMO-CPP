@@ -4,14 +4,6 @@
 #include <cmath>
 #include <random>
 
-
-double probability(double obj_new, double obj_old, double temperature);
-double cooling(double time_limit, double current_time,double t0);
-int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool first,int n_exams);
-double temperature_shock(double temperature);
-
-
-
 Solution* func_local_search(Solution* solution, double perc_improvement)
 {   
     double obj_SA = solution->double_obj;
@@ -225,7 +217,7 @@ Solution* get_new_solution(int idx , Solution* solution, std::vector<int> timesl
 
 
 
-Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance, double cool_coef){
+Solution* sa_v1(Solution* solution, struct timeb start, int timelimit,std::string current_instance, double cool_coef){
  
     struct timeb now;
     double prob = 0;
@@ -367,15 +359,4 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     return best_solution;  
 }
 
-double probability(double obj_new, double obj_old, double temperature)
-{
-    double e=2.71828183;
-    double p = pow(e, -((obj_new-obj_old)/temperature)); // p = exp^(-(F(x_new)-F(x_old))/T)
-    return p;
-}
 
-/*double cooling(double time_limit, double current_time,double t0, double cool_coef)
-{
-    double coeff=(time_limit-current_time)/time_limit;
-    return  t0*coeff;
-}*/

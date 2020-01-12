@@ -10,7 +10,9 @@
 #include "sort_indexes.cpp"
 #include "localSearch.cpp"
 #include "neighbours.cpp"
-#include "sa.cpp"
+#include "sa_v1.cpp"
+#include "sa_v2.cpp"
+#include "sa_functions.cpp"
 #include "alternativeColoring.cpp"
 
 #include <fstream>
@@ -24,7 +26,6 @@
 #include <time.h>
 #include <sys/timeb.h>
 #include <omp.h>
-
 
 //int read_file_stu(char *name_stu);
 int main(int argc, char **argv) {
@@ -153,7 +154,7 @@ int main(int argc, char **argv) {
         
         //double best_sol;
         double cooling_coeff=0.9;
-        best_sol[id] = sa(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol",cooling_coeff);
+        best_sol[id] = sa_v1(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol",cooling_coeff);
 
         //array_sol[id]->double_obj=best_sol;
         
