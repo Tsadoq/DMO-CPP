@@ -40,6 +40,8 @@ int main(int argc, char **argv) {
     if(argc >= 4){
         if (argc == 5){
             numproc = atoi(argv[4]);
+        } else {
+            numproc = 1;
         }
         std::string time_flag = argv[2];
         if (time_flag != "-t") {
@@ -115,8 +117,10 @@ int main(int argc, char **argv) {
     //---------------------------------- MULTI-THREAD -----------------------------------------------------------
  
     omp_set_dynamic(0);     // Explicitly disable dynamic teams
+    if (numproc == 1)
+        numproc = omp_get_num_procs();
     omp_set_num_threads(numproc); // Use 4 threads for all consecutive parallel regions
- 
+    
     int mysize;
     mysize = omp_get_num_threads();
     std::cout << "  Number of processors available = " << omp_get_num_procs() << "\n";
@@ -151,10 +155,15 @@ int main(int argc, char **argv) {
         std::cout<<"feasibility "<<flag<<std::endl;
 
         std::string str_id = std::to_string(id);
-        
-        //double best_sol;
-        double cooling_coeff=0.9;
-        best_sol[id] = sa_v1(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol",cooling_coeff);
+        if(id%2){
+            //double best_sol;
+            double cooling_coeff=0.9;
+            std::cout << "THREAD WITH ID " << id << " USING SA V1" << std::endl;
+            best_sol[id] = sa_v1(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol",cooling_coeff);
+        } else {
+            std::cout << "THREAD WITH ID " << id << " USING SA V2" << std::endl;
+            best_sol[id] = sa_v2(array_sol[id], start, timelimit, "./instances/"+current_instance+"_"+str_id+"_"+".sol", true);
+        }
 
         //array_sol[id]->double_obj=best_sol;
         
