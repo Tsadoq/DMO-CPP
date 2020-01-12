@@ -127,6 +127,16 @@ Solution* func_swap_deterministic(Solution* solution, std::vector<int> timeslot_
 
 
 
+Solution* func_swap_random(Solution* solution)
+{   
+    neighbours_by_swapping(solution);
+    solution->update_weights();
+
+    return solution;
+}
+
+
+
 Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance){
  
     struct timeb now;
@@ -199,8 +209,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
 
         //----------------------------------RANDOM SWAP-------------------------------
         
-        neighbours_by_swapping(solution);
-        solution->update_weights();
+        solution = func_swap_random(solution);
 
         //--------------------------MUTATION-------------------------------------------------
         
