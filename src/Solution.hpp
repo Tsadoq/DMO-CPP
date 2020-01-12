@@ -34,5 +34,6 @@ class Solution{
     Solution* copy_solution();
     // aggiorno il timeslot di un esame nella soluzione e nei suoi conflittuali
     void update_single_exam(int exam, int new_timeslot);
-    
+    // aggiorno i pesi negli esami conflittuali
+    void update_weights_conflicting(int exam, int new_timeslot,int old_timeslot);    
 };
