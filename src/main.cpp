@@ -32,13 +32,37 @@ int main(int argc, char **argv) {
     struct timeb start;
     int n_exams = 0;
     int n_timeslot = 0;
-    int numproc = atoi(argv[3]);
+    int numproc = 4;
+    int timelimit = 0;
+    std::string current_instance=argv[1];
 
+    if(argc >= 4){
+        if (argc == 5){
+            numproc = atoi(argv[4]);
+        }
+        std::string time_flag = argv[2];
+        if (time_flag != "-t") {
+            std::cerr << "Second argument must flag -t" << std::endl;
+            return 1;
+        }
+
+        std::string time = argv[3];
+        try {
+            timelimit = std::stoi(time);
+            std::cout << "TIMELIMIT SET" <<std::endl;
+        } catch (const std::exception& e) { 
+            std::cerr << "Third argument must be an integer" << std::endl;
+            return 1;
+        }
+    } else {
+        std::cerr << "Wrong number of arguments.\nProgram must be used as such: ./main instance_name -t (int)timelimit" << std::endl;
+        return 1;
+    }
 
     ftime(&start);
     std::cout<<"Starting"<<std::endl;
 
-    std::string current_instance=argv[1];
+    // std::string current_instance=argv[1];
     std::string instance_exm;
     std::string instance_slo;
     std::string instance_stu;
@@ -56,17 +80,19 @@ int main(int argc, char **argv) {
     }
     
     //--------------------------------------- READ FILES------------------------------------------------------
-    int timelimit = atoi(argv[2]);
+    // int timelimit = atoi(argv[2]);
     std::cout<<"timelimit: "<<timelimit<<std::endl;
     char * writable_instance_stu = new char[instance_stu.size() + 1];
     std::copy(instance_stu.begin(), instance_stu.end(), writable_instance_stu);
     writable_instance_stu[instance_stu.size()] = '\0';
 
     // read number of timeslots
+
     n_timeslot = read_file_slo(instance_slo);
     fprintf(stdout, "Number of timeslot: %d\n", n_timeslot);
     
     // read number of exams
+
     n_exams=read_file_exm(instance_exm);
     fprintf(stdout, "Number of exams: %d\n", n_exams);
 
@@ -76,6 +102,7 @@ int main(int argc, char **argv) {
     std::vector<std::vector<int>> conflict_matrix;
     int total_number_students=0;
     conflict_matrix=read_file_stu(writable_instance_stu,n_exams,total_number_students);
+
 
     std::cout<<"Number of students: "<<total_number_students<<std::endl;
     Solution* initial_solution=new Solution();    

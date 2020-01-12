@@ -7,7 +7,12 @@
 int read_file_exm(std::string file_name){
     int n_exams = 0;     
     std::string line;
-    std::ifstream myfile (file_name);
+    std::ifstream myfile;
+    myfile.open(file_name);
+    if(myfile.fail()){
+        std::cerr << file_name << " file not found" << std::endl;
+        exit(EXIT_FAILURE); 
+    }
     if (myfile.is_open())
     {
         while ( getline (myfile,line) )
@@ -18,5 +23,7 @@ int read_file_exm(std::string file_name){
         }
         myfile.close();
     }
+
+
     return n_exams;
 }
