@@ -75,8 +75,7 @@ Solution* func_rescheduling(Solution* solution, std::vector<int> old_timeslot_so
         first=0;
     }
     
-    // viene fatto nell'if...
-    // solution->update_weights();
+    solution->update_weights();
 
     return solution;
 }
@@ -309,6 +308,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
             double tmp_rel_t = 1;
             solution = func_rescheduling(solution, old_timeslot_solution, tmp_rel_t);
             fail_sa = 0;
+            t0_iter = t0;
+
         }
         
 
@@ -348,7 +349,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
             fail_sa++;
         }
         
-        std::cout << "fail:\t" << fail_sa << std::endl;
+        // std::cout << "fail:\t" << fail_sa << std::endl;
 
         t *= cool_coef;
 
