@@ -145,9 +145,9 @@ with open("./logs/test.log", 'w') as log:
                 os.remove(filePath)
         # RUN ALL COMBINATIONS
         for comb in combinations:
-            a=comb[0]
-            mut=comb[1]
-            cool=comb[2]
+            t=comb[0]
+            swap=comb[1]
+            maxmut=comb[2]
             
             if i == parallel:
                 res = is_running()
@@ -156,9 +156,9 @@ with open("./logs/test.log", 'w') as log:
                     time.sleep(1)
                     # time.sleep(runtime + 1)
                 i=0
-            filename=f"log_{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}_temp{a}_mut{mut}_cool{cool}.txt"
-            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running with temp: {a}, cool: {cool}, mut: {mut}\n")
-            os.system(f"./{program} {instance} {runtime} 4 {a} {mut} {cool} > logs/{instance}/{filename} &")
+            filename=f"log_{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}_temp{t}_maxmut{maxmut}_swap{swap}.txt"
+            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running with temp: {t}, maxmut: {maxmut}, swap: {swap}\n")
+            os.system(f"./{program} {instance} {runtime} 4 {t} {maxmut} {swap} > logs/{instance}/{filename} &")
             if instance not in runs.keys():
                 runs[instance] = [filename]
             else: 
