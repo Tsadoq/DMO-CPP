@@ -65,9 +65,9 @@ int main(int argc, char **argv) {
 
 
     
-    std::string instance_exm="./"+current_instance+".exm";
-    std::string instance_slo="./"+current_instance+".slo";
-    std::string instance_stu="./"+current_instance+".stu";
+    std::string instance_exm=current_instance+".exm";
+    std::string instance_slo=current_instance+".slo";
+    std::string instance_stu=current_instance+".stu";
     
     //--------------------------------------- READ FILES------------------------------------------------------
     std::cout<<"Time limit: "<<timelimit<<std::endl;
@@ -140,9 +140,9 @@ int main(int argc, char **argv) {
         std::string str_id = std::to_string(id);
         if(id%2){
             double cooling_coeff=0.9;
-            best_sol[id] = sa_v1(array_sol[id], start, timelimit,"./"+current_instance+"_"+str_id+"_"+".sol",cooling_coeff);
+            best_sol[id] = sa_v1(array_sol[id], start, timelimit,current_instance+"_"+str_id+"_"+".sol",cooling_coeff);
         } else {
-            best_sol[id] = sa_v2(array_sol[id], start, timelimit, "./"+current_instance+"_"+str_id+"_"+".sol", true);
+            best_sol[id] = sa_v2(array_sol[id], start, timelimit,current_instance+"_"+str_id+"_"+".sol", true);
         }        
 
     }
