@@ -168,9 +168,6 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
 
 
     solution->update_weights();
-
-
-    
     obj_SA = solution->objective_function();
     std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
 
@@ -194,10 +191,15 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     int iter=0;
     obj_SA=obj_local;
     
-    while((int)((now.time-start.time))<timelimit){        
+    while((int)((now.time-start.time))<timelimit){      
+
         rel_t=t/t0;
-        
         iter++;
+
+        // chose func to apply
+        // index_func = 1/2/3/4/5
+        // index = choose_function(rel_t, time, )
+
         //--------------------------------------- RESCHEDULING----------------
         
         old_timeslot_solution=solution->timeslot_per_exams; 
@@ -218,9 +220,11 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
         //--------------------------LOCAL SEARCH-------------------------------------------------
         perc_improvement=0.1*rel_t; 
         solution = func_local_search(solution, perc_improvement);
-        obj_new = solution->double_obj;
 
         //-------------------------SA--------------------------------------------------------
+
+        obj_new = solution->double_obj;
+
 
         if(obj_new > obj_SA){
             prob=(obj_new,obj_SA, t);
