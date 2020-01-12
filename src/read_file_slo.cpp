@@ -9,6 +9,7 @@ int read_file_slo(std::string file_name)
     std::ifstream myfile;
     myfile.open(file_name);
     if(myfile.fail()){
+        myfile.close();
         std::cerr << file_name << " file not found" << std::endl;
         exit(EXIT_FAILURE); 
     }
