@@ -123,7 +123,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
         
         solution->update_weights();
         
-        //----------------------------------SWAPs-------------------------------
+        //----------------------------------DETERMINISTIC SWAP-------------------------------
 
         timeslot_pre_swap=solution->timeslot_per_exams;
         double obj_pre_swap=solution->objective_function();
@@ -142,6 +142,13 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
                 }
             }
         }
+        //std::cout<<"Attenzioneeeeeeeeeeee:"<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
+
+        //----------------------------------RANDOM SWAP-------------------------------
+        
+        neighbours_by_swapping(solution);
+        solution->update_weights();
+        std::cout<<"Attenzioneeeeeeeeeeee:"<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams)<<std::endl;
 
         //--------------------------MUTATION-------------------------------------------------
         

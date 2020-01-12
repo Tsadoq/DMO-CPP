@@ -218,3 +218,71 @@ void neighbours_by_mutation(Solution* solution, std::vector<size_t> order_for_mu
         } 
     } 
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+void neighbours_by_swapping(Solution* solution){
+    std::vector<int> exams = solution->timeslot_per_exams;
+    int totTimeslots = solution->n_timeslot;
+    // seleziono due diversi timeslot a caso
+    int t1 = 1 + rand() % totTimeslots;
+    int t2 = 1 + rand() % totTimeslots;
+    while(t2==t1 && abs(t2-t1)>5) 
+        t2 = 1 + rand() % totTimeslots;
+    // vettori di indici di esami che stanno nello stesso timeslot rispettivamente in t1 e in t2
+    std::vector<int> e1 = std::vector<int>(solution->n_exams);
+    std::vector<int> e2 = std::vector<int>(solution->n_exams);  // preallocazione (cicciona, ma non ci sono altri upperbounds)
+    for (int i = 0; i<exams.size(); i++){
+        if (exams[i] == t1){
+            e1.push_back(i);
+        }
+        if (exams[i] == t2){
+            e2.push_back(i);
+        }
+    }
+
+    // cerco gli esami in e2 che sono in conflitto con gli esami in t1
+    std::vector<int> toSwappedIn1 = std::vector<int>(e2.size());
+    // cerco gli esami in e1 che sono in conflitto con gli esami in t2
+    std::vector<int> toSwappedIn2 = std::vector<int>(e1.size());;
+    for (int i = 0; i< e1.size(); i++){
+        // cerco un esame conflittuale piazzato in t2
+        if ( std::find(solution->all_exams[e1[i]]->conflict_times.begin(), 
+                solution->all_exams[e1[i]]->conflict_times.end(), t2) != solution->all_exams[e1[i]]->conflict_times.end()){
+            // ho trovato un esame conflittuale in t2, quindi l'esame con indice e1[i] va inserito
+            toSwappedIn2.push_back(e1[i]);
+        }
+    }
+
+    for (int i = 0; i< e2.size(); i++){
+        if (std::find(solution->all_exams[e2[i]]->conflict_times.begin(), 
+                solution->all_exams[e2[i]]->conflict_times.end(), t1) != solution->all_exams[e2[i]]->conflict_times.end()){
+            // ho trovato un esame conflittuale in t1, quindi l'esame con indice e2[i] va inserito
+            toSwappedIn1.push_back(e2[i]);
+        }
+    }
+    // TIMESLOT UPDATE
+     for (int i = 0; i < toSwappedIn1.size(); i++){
+       
+        solution->timeslot_per_exams[toSwappedIn1[i]]=t1;
+        
+    }
+    for (int i = 0; i < toSwappedIn2.size(); i++){
+ 
+        solution->timeslot_per_exams[toSwappedIn2[i]]=t2;
+    }
+    solution->update_timeslots();
+
+    /*for (int i = 0; i < toSwappedIn1.size(); i++){
+        solution->update_single_exam(toSwappedIn1[i], t1);
+    }
+    for (int i = 0; i < toSwappedIn2.size(); i++){
+        solution->update_single_exam(toSwappedIn2[i], t2);
+    } */
+    
+    return;
+
+}
+
+
+    

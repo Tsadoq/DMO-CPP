@@ -69,7 +69,6 @@ int main(int argc, char **argv) {
     // read number of exams
     n_exams=read_file_exm(instance_exm);
     fprintf(stdout, "Number of exams: %d\n", n_exams);
-    
 
     //--------------------------------- FIXED VALUES CONSTRUCTION--------------------------------------------
 
@@ -85,8 +84,8 @@ int main(int argc, char **argv) {
     initial_solution->solution_update(conflict_matrix,n_exams, total_number_students,n_timeslot);
     std::cout<<"dopo"<<std::endl;
 
-  /*  //-------------------------------- VARIABLE VALUES INITIALIZATION --------------------------------------------
-     // sort exams by decreasing value of number of neighbours
+  /*//-------------------------------- VARIABLE VALUES INITIALIZATION --------------------------------------------
+    // sort exams by decreasing value of number of neighbours
     std::vector<size_t> sorted_index=std::vector<size_t>(n_exams);
     // it's a vector of indexes: values in [0,n_exams-1]       
     sorted_index=sort_indexes(initial_solution->num_neighbours_for_exams);
