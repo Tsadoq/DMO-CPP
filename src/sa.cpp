@@ -200,6 +200,8 @@ Solution* func_alberto(Solution* solution, std::vector<int> timeslot_pre_swap,
         ftime(&now);
         inception=2;
         solution = sa(solution, now, 1, current_instance, inception);
+        // devo resettare inception da qualche parte?????? dopo sa interno???  DOMANDA!!!!!!!!!
+        inception = 0; // controola qua
     }
     
     if (inception==2){
@@ -215,18 +217,34 @@ int choose_function(double rel_t, int iter, double perc_improvement, int incepti
 {   
     // CAMBIA PARAMETRO SE AGGIUNGI O TOGLI FUNZIONI!!!
     int num_func = 6;
+    int idx_func;
+    
+    // 0    -> rescheduling
+    // 1    -> swap deterministic
+    // 2    -> swap random
+    // 3    -> mutation
+    // 4    -> local search greedy
+    // 5    -> func alberto
 
-    // int idx_func = rand() % num_func;
-    //idx_func = idx_func + 1
+
+    if (perc_improvement == 0){
+        idx_func = 3;
+    }
+
+
+    // quando uso func_alberto ho rel_t = -nan
+    std::cout << "rel_t:\t" << rel_t << std::endl;
+
+    // idx_func = rand() % num_func;
+
 
     // solo alberto
-    int idx_func = num_func-1;
+    idx_func = num_func-1;
 
-
+    std::cout << "chosen:\t" << idx_func << std::endl;
+    
     return idx_func;
-
 }
-
 
 
 Solution* get_new_solution(int idx , Solution* solution, std::vector<int> timeslot_pre_swap,
@@ -307,6 +325,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     obj_local = solution->double_obj;
     
     // ------------------CALCOLO T0--------------------------------
+    
     t0=(obj_SA-obj_local)/0.693747281;
     t=t0;
     std::cout<<"initial t0 "<<t0<<std::endl;
@@ -321,7 +340,15 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     ftime(&now);
     while((int)((now.time-start.time))<timelimit){      
 
-        rel_t=t/t0;
+        if (t0!=0){
+            rel_t=t/t0;
+        } else {
+
+            // perchè t0=(obj_SA-obj_local)/0.693747281;
+            // ma obj_SA=obj_locals
+            rel_t = 0;
+        }
+        
         iter++;
         perc_improvement = 0.1*rel_t;
 
