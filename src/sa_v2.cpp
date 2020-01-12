@@ -23,7 +23,6 @@ Solution* sa_v2(Solution* solution, struct timeb start, int timelimit,std::strin
     double obj_SA;
     int n_exams=solution->n_exams;
     int n_timeslot=solution->n_timeslot;
-    
     // prealloco tutti i vettori
     std::vector<int> timeslot_pre_swap=std::vector<int>(n_exams);    
     std::vector<int> old_timeslot_solution=std::vector<int>(n_exams);
@@ -50,15 +49,15 @@ Solution* sa_v2(Solution* solution, struct timeb start, int timelimit,std::strin
     
     obj_SA = solution->objective_function();
     if (inception)
-        std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
+        // std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
 
-    solution->write_output_file(current_instance);
+    //solution->write_output_file(current_instance);
 
     //--------------------LOCAL SEARCH INIZIALE---------------------------
     order_for_local=sort_indexes(solution->num_neighbours_for_exams);
     localSearch(solution,order_for_local);
     obj_local=solution->objective_function();
-    std::cout<<obj_local<<std::endl;
+    // std::cout<<obj_local<<std::endl;
     obj_old=obj_SA;
      
     perc_improvement=0.1;
@@ -67,12 +66,12 @@ Solution* sa_v2(Solution* solution, struct timeb start, int timelimit,std::strin
         localSearch(solution,order_for_local);
         obj_local=solution->objective_function();  
     }
-    std::cout<<"SA "<<obj_SA<<"local "<<obj_local<<std::endl;
+    // std::cout<<"SA "<<obj_SA<<"local "<<obj_local<<std::endl;
     
     // ------------------CALCOLO T0--------------------------------
     t0=(obj_SA-obj_local)/0.3566749;
     t=t0;
-    std::cout<<"initial t0 "<<t0<<std::endl;
+    // std::cout<<"initial t0 "<<t0<<std::endl;
     // --------------------------------------------------
 
     best_sol = obj_old;
@@ -208,7 +207,7 @@ Solution* sa_v2(Solution* solution, struct timeb start, int timelimit,std::strin
             best_solution->timeslot_per_exams=solution->timeslot_per_exams;
             best_solution->update_timeslots();
             solution->update_weights();
-            best_solution->write_output_file(current_instance);
+            // best_solution->write_output_file(current_instance);
         }
         
         t = cooling(timelimit, now.time-start.time,t0);

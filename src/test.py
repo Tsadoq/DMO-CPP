@@ -156,7 +156,7 @@ with open("./logs/test.log", 'w') as log:
                 i=0
             filename=f"log_{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}_{instance}_{a}.txt"
             log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running instance {instance}\n")
-            os.system(f"./{program} {instance} {runtime} 6 {a} > logs/{instance}/{filename} &")
+            os.system(f"./{program} {instance} -t {runtime} 6 > logs/{instance}/{filename} &")
             if instance not in runs.keys():
                 runs[instance] = [filename]
             else: 

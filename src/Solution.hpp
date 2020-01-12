@@ -19,7 +19,7 @@ class Solution{
     int n_timeslot;
 
     // aggiorno i valori che rimarranno fissi per tutto l'algoritmo
-    void solution_update(std::vector<std::vector<int>> conflict_matrix, int n_exams, int total_number_students, int n_timeslot);
+    void solution_update(std::vector<std::vector<int>> conflict_matrix, int n_exams, int tot_number_students, int n_timeslot);
     // check della feasibility della soluzione
     int check_feasibility(std::vector<int> t, std::vector<Exam*> e);
     // aggiornamento timeslot per chiamata iniziale

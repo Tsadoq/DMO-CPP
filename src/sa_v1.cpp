@@ -218,7 +218,7 @@ Solution* get_new_solution(int idx , Solution* solution, std::vector<int> timesl
 
 
 Solution* sa_v1(Solution* solution, struct timeb start, int timelimit,std::string current_instance, double cool_coef){
- 
+    
     struct timeb now;
     double prob = 0;
     double prob_random = 0;
@@ -238,7 +238,6 @@ Solution* sa_v1(Solution* solution, struct timeb start, int timelimit,std::strin
     double t0_iter;
     
     int fail_sa = 0;
-
     // prealloco tutti i vettori
     std::vector<int> timeslot_pre_swap=std::vector<int>(n_exams);    
     std::vector<int> old_timeslot_solution=std::vector<int>(n_exams);
@@ -251,7 +250,7 @@ Solution* sa_v1(Solution* solution, struct timeb start, int timelimit,std::strin
 
     solution->update_weights();
     obj_SA = solution->objective_function();
-    std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
+    // std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
 
     //--------------------LOCAL SEARCH INIZIALE---------------------------
     perc_improvement = 0.1;
@@ -264,7 +263,7 @@ Solution* sa_v1(Solution* solution, struct timeb start, int timelimit,std::strin
     // rialzo la temperatura in modo che ci sia una probabilità di 0.3 di accettare soluzioni peggioranti
     alpha=(obj_SA-obj_local)/(t0*1.38629436);
     t=t0;
-    std::cout<<"initial t0 "<<t0<<std::endl;
+    // std::cout<<"initial t0 "<<t0<<std::endl;
     // --------------------------------------------------
 
     best_sol = obj_SA;
@@ -333,9 +332,9 @@ Solution* sa_v1(Solution* solution, struct timeb start, int timelimit,std::strin
             best_solution->update_timeslots();
             best_solution->update_weights();
             best_solution->objective_function();
-            best_solution->write_output_file(current_instance);
+            //best_solution->write_output_file(current_instance);
 
-            std::cout << "best_sol:\t" << best_sol << std::endl;
+            // std::cout << "best_sol:\t" << best_sol << std::endl;
 
         }else{
             fail_sa++;
@@ -355,7 +354,7 @@ Solution* sa_v1(Solution* solution, struct timeb start, int timelimit,std::strin
     //output_file.close();               
     //std::cout<<"Best sol "<<best_sol<<std::endl;
     
-    std::cout<<iter<<std::endl;
+    // std::cout<<iter<<std::endl;
     return best_solution;  
 }
 

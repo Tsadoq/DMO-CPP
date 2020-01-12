@@ -27,7 +27,6 @@
 #include <sys/timeb.h>
 #include <omp.h>
 
-//int read_file_stu(char *name_stu);
 int main(int argc, char **argv) {
     srand(time(NULL));
     struct timeb start;
@@ -52,7 +51,6 @@ int main(int argc, char **argv) {
         std::string time = argv[3];
         try {
             timelimit = std::stoi(time);
-            std::cout << "TIMELIMIT SET" <<std::endl;
         } catch (const std::exception& e) { 
             std::cerr << "Third argument must be an integer" << std::endl;
             return 1;
@@ -65,26 +63,14 @@ int main(int argc, char **argv) {
     ftime(&start);
     std::cout<<"Starting"<<std::endl;
 
-    // std::string current_instance=argv[1];
-    std::string instance_exm;
-    std::string instance_slo;
-    std::string instance_stu;
-    bool path_to_use=false;
+
     
-    if(path_to_use){
-        instance_exm="/home/parallels/DMO-CPP/src/instances/"+current_instance+".exm";
-        instance_slo="/home/parallels/DMO-CPP/src/instances/"+current_instance+".slo";
-        instance_stu="/home/parallels/DMO-CPP/src/instances/"+current_instance+".stu";
-    }
-    else{
-        instance_exm="./instances/"+current_instance+".exm";
-        instance_slo="./instances/"+current_instance+".slo";
-        instance_stu="./instances/"+current_instance+".stu";
-    }
+    std::string instance_exm="./"+current_instance+".exm";
+    std::string instance_slo="./"+current_instance+".slo";
+    std::string instance_stu="./"+current_instance+".stu";
     
     //--------------------------------------- READ FILES------------------------------------------------------
-    // int timelimit = atoi(argv[2]);
-    std::cout<<"timelimit: "<<timelimit<<std::endl;
+    std::cout<<"Time limit: "<<timelimit<<std::endl;
     char * writable_instance_stu = new char[instance_stu.size() + 1];
     std::copy(instance_stu.begin(), instance_stu.end(), writable_instance_stu);
     writable_instance_stu[instance_stu.size()] = '\0';
@@ -110,9 +96,7 @@ int main(int argc, char **argv) {
     std::cout<<"Number of students: "<<total_number_students<<std::endl;
     Solution* initial_solution=new Solution();    
     
-    std::cout<<"prima"<<std::endl;
     initial_solution->solution_update(conflict_matrix,n_exams, total_number_students,n_timeslot);
-    std::cout<<"dopo"<<std::endl;
 
     //---------------------------------- MULTI-THREAD -----------------------------------------------------------
  
@@ -152,21 +136,14 @@ int main(int argc, char **argv) {
 
         array_sol[id]->update_timeslots();
         int flag =  array_sol[id]->check_feasibility( array_sol[id]->timeslot_per_exams,  array_sol[id]->all_exams);
-        std::cout<<"feasibility "<<flag<<std::endl;
 
         std::string str_id = std::to_string(id);
         if(id%2){
-            //double best_sol;
             double cooling_coeff=0.9;
-            std::cout << "THREAD WITH ID " << id << " USING SA V1" << std::endl;
             best_sol[id] = sa_v1(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol",cooling_coeff);
         } else {
-            std::cout << "THREAD WITH ID " << id << " USING SA V2" << std::endl;
             best_sol[id] = sa_v2(array_sol[id], start, timelimit, "./instances/"+current_instance+"_"+str_id+"_"+".sol", true);
-        }
-
-        //array_sol[id]->double_obj=best_sol;
-        
+        }        
 
     }
     // seleziono miglior soluzione tra quelle feasible che ho trovato
@@ -177,7 +154,6 @@ int main(int argc, char **argv) {
     for(int i=0; i<numproc; i++){
        // prendo il minimo
        Solution *tmp = array_sol[i];
-       //double tmp_obj = tmp->double_obj;
        counter++;
        if (best_sol[i]->double_obj < min){
            index_best = i;
