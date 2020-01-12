@@ -176,6 +176,7 @@ int choose_function(double rel_t, int iter, double perc_improvement, int fail)
 }
 
 
+
 Solution* get_new_solution(int idx , Solution* solution, std::vector<int> timeslot_pre_swap,
          std::vector<int> old_timeslot_solution, double rel_t, double perc_improvement, 
          struct timeb now, std::string current_instance)
@@ -281,11 +282,14 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
 
         old_timeslot_solution=solution->timeslot_per_exams; 
 
-        int idx = choose_function(rel_t, iter, perc_improvement, fail);
-        
-        solution = get_new_solution(idx , solution, timeslot_pre_swap, old_timeslot_solution, rel_t, perc_improvement, now, current_instance);
+        // int idx = choose_function(rel_t, iter, perc_improvement, fail);
+        // solution = get_new_solution(idx , solution, timeslot_pre_swap, old_timeslot_solution, rel_t, perc_improvement, now, current_instance);
     
-        //-------------------------SA--------------------------------------------------------
+
+        solution = func_rescheduling(solution, old_timeslot_solution, rel_t);
+        solution = func_swap_deterministic(solution, timeslot_pre_swap);
+        solution = func_local_search(solution, perc_improvement);
+       
 
         obj_new = solution->double_obj;
 
