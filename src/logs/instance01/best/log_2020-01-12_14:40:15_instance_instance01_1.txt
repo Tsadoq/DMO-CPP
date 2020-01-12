@@ -1,0 +1,1040 @@
+Starting
+timelimit: 300
+Number of timeslot: 13
+Number of exams: 139
+Number of students: 611
+prima
+dopo
+  Number of processors available = 24
+  Number of threads =              6
+feasibility 0
+Initial Objective Function: 190.098
+feasibility 0
+Initial Objective Function: 171.311
+feasibility 0
+Initial Objective Function: 180.748
+feasibility 0
+Initial Objective Function: 172.951
+feasibility 0
+Initial Objective Function: 180.957
+180.578
+SA 190.098local 180.578
+initial t0 26.6923
+165.74
+SA 171.311local 165.74
+initial t0 15.6198
+174.851
+SA 180.748local 174.851
+initial t0 16.533
+171.227
+SA 180.957local 171.227
+initial t0 27.2796
+168.818
+SA 172.951local 168.818
+initial t0 11.5864
+feasibility 0
+Initial Objective Function: 194.81
+181.614
+SA 194.81local 181.614
+initial t0 36.9984
+158.615
+SA 158.624local 158.615
+initial t0 0.0229433
+159.393
+SA 159.583local 159.393
+initial t0 0.532285
+158.208
+SA 158.488local 158.208
+initial t0 0.784662
+158.196
+SA 158.516local 158.196
+initial t0 0.894789
+158.838
+SA 158.838local 158.838
+initial t0 0
+158.018
+SA 158.018local 158.018
+initial t0 0
+158.327
+SA 158.327local 158.327
+initial t0 0
+158.548
+SA 158.548local 158.548
+initial t0 0
+158.1
+SA 158.786local 158.1
+initial t0 1.92265
+158.584
+SA 158.725local 158.584
+initial t0 0.394625
+158.786
+SA 158.786local 158.786
+initial t0 0
+157.612
+SA 157.612local 157.612
+initial t0 0
+157.859
+SA 158.275local 157.859
+initial t0 1.16552
+159.275
+SA 159.804local 159.275
+initial t0 1.48214
+158.164
+SA 158.164local 158.164
+initial t0 0
+158.727
+SA 159.054local 158.727
+initial t0 0.917733
+158.213
+SA 158.213local 158.213
+initial t0 0
+158.782
+SA 158.804local 158.782
+initial t0 0.0596526
+158.244
+SA 158.573local 158.244
+initial t0 0.922321
+158.625
+SA 159.047local 158.625
+initial t0 1.18388
+158.191
+SA 158.447local 158.191
+initial t0 0.715832
+157.707
+SA 157.707local 157.707
+initial t0 0
+158.65
+SA 158.656local 158.65
+initial t0 0.0183547
+158.052
+SA 158.116local 158.052
+initial t0 0.178958
+158.241
+SA 158.321local 158.241
+initial t0 0.224845
+158.694
+SA 158.694local 158.694
+initial t0 0
+158.103
+SA 158.151local 158.103
+initial t0 0.133071
+159.885
+SA 160.146local 159.885
+initial t0 0.729598
+158.483
+SA 158.493local 158.483
+initial t0 0.027532
+158.072
+SA 158.867local 158.072
+initial t0 2.23009
+158.301
+SA 158.301local 158.301
+initial t0 0
+158.196
+SA 158.245local 158.196
+initial t0 0.13766
+158.072
+SA 158.072local 158.072
+initial t0 0
+158.368
+SA 158.368local 158.368
+initial t0 0
+158.259
+SA 158.27local 158.259
+initial t0 0.0321206
+157.827
+SA 157.827local 157.827
+initial t0 0
+158.231
+SA 158.231local 158.231
+initial t0 0
+158.723
+SA 158.723local 158.723
+initial t0 0
+158.046
+SA 158.051local 158.046
+initial t0 0.013766
+159.079
+SA 159.087local 159.079
+initial t0 0.0229433
+158.264
+SA 158.264local 158.264
+initial t0 0
+158.234
+SA 158.282local 158.234
+initial t0 0.133071
+158.069
+SA 158.069local 158.069
+initial t0 0
+158.406
+SA 158.748local 158.406
+initial t0 0.959031
+158.242
+SA 158.242local 158.242
+initial t0 0
+158.637
+SA 158.637local 158.637
+initial t0 0
+160.144
+SA 160.159local 160.144
+initial t0 0.041298
+158.66
+SA 158.818local 158.66
+initial t0 0.4451
+158.61
+SA 158.612local 158.61
+initial t0 0.00458866
+158.313
+SA 158.363local 158.313
+initial t0 0.142249
+158.036
+SA 158.403local 158.036
+initial t0 1.02786
+158.265
+SA 158.265local 158.265
+initial t0 0
+157.457
+SA 157.784local 157.457
+initial t0 0.917733
+157.951
+SA 157.951local 157.951
+initial t0 0
+158.241
+SA 158.254local 158.241
+initial t0 0.0367093
+158.277
+SA 158.321local 158.277
+initial t0 0.123894
+159.646
+SA 159.646local 159.646
+initial t0 0
+158.905
+SA 158.905local 158.905
+initial t0 0
+158.514
+SA 158.669local 158.514
+initial t0 0.435923
+158.851
+SA 159.2local 158.851
+initial t0 0.977385
+160.308
+SA 160.64local 160.308
+initial t0 0.931499
+158.067
+SA 158.093local 158.067
+initial t0 0.0734186
+158.113
+SA 158.113local 158.113
+initial t0 0
+159.91
+SA 159.91local 159.91
+initial t0 0
+157.736
+SA 157.736local 157.736
+initial t0 0
+158.115
+SA 158.115local 158.115
+initial t0 0
+158.47
+SA 158.651local 158.47
+initial t0 0.509342
+161.424
+SA 161.424local 161.424
+initial t0 0
+158.252
+SA 158.252local 158.252
+initial t0 0
+158.699
+SA 158.743local 158.699
+initial t0 0.123894
+157.974
+SA 157.974local 157.974
+initial t0 0
+158.604
+SA 158.645local 158.604
+initial t0 0.114717
+158.556
+SA 158.576local 158.556
+initial t0 0.055064
+157.969
+SA 159.422local 157.969
+initial t0 4.07473
+159.121
+SA 159.121local 159.121
+initial t0 0
+158.267
+SA 158.267local 158.267
+initial t0 0
+159.177
+SA 159.177local 159.177
+initial t0 0
+159.609
+SA 159.609local 159.609
+initial t0 0
+158.36
+SA 158.411local 158.36
+initial t0 0.142249
+157.815
+SA 158.157local 157.815
+initial t0 0.959031
+157.854
+SA 157.854local 157.854
+initial t0 0
+158.031
+SA 158.031local 158.031
+initial t0 0
+158.044
+SA 158.044local 158.044
+initial t0 0
+159.11
+SA 159.661local 159.11
+initial t0 1.54638
+158.01
+SA 158.018local 158.01
+initial t0 0.0229433
+158.015
+SA 158.345local 158.015
+initial t0 0.92691
+158.241
+SA 158.259local 158.241
+initial t0 0.0504753
+158.344
+SA 158.586local 158.344
+initial t0 0.679122
+157.794
+SA 157.82local 157.794
+initial t0 0.0734186
+159.53
+SA 159.53local 159.53
+initial t0 0
+158.439
+SA 158.439local 158.439
+initial t0 0
+157.511
+SA 157.524local 157.511
+initial t0 0.0367093
+158.481
+SA 159.957local 158.481
+initial t0 4.13897
+158.435
+SA 158.435local 158.435
+initial t0 0
+158.923
+SA 158.923local 158.923
+initial t0 0
+159.304
+SA 159.655local 159.304
+initial t0 0.981974
+158.884
+SA 158.884local 158.884
+initial t0 0
+159.072
+SA 159.072local 159.072
+initial t0 0
+157.885
+SA 158.229local 157.885
+initial t0 0.963619
+158.218
+SA 158.218local 158.218
+initial t0 0
+158.751
+SA 159local 158.751
+initial t0 0.697477
+157.589
+SA 157.589local 157.589
+initial t0 0
+157.732
+SA 157.732local 157.732
+initial t0 0
+158.444
+SA 158.488local 158.444
+initial t0 0.123894
+157.678
+SA 157.678local 157.678
+initial t0 0
+158.692
+SA 158.692local 158.692
+initial t0 0
+157.953
+SA 157.962local 157.953
+initial t0 0.027532
+159.018
+SA 159.028local 159.018
+initial t0 0.027532
+157.664
+SA 157.664local 157.664
+initial t0 0
+158.953
+SA 159.295local 158.953
+initial t0 0.959031
+158.363
+SA 158.381local 158.363
+initial t0 0.0504753
+157.926
+SA 158.028local 157.926
+initial t0 0.284497
+157.797
+SA 157.809local 157.797
+initial t0 0.0321206
+157.923
+SA 157.923local 157.923
+initial t0 0
+158.52
+SA 158.52local 158.52
+initial t0 0
+158.221
+SA 158.241local 158.221
+initial t0 0.055064
+158.71
+SA 158.71local 158.71
+initial t0 0
+158.241
+SA 158.265local 158.241
+initial t0 0.06883
+159.27
+SA 159.277local 159.27
+initial t0 0.0183547
+158.822
+SA 158.822local 158.822
+initial t0 0
+158.327
+SA 158.327local 158.327
+initial t0 0
+157.997
+SA 157.997local 157.997
+initial t0 0
+158.871
+SA 159.198local 158.871
+initial t0 0.917733
+158.219
+SA 158.219local 158.219
+initial t0 0
+157.761
+SA 157.769local 157.761
+initial t0 0.0229433
+158.615
+SA 158.615local 158.615
+initial t0 0
+158.869
+SA 158.869local 158.869
+initial t0 0
+158.773
+SA 158.802local 158.773
+initial t0 0.0825959
+157.969
+SA 158.185local 157.969
+initial t0 0.605704
+157.507
+SA 157.849local 157.507
+initial t0 0.959031
+160.979
+SA 161.139local 160.979
+initial t0 0.449689
+159.923
+SA 159.923local 159.923
+initial t0 0
+157.935
+SA 157.935local 157.935
+initial t0 0
+158.514
+SA 158.902local 158.514
+initial t0 1.08751
+157.935
+SA 157.935local 157.935
+initial t0 0
+158.524
+SA 158.776local 158.524
+initial t0 0.706654
+158.55
+SA 158.552local 158.55
+initial t0 0.00458866
+157.682
+SA 157.784local 157.682
+initial t0 0.284497
+158.378
+SA 158.378local 158.378
+initial t0 0
+158.349
+SA 158.349local 158.349
+initial t0 0
+158.951
+SA 158.969local 158.951
+initial t0 0.0504753
+157.825
+SA 157.827local 157.825
+initial t0 0.00458866
+157.948
+SA 157.951local 157.948
+initial t0 0.00917733
+158.214
+SA 158.304local 158.214
+initial t0 0.252377
+158.123
+SA 158.183local 158.123
+initial t0 0.169781
+158.236
+SA 158.236local 158.236
+initial t0 0
+158.416
+SA 158.457local 158.416
+initial t0 0.114717
+158.792
+SA 158.792local 158.792
+initial t0 0
+157.863
+SA 157.867local 157.863
+initial t0 0.013766
+157.849
+SA 157.849local 157.849
+initial t0 0
+157.957
+SA 157.957local 157.957
+initial t0 0
+158.498
+SA 158.498local 158.498
+initial t0 0
+158.516
+SA 158.516local 158.516
+initial t0 0
+158.098
+SA 158.555local 158.098
+initial t0 1.28024
+158.368
+SA 158.368local 158.368
+initial t0 0
+157.856
+SA 158.354local 157.856
+initial t0 1.39495
+158.08
+SA 158.129local 158.08
+initial t0 0.13766
+158.072
+SA 158.121local 158.072
+initial t0 0.13766
+158.244
+SA 158.245local 158.244
+initial t0 0.00458866
+157.828
+SA 157.879local 157.828
+initial t0 0.142249
+158.296
+SA 158.624local 158.296
+initial t0 0.917733
+158.134
+SA 158.643local 158.134
+initial t0 1.42707
+158.565
+SA 158.843local 158.565
+initial t0 0.780073
+158.326
+SA 158.326local 158.326
+initial t0 0
+158.139
+SA 158.481local 158.139
+initial t0 0.959031
+157.867
+SA 157.867local 157.867
+initial t0 0
+157.998
+SA 158.34local 157.998
+initial t0 0.959031
+158.147
+SA 158.691local 158.147
+initial t0 1.52344
+158.19
+SA 158.19local 158.19
+initial t0 0
+158.137
+SA 158.18local 158.137
+initial t0 0.119305
+158.026
+SA 158.077local 158.026
+initial t0 0.142249
+159.656
+SA 159.998local 159.656
+initial t0 0.959031
+158.419
+SA 158.419local 158.419
+initial t0 0
+158.021
+SA 158.021local 158.021
+initial t0 0
+158.409
+SA 158.65local 158.409
+initial t0 0.674534
+158.095
+SA 158.095local 158.095
+initial t0 0
+158.321
+SA 158.321local 158.321
+initial t0 0
+158.021
+SA 158.021local 158.021
+initial t0 0
+157.946
+SA 157.946local 157.946
+initial t0 0
+157.989
+SA 158local 157.989
+initial t0 0.0321206
+158.142
+SA 158.142local 158.142
+initial t0 0
+159.462
+SA 159.462local 159.462
+initial t0 0
+158.318
+SA 158.318local 158.318
+initial t0 0
+158.57
+SA 158.57local 158.57
+initial t0 0
+158.57
+SA 158.61local 158.57
+initial t0 0.114717
+158.137
+SA 158.188local 158.137
+initial t0 0.142249
+157.646
+SA 157.646local 157.646
+initial t0 0
+157.642
+SA 157.642local 157.642
+initial t0 0
+158.939
+SA 158.974local 158.939
+initial t0 0.0963619
+158.191
+SA 158.191local 158.191
+initial t0 0
+157.918
+SA 157.918local 157.918
+initial t0 0
+158.576
+SA 158.678local 158.576
+initial t0 0.284497
+159.173
+SA 159.173local 159.173
+initial t0 0
+157.933
+SA 157.933local 157.933
+initial t0 0
+159.555
+SA 159.57local 159.555
+initial t0 0.041298
+158.367
+SA 158.414local 158.367
+initial t0 0.133071
+158.334
+SA 158.334local 158.334
+initial t0 0
+158.244
+SA 158.244local 158.244
+initial t0 0
+157.774
+SA 157.921local 157.774
+initial t0 0.41298
+157.869
+SA 157.935local 157.869
+initial t0 0.183547
+158.625
+SA 158.73local 158.625
+initial t0 0.293674
+158.733
+SA 159.651local 158.733
+initial t0 2.57424
+158.561
+SA 158.561local 158.561
+initial t0 0
+159.782
+SA 159.795local 159.782
+initial t0 0.0367093
+158.236
+SA 158.442local 158.236
+initial t0 0.578172
+158.083
+SA 158.088local 158.083
+initial t0 0.013766
+158.098
+SA 158.098local 158.098
+initial t0 0
+158.795
+SA 158.974local 158.795
+initial t0 0.500164
+158.673
+SA 158.795local 158.673
+initial t0 0.34415
+158.064
+SA 158.064local 158.064
+initial t0 0
+158.504
+SA 158.504local 158.504
+initial t0 0
+157.931
+SA 157.931local 157.931
+initial t0 0
+157.967
+SA 157.969local 157.967
+initial t0 0.00458866
+158.538
+SA 158.57local 158.538
+initial t0 0.0871846
+157.843
+SA 158.033local 157.843
+initial t0 0.532285
+157.863
+SA 157.876local 157.863
+initial t0 0.0367093
+158.033
+SA 158.033local 158.033
+initial t0 0
+158.277
+SA 158.283local 158.277
+initial t0 0.0183547
+158.951
+SA 158.951local 158.951
+initial t0 0
+159.288
+SA 159.29local 159.288
+initial t0 0.00458866
+158.432
+SA 158.432local 158.432
+initial t0 0
+158.123
+SA 158.134local 158.123
+initial t0 0.0321206
+158
+SA 158local 158
+initial t0 0
+158.432
+SA 158.432local 158.432
+initial t0 0
+158.036
+SA 158.08local 158.036
+initial t0 0.123894
+159.313
+SA 159.455local 159.313
+initial t0 0.399214
+157.961
+SA 157.962local 157.961
+initial t0 0.00458866
+158.01
+SA 158.01local 158.01
+initial t0 0
+158.75
+SA 158.75local 158.75
+initial t0 0
+158.152
+SA 158.229local 158.152
+initial t0 0.215667
+160.003
+SA 160.097local 160.003
+initial t0 0.261554
+158.296
+SA 158.296local 158.296
+initial t0 0
+157.966
+SA 157.966local 157.966
+initial t0 0
+158.447
+SA 158.462local 158.447
+initial t0 0.041298
+159.113
+SA 159.136local 159.113
+initial t0 0.0642413
+158.259
+SA 158.697local 158.259
+initial t0 1.22976
+157.889
+SA 158.224local 157.889
+initial t0 0.940676
+158.136
+SA 158.136local 158.136
+initial t0 0
+158.545
+SA 158.686local 158.545
+initial t0 0.394625
+158.245
+SA 158.286local 158.245
+initial t0 0.114717
+158.385
+SA 158.385local 158.385
+initial t0 0
+158.275
+SA 158.275local 158.275
+initial t0 0
+157.984
+SA 157.987local 157.984
+initial t0 0.00917733
+158.573
+SA 158.581local 158.573
+initial t0 0.0229433
+161.314
+SA 161.687local 161.314
+initial t0 1.04622
+159.56
+SA 159.561local 159.56
+initial t0 0.00458866
+159.126
+SA 159.128local 159.126
+initial t0 0.00458866
+158.013
+SA 158.013local 158.013
+initial t0 0
+158.524
+SA 158.527local 158.524
+initial t0 0.00917733
+158.717
+SA 158.998local 158.717
+initial t0 0.78925
+157.984
+SA 158.034local 157.984
+initial t0 0.142249
+159.005
+SA 159.005local 159.005
+initial t0 0
+157.93
+SA 157.93local 157.93
+initial t0 0
+158.229
+SA 158.229local 158.229
+initial t0 0
+157.836
+SA 158.381local 157.836
+initial t0 1.52803
+158.534
+SA 158.876local 158.534
+initial t0 0.959031
+158.73
+SA 158.73local 158.73
+initial t0 0
+158.663
+SA 158.728local 158.663
+initial t0 0.183547
+157.961
+SA 157.961local 157.961
+initial t0 0
+158.229
+SA 158.596local 158.229
+initial t0 1.02786
+157.72
+SA 157.72local 157.72
+initial t0 0
+161.303
+SA 161.303local 161.303
+initial t0 0
+158.715
+SA 158.715local 158.715
+initial t0 0
+158.545
+SA 158.545local 158.545
+initial t0 0
+158.175
+SA 158.465local 158.175
+initial t0 0.812193
+158.005
+SA 158.005local 158.005
+initial t0 0
+158.131
+SA 158.131local 158.131
+initial t0 0
+157.812
+SA 157.812local 157.812
+initial t0 0
+157.586
+SA 157.586local 157.586
+initial t0 0
+157.728
+SA 157.728local 157.728
+initial t0 0
+158.264
+SA 158.264local 158.264
+initial t0 0
+157.879
+SA 158.021local 157.879
+initial t0 0.399214
+157.776
+SA 157.954local 157.776
+initial t0 0.500164
+158.555
+SA 158.555local 158.555
+initial t0 0
+159.182
+SA 159.524local 159.182
+initial t0 0.959031
+157.586
+SA 157.633local 157.586
+initial t0 0.133071
+158.051
+SA 158.052local 158.051
+initial t0 0.00458866
+157.727
+SA 157.727local 157.727
+initial t0 0
+158.231
+SA 158.231local 158.231
+initial t0 0
+158.511
+SA 158.511local 158.511
+initial t0 0
+158.007
+SA 158.007local 158.007
+initial t0 0
+158.664
+SA 158.679local 158.664
+initial t0 0.041298
+157.679
+SA 157.732local 157.679
+initial t0 0.146837
+157.656
+SA 157.656local 157.656
+initial t0 0
+157.825
+SA 157.827local 157.825
+initial t0 0.00458866
+157.755
+SA 157.82local 157.755
+initial t0 0.183547
+158.005
+SA 158.005local 158.005
+initial t0 0
+158.82
+SA 158.972local 158.82
+initial t0 0.426746
+158.264
+SA 158.264local 158.264
+initial t0 0
+158.231
+SA 158.231local 158.231
+initial t0 0
+157.935
+SA 158.116local 157.935
+initial t0 0.509342
+158.02
+SA 158.02local 158.02
+initial t0 0
+157.928
+SA 157.928local 157.928
+initial t0 0
+157.817
+SA 157.817local 157.817
+initial t0 0
+158.236
+SA 158.236local 158.236
+initial t0 0
+158.02
+SA 158.02local 158.02
+initial t0 0
+157.758
+SA 157.758local 157.758
+initial t0 0
+158.223
+SA 158.223local 158.223
+initial t0 0
+159.653
+SA 159.661local 159.653
+initial t0 0.0229433
+158.188
+SA 158.188local 158.188
+initial t0 0
+157.917
+SA 157.917local 157.917
+initial t0 0
+158.013
+SA 158.013local 158.013
+initial t0 0
+158.283
+SA 158.283local 158.283
+initial t0 0
+158.201
+SA 158.201local 158.201
+initial t0 0
+158.005
+SA 158.005local 158.005
+initial t0 0
+158.092
+SA 158.092local 158.092
+initial t0 0
+157.63
+SA 157.63local 157.63
+initial t0 0
+157.779
+SA 157.827local 157.779
+initial t0 0.133071
+158.918
+SA 159.293local 158.918
+initial t0 1.0508
+157.931
+SA 157.931local 157.931
+initial t0 0
+158.473
+SA 158.476local 158.473
+initial t0 0.00917733
+160.516
+SA 160.516local 160.516
+initial t0 0
+157.938
+SA 158.237local 157.938
+initial t0 0.839725
+157.917
+SA 157.917local 157.917
+initial t0 0
+158.918
+SA 158.918local 158.918
+initial t0 0
+158.005
+SA 158.005local 158.005
+initial t0 0
+157.732
+SA 157.732local 157.732
+initial t0 0
+157.723
+SA 157.723local 157.723
+initial t0 0
+158.385
+SA 158.525local 158.385
+initial t0 0.394625
+157.915
+SA 157.915local 157.915
+initial t0 0
+158.367
+SA 159.203local 158.367
+initial t0 2.34481
+158.362
+SA 158.522local 158.362
+initial t0 0.449689
+158.005
+SA 158.005local 158.005
+initial t0 0
+157.831
+SA 157.863local 157.831
+initial t0 0.0871846
+158.809
+SA 158.809local 158.809
+initial t0 0
+158.367
+SA 158.367local 158.367
+initial t0 0
+158.35
+SA 158.35local 158.35
+initial t0 0
+157.777
+SA 157.777local 157.777
+initial t0 0
+158.465
+SA 158.465local 158.465
+initial t0 0
+157.953
+SA 157.953local 157.953
+initial t0 0
+158.005
+SA 158.005local 158.005
+initial t0 0
+Solution of core 1 has a score of 157.398
+Solution of core 2 has a score of 157.245
+Solution of core 3 has a score of 157.37
+Solution of core 4 has a score of 157.214
+Solution of core 5 has a score of 157.262
+Solution of core 6 has a score of 157.295
+Best solution:		157.214
+Average solution:	157.297

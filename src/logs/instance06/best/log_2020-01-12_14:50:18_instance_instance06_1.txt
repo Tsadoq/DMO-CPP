@@ -1,0 +1,257 @@
+Starting
+timelimit: 300
+Number of timeslot: 35
+Number of exams: 622
+Number of students: 21266
+prima
+dopo
+  Number of processors available = 24
+  Number of threads =              6
+feasibility 0
+Initial Objective Function: 5.97828
+feasibility 0
+Initial Objective Function: 6.02102
+feasibility 0
+Initial Objective Function: 5.97583
+feasibility 0
+Initial Objective Function: 6.67907
+4.84534
+5.01425
+5.03381
+feasibility 0
+Initial Objective Function: 6.07227
+5.68748
+feasibility 0
+Initial Objective Function: 5.7196
+SA 5.97828local 4.70733
+initial t0 3.56333
+SA 6.02102local 4.85869
+initial t0 3.25878
+SA 5.97583local 4.91526
+initial t0 2.97348
+5.02267
+SA 6.67907local 5.43008
+initial t0 3.50176
+4.82804
+SA 6.07227local 4.90948
+initial t0 3.2601
+SA 5.7196local 4.6762
+initial t0 2.92536
+3.91653
+SA 3.98829local 3.91653
+initial t0 0.201185
+4.16058
+SA 4.23973local 4.16058
+initial t0 0.221884
+4.0569
+SA 4.13049local 4.0569
+initial t0 0.206327
+4.00724
+SA 4.09334local 4.00724
+initial t0 0.241396
+4.05069
+SA 4.14775local 4.05069
+initial t0 0.272114
+3.94183
+SA 3.96276local 3.94183
+initial t0 0.058668
+3.68466
+SA 3.70084local 3.68466
+initial t0 0.0453524
+3.7623
+SA 3.76437local 3.7623
+initial t0 0.00580089
+3.58577
+SA 3.58798local 3.58577
+initial t0 0.0061964
+3.74194
+SA 3.7472local 3.74194
+initial t0 0.0147659
+3.80805
+SA 3.81383local 3.80805
+initial t0 0.0162161
+3.80791
+SA 3.8089local 3.80791
+initial t0 0.0027686
+3.74424
+SA 3.74664local 3.74424
+initial t0 0.00672375
+3.63199
+SA 3.63265local 3.63199
+initial t0 0.00184574
+3.79888
+SA 3.80203local 3.79888
+initial t0 0.00883317
+3.74786
+SA 3.7496local 3.74786
+initial t0 0.00487802
+3.64483
+SA 3.65555local 3.64483
+initial t0 0.0300591
+3.76413
+SA 3.76742local 3.76413
+initial t0 0.00922868
+3.57566
+SA 3.57806local 3.57566
+initial t0 0.00672375
+3.74753
+SA 3.75491local 3.74753
+initial t0 0.0206986
+3.62903
+SA 3.6398local 3.62903
+initial t0 0.030191
+3.57467
+SA 3.57745local 3.57467
+initial t0 0.00777846
+3.80198
+SA 3.80415local 3.80198
+initial t0 0.00606456
+3.6438
+SA 3.64605local 3.6438
+initial t0 0.00632824
+3.75755
+SA 3.7639local 3.75755
+initial t0 0.0177982
+3.76469
+SA 3.76573local 3.76469
+initial t0 0.00290044
+3.62819
+SA 3.62842local 3.62819
+initial t0 0.000659192
+3.64384
+SA 3.6477local 3.64384
+initial t0 0.0108107
+3.76441
+SA 3.76578local 3.76441
+initial t0 0.00382331
+3.56461
+SA 3.57256local 3.56461
+initial t0 0.0222807
+3.78962
+SA 3.79361local 3.78962
+initial t0 0.0112063
+3.65551
+SA 3.65607local 3.65551
+initial t0 0.00158206
+3.76625
+SA 3.77485local 3.76625
+initial t0 0.0241264
+3.55243
+SA 3.56local 3.55243
+initial t0 0.021226
+3.75158
+SA 3.75647local 3.75158
+initial t0 0.0137112
+3.81209
+SA 3.81426local 3.81209
+initial t0 0.00606456
+3.63877
+SA 3.63938local 3.63877
+initial t0 0.0017139
+3.76291
+SA 3.76832local 3.76291
+initial t0 0.0151614
+3.54905
+SA 3.5498local 3.54905
+initial t0 0.00210941
+3.75172
+SA 3.75332local 3.75172
+initial t0 0.0044825
+3.80086
+SA 3.80965local 3.80086
+initial t0 0.0246538
+3.62583
+SA 3.62678local 3.62583
+initial t0 0.00263677
+3.76314
+SA 3.76413local 3.76314
+initial t0 0.0027686
+3.74889
+SA 3.74951local 3.74889
+initial t0 0.0017139
+3.54684
+SA 3.54947local 3.54684
+initial t0 0.00738295
+3.78722
+SA 3.78825local 3.78722
+initial t0 0.00290044
+3.64587
+SA 3.6462local 3.64587
+initial t0 0.000922868
+3.62602
+SA 3.6287local 3.62602
+initial t0 0.00751478
+3.76451
+SA 3.76545local 3.76451
+initial t0 0.00263677
+3.74349
+SA 3.74814local 3.74349
+initial t0 0.013052
+3.54622
+SA 3.54796local 3.54622
+initial t0 0.00487802
+3.80659
+SA 3.80876local 3.80659
+initial t0 0.00606456
+3.64963
+SA 3.65936local 3.64963
+initial t0 0.0272905
+3.62541
+SA 3.63646local 3.62541
+initial t0 0.030982
+3.76046
+SA 3.77579local 3.76046
+initial t0 0.0429793
+3.74372
+SA 3.74584local 3.74372
+initial t0 0.00593272
+3.54594
+SA 3.54796local 3.54594
+initial t0 0.00566905
+3.78811
+SA 3.79046local 3.78811
+initial t0 0.00659192
+3.64874
+SA 3.66726local 3.64874
+initial t0 0.0519443
+3.61431
+SA 3.61859local 3.61431
+initial t0 0.0119973
+3.6477
+SA 3.64874local 3.6477
+initial t0 0.00290044
+3.76051
+SA 3.76197local 3.76051
+initial t0 0.00408699
+3.74396
+SA 3.74443local 3.74396
+initial t0 0.00131838
+3.54491
+SA 3.54646local 3.54491
+initial t0 0.00435066
+3.78717
+SA 3.79079local 3.78717
+initial t0 0.0101516
+3.6138
+SA 3.61798local 3.6138
+initial t0 0.0117336
+3.64685
+SA 3.65569local 3.64685
+initial t0 0.0247856
+3.64685
+SA 3.64685local 3.64685
+initial t0 0
+3.7614
+SA 3.76408local 3.7614
+initial t0 0.00751478
+3.76126
+SA 3.7614local 3.76126
+initial t0 0.000395515
+Solution of core 1 has a score of 3.74194
+Solution of core 2 has a score of 3.54491
+Solution of core 3 has a score of 3.78717
+Solution of core 4 has a score of 3.6383
+Solution of core 5 has a score of 3.6138
+Solution of core 6 has a score of 3.75863
+Best solution:		3.54491
+Average solution:	3.68079

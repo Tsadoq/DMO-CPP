@@ -1,0 +1,56 @@
+[2020-01-12_14:40:15] -- Program not specified. Using main as default
+[2020-01-12_14:40:15] -- Program main found
+[2020-01-12_14:40:15] -- Running 4.0 parallel instances with arguments: main ['instance01', 'instance02', 'instance03', 'instance04', 'instance05', 'instance06', 'instance07', 'instance08'] 300
+alpha: [1.0, 2.0]
+mutations: [1]
+cooling: [1.0]
+[2020-01-12_14:40:15] ------ INSTANCE instance01 BEGIN ------
+[2020-01-12_14:40:15] -- Running grid search on instance instance01
+[2020-01-12_14:40:15] -- Running instance instance01
+[2020-01-12_14:40:15] -- Running instance instance01
+[2020-01-12_14:40:15] ------ INSTANCE instance02 BEGIN ------
+[2020-01-12_14:40:15] -- Running grid search on instance instance02
+[2020-01-12_14:40:15] -- Running instance instance02
+[2020-01-12_14:40:15] -- Running instance instance02
+[2020-01-12_14:40:15] ------ INSTANCE instance03 BEGIN ------
+[2020-01-12_14:40:15] -- Running grid search on instance instance03
+[2020-01-12_14:45:17] -- Running instance instance03
+[2020-01-12_14:45:17] -- Running instance instance03
+[2020-01-12_14:45:17] ------ INSTANCE instance04 BEGIN ------
+[2020-01-12_14:45:17] -- Running grid search on instance instance04
+[2020-01-12_14:45:17] -- Running instance instance04
+[2020-01-12_14:45:17] -- Running instance instance04
+[2020-01-12_14:45:17] ------ INSTANCE instance05 BEGIN ------
+[2020-01-12_14:45:17] -- Running grid search on instance instance05
+[2020-01-12_14:50:18] -- Running instance instance05
+[2020-01-12_14:50:18] -- Running instance instance05
+[2020-01-12_14:50:18] ------ INSTANCE instance06 BEGIN ------
+[2020-01-12_14:50:18] -- Running grid search on instance instance06
+[2020-01-12_14:50:18] -- Running instance instance06
+[2020-01-12_14:50:18] -- Running instance instance06
+[2020-01-12_14:50:18] ------ INSTANCE instance07 BEGIN ------
+[2020-01-12_14:50:18] -- Running grid search on instance instance07
+[2020-01-12_14:55:19] -- Running instance instance07
+[2020-01-12_14:55:19] -- Running instance instance07
+[2020-01-12_14:55:19] ------ INSTANCE instance08 BEGIN ------
+[2020-01-12_14:55:19] -- Running grid search on instance instance08
+[2020-01-12_14:55:19] -- Running instance instance08
+[2020-01-12_14:55:19] -- Running instance instance08
+[2020-01-12_15:00:23] --------- All instances are done computing
+[2020-01-12_15:00:23] --------- Parsing solutions for instance instance01
+[2020-01-12_15:00:23] -- Best solution for instance instance01: 157.214 | log_2020-01-12_14:40:15_instance_instance01_1.txt
+[2020-01-12_15:00:23] --------- Parsing solutions for instance instance02
+[2020-01-12_15:00:23] -- Best solution for instance instance02: 36.9586 | log_2020-01-12_14:40:15_instance_instance02_2.txt
+[2020-01-12_15:00:23] --------- Parsing solutions for instance instance03
+[2020-01-12_15:00:23] -- Best solution for instance instance03: 34.8471 | log_2020-01-12_14:45:17_instance_instance03_2.txt
+[2020-01-12_15:00:23] --------- Parsing solutions for instance instance04
+[2020-01-12_15:00:23] -- Best solution for instance instance04: 8.45229 | log_2020-01-12_14:45:17_instance_instance04_1.txt
+[2020-01-12_15:00:23] --------- Parsing solutions for instance instance05
+[2020-01-12_15:00:23] -- Best solution for instance instance05: 14.1363 | log_2020-01-12_14:50:18_instance_instance05_2.txt
+[2020-01-12_15:00:23] --------- Parsing solutions for instance instance06
+[2020-01-12_15:00:23] -- Best solution for instance instance06: 3.54491 | log_2020-01-12_14:50:18_instance_instance06_1.txt
+[2020-01-12_15:00:23] --------- Parsing solutions for instance instance07
+[2020-01-12_15:00:23] -- Best solution for instance instance07: 10.7751 | log_2020-01-12_14:55:19_instance_instance07_1.txt
+[2020-01-12_15:00:23] --------- Parsing solutions for instance instance08
+[2020-01-12_15:00:23] -- Best solution for instance instance08: 25.677 | log_2020-01-12_14:55:19_instance_instance08_2.txt
+[2020-01-12_15:00:23] --------- END ---------

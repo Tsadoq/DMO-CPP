@@ -28,13 +28,9 @@ def is_running():
         return 1
 
 total_instances=["instance01", "instance02", "instance03", "instance04", "instance05", "instance06", "instance07", "instance08" ]
-# def_alpha = [0.5, 10, 50, 100]
-# def_mutations = [2, 7, 12]
-# def_cooling = [0.75, 0.85, 0.9, 0.95]
-
-def_temp = [30, 40, 50, 60, 70]
-def_num_before_swap = [5, 10, 15, 20]
-def_num_max_mutations = [8, 10, 12]
+def_alpha = [0.5, 10, 50, 100]
+def_mutations = [2, 7, 12]
+def_cooling = [0.75, 0.85, 0.9, 0.95]
 
 parser = argparse.ArgumentParser(description='Grid search for hyperparameters.')
 
@@ -46,19 +42,19 @@ parser.add_argument('-t', metavar='runtime', type=int, default=180, nargs=1, des
                     help='an integer for the program run time in s. If missing, 180s (3m) will be used.')
 parser.add_argument('--clean-logs', action="store_true", default=False, dest='clean',
                     help='a flag to clean previous log files')
-parser.add_argument('--temp', metavar='temp', type=float, default=def_temp, nargs='+', dest='temp',
-                    help='a list of floats to be tried as temp values.')
-parser.add_argument('--num-before-swap', metavar='num_before_swap', type=int, default=def_num_before_swap, nargs='+', dest='num_before_swap',
+parser.add_argument('--alpha', metavar='alpha', type=float, default=def_alpha, nargs='+', dest='alpha',
+                    help='a list of floats to be tried as alpha values.')
+parser.add_argument('--mutations', metavar='mutations', type=int, default=def_mutations, nargs='+', dest='mutations',
                     help='a list of ints to be tried as number of mutations.')
-parser.add_argument('--num-max-mutations', metavar='num_max_mutations', type=float, default=def_num_max_mutations, nargs='+', dest='num_max_mutations',
-                    help='a list of floats to be tried as num_max_mutations coefficients.')
+parser.add_argument('--cooling', metavar='cooling', type=float, default=def_cooling, nargs='+', dest='cooling',
+                    help='a list of floats to be tried as cooling coefficients.')
 parser.add_argument('--shutdown', action="store_true", default=False, dest='shutdown',
                     help='a flag shutdown the machine at the end of the task (SUGGESTED FOR GOOGLE CLOUD VM)')
 
-parallel = multiprocessing.cpu_count()/4
+parallel = multiprocessing.cpu_count()/6
 
 args = parser.parse_args()
-with open("./logs/test.log", 'w') as log:
+with open("./logs/test.log", 'w+') as log:
     if isinstance(args.program_name, list):
         program = args.program_name[0]
     elif isinstance(args.program_name, str):
@@ -76,9 +72,9 @@ with open("./logs/test.log", 'w') as log:
     clean = args.clean
     shutdown = args.shutdown
 
-    temp = args.temp
-    num_before_swap = args.num_before_swap
-    num_max_mutations = args.num_max_mutations
+    alpha = args.alpha
+    mutations = args.mutations
+    cooling = args.cooling
 
 
 
@@ -108,18 +104,18 @@ with open("./logs/test.log", 'w') as log:
 
 
     # TEST VALUES
-    # temp = [0.5, 10]
+    # alpha = [0.5, 10]
     # mutations = [2, 7]
     # cooling = [0.75]
 
-    combinations = list(itertools.product(temp, num_before_swap, num_max_mutations))
+    combinations = list(itertools.product(alpha, mutations, cooling))
     i=0
 
     if not os.path.exists('logs'):
         os.makedirs('logs')
 
 
-    log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running {parallel} parallel instances with arguments: {program} {instances} {runtime}\ntemp: {temp}\nnum_before_swap: {num_before_swap}\nnum_max_mutations: {num_max_mutations}\n")
+    log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running {parallel} parallel instances with arguments: {program} {instances} {runtime}\nalpha: {alpha}\nmutations: {mutations}\ncooling: {cooling}\n")
     runs = {}
     for instance in instances:
         log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] ------ INSTANCE {instance} BEGIN ------\n")
@@ -145,20 +141,16 @@ with open("./logs/test.log", 'w') as log:
                 os.remove(filePath)
         # RUN ALL COMBINATIONS
         for comb in combinations:
-            t=comb[0]
-            swap=comb[1]
-            maxmut=comb[2]
+            a=comb[0]
+            mut=comb[1]
+            cool=comb[2]
             
             if i == parallel:
-                res = is_running()
-                while res:
-                    res = is_running()
-                    time.sleep(1)
-                    # time.sleep(runtime + 1)
+                time.sleep(runtime + 1)
                 i=0
-            filename=f"log_{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}_temp{t}_maxmut{maxmut}_swap{swap}.txt"
-            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running with temp: {t}, maxmut: {maxmut}, swap: {swap}\n")
-            os.system(f"./{program} {instance} {runtime} 4 {t} {maxmut} {swap} > logs/{instance}/{filename} &")
+            filename=f"log_{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}_instance_{instance}_{int(a)}.txt"
+            log.write(f"[{datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}] -- Running instance {instance}\n")
+            os.system(f"./{program} {instance} {runtime} 6 > logs/{instance}/{filename} &")
             if instance not in runs.keys():
                 runs[instance] = [filename]
             else: 
@@ -166,7 +158,7 @@ with open("./logs/test.log", 'w') as log:
             i+=1
 
         # WAIT FOR LAST INSTANCES TO FINISH
-        time.sleep(runtime+1)
+        #time.sleep(runtime+1)
 
     # WAIT FOR ALL INSTANCES TO FINISH SINCE TIMER DEPENDS ON INITIAL SOLUTION
     res = is_running()

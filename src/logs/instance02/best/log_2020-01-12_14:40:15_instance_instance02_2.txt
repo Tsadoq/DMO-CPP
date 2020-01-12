@@ -1,0 +1,1595 @@
+Starting
+timelimit: 300
+Number of timeslot: 21
+Number of exams: 181
+Number of students: 941
+prima
+dopo
+  Number of processors available = 24
+  Number of threads =              6
+feasibility 0
+Initial Objective Function: 51.0351
+47.0053
+SA 51.0351local 47.0053
+initial t0 11.2981
+feasibility 0
+Initial Objective Function: 52.8905
+48.6174
+SA 52.8905local 48.6174
+initial t0 11.9804
+feasibility 0
+Initial Objective Function: 51.4559
+48.9479
+SA 51.4559local 48.9479
+initial t0 7.03153
+feasibility 0
+Initial Objective Function: 53.779
+49.508
+SA 53.779local 49.508
+initial t0 11.9745
+feasibility 0
+Initial Objective Function: 53.7524
+48.916
+SA 53.7524local 48.916
+initial t0 13.5595
+feasibility 0
+Initial Objective Function: 53.0319
+47.1392
+SA 53.0319local 46.7194
+initial t0 17.698
+39.1605
+SA 39.3943local 39.1605
+initial t0 0.655482
+39.3666
+SA 40.0159local 39.3666
+initial t0 1.82045
+39.1073
+SA 39.3634local 39.1073
+initial t0 0.71805
+38.5792
+SA 38.712local 38.5792
+initial t0 0.372433
+37.9607
+SA 37.9713local 37.9607
+initial t0 0.0297946
+38.3039
+SA 39.2657local 38.3039
+initial t0 2.69641
+38.5388
+SA 38.6865local 38.5388
+initial t0 0.414145
+39.5675
+SA 40.084local 39.5675
+initial t0 1.44802
+39.0935
+SA 39.3443local 39.0935
+initial t0 0.703153
+39.1424
+SA 39.4453local 39.1424
+initial t0 0.849147
+37.2774
+SA 37.3603local 37.2774
+initial t0 0.232398
+37.6419
+SA 37.6727local 37.6419
+initial t0 0.0864044
+38.3061
+SA 38.4102local 38.3061
+initial t0 0.291987
+38.5345
+SA 38.6684local 38.5345
+initial t0 0.375412
+39.0776
+SA 39.0871local 39.0776
+initial t0 0.0268152
+38.4336
+SA 38.4718local 38.4336
+initial t0 0.107261
+38.7864
+SA 39.339local 38.7864
+initial t0 1.54932
+39.6663
+SA 40.237local 39.6663
+initial t0 1.59997
+38.204
+SA 38.204local 38.204
+initial t0 0
+38.4336
+SA 38.7662local 38.4336
+initial t0 0.932572
+40.2933
+SA 40.4495local 40.2933
+initial t0 0.437981
+38.1764
+SA 38.3167local 38.1764
+initial t0 0.393289
+37.7896
+SA 37.8151local 37.7896
+initial t0 0.0715071
+39.0446
+SA 39.0893local 39.0446
+initial t0 0.125137
+38.932
+SA 39.6079local 38.932
+initial t0 1.89494
+37.6461
+SA 37.932local 37.6461
+initial t0 0.801475
+38.9926
+SA 38.9926local 38.9926
+initial t0 0
+39.5824
+SA 39.7311local 39.5824
+initial t0 0.417125
+39.1637
+SA 39.3507local 39.1637
+initial t0 0.524385
+39.6472
+SA 39.8565local 39.6472
+initial t0 0.586954
+38.9522
+SA 39.2221local 38.9522
+initial t0 0.756783
+38.7715
+SA 39.0553local 38.7715
+initial t0 0.795516
+39.4899
+SA 39.6036local 39.4899
+initial t0 0.318802
+40.7056
+SA 40.7492local 40.7056
+initial t0 0.122158
+37.4803
+SA 37.56local 37.4803
+initial t0 0.22346
+39.6482
+SA 39.8491local 39.6482
+initial t0 0.563118
+37.4601
+SA 37.508local 37.4601
+initial t0 0.134076
+38.6196
+SA 38.6196local 38.6196
+initial t0 0
+38.6451
+SA 39.2009local 38.6451
+initial t0 1.55826
+39.7503
+SA 39.7503local 39.7503
+initial t0 0
+38.3698
+SA 38.4155local 38.3698
+initial t0 0.128117
+39.0266
+SA 39.7609local 39.0266
+initial t0 2.05881
+38.9915
+SA 39.0181local 38.9915
+initial t0 0.0744865
+38.8948
+SA 39.3507local 38.8948
+initial t0 1.27819
+38.9724
+SA 38.9947local 38.9724
+initial t0 0.0625687
+38.8874
+SA 38.9044local 38.8874
+initial t0 0.0476714
+38.1583
+SA 38.3719local 38.1583
+initial t0 0.598872
+39.1828
+SA 39.3401local 39.1828
+initial t0 0.44096
+38.7673
+SA 38.9044local 38.7673
+initial t0 0.384351
+38.237
+SA 38.3231local 38.237
+initial t0 0.241336
+39.1477
+SA 39.2593local 39.1477
+initial t0 0.312843
+37.8077
+SA 38.1838local 37.8077
+initial t0 1.05473
+38.4102
+SA 38.4803local 38.4102
+initial t0 0.196644
+37.8077
+SA 37.8077local 37.8077
+initial t0 0
+39.1073
+SA 39.118local 39.1073
+initial t0 0.0297946
+38.492
+SA 38.559local 38.492
+initial t0 0.187706
+37.4857
+SA 37.5739local 37.4857
+initial t0 0.247295
+38.593
+SA 39.0159local 38.593
+initial t0 1.18583
+38.0329
+SA 38.4145local 38.0329
+initial t0 1.06963
+37.7109
+SA 37.9734local 37.7109
+initial t0 0.735927
+38.4984
+SA 38.5845local 38.4984
+initial t0 0.241336
+37.559
+SA 37.8757local 37.559
+initial t0 0.88788
+38.6525
+SA 39.2604local 38.6525
+initial t0 1.70425
+39.3039
+SA 39.4431local 39.3039
+initial t0 0.39031
+37.5186
+SA 37.5367local 37.5186
+initial t0 0.0506509
+38.7078
+SA 38.8215local 38.7078
+initial t0 0.318802
+40.2327
+SA 40.2359local 40.2327
+initial t0 0.00893839
+40.3698
+SA 40.4857local 40.3698
+initial t0 0.324761
+37.5919
+SA 37.5919local 37.5919
+initial t0 0
+38.3741
+SA 38.458local 38.3741
+initial t0 0.235377
+39.6259
+SA 39.7333local 39.6259
+initial t0 0.300926
+38.3688
+SA 38.3762local 38.3688
+initial t0 0.0208562
+40.3146
+SA 40.4942local 40.3146
+initial t0 0.503529
+38.3858
+SA 39.1371local 38.3858
+initial t0 2.10648
+39.457
+SA 39.6759local 39.457
+initial t0 0.613769
+38.4113
+SA 38.5133local 38.4113
+initial t0 0.286028
+38.4038
+SA 38.6068local 38.4038
+initial t0 0.569077
+40.0627
+SA 40.3305local 40.0627
+initial t0 0.750824
+37.3964
+SA 37.7428local 37.3964
+initial t0 0.971305
+37.9044
+SA 38.1881local 37.9044
+initial t0 0.795516
+39.6525
+SA 39.847local 39.6525
+initial t0 0.545242
+37.6334
+SA 37.8257local 37.6334
+initial t0 0.539283
+38.6525
+SA 38.7917local 38.6525
+initial t0 0.39031
+39.6174
+SA 39.6174local 39.6174
+initial t0 0
+38.6557
+SA 39.0659local 38.6557
+initial t0 1.15007
+37.4857
+SA 37.4857local 37.4857
+initial t0 0
+40.2572
+SA 40.2582local 40.2572
+initial t0 0.00297946
+39.8948
+SA 39.8948local 39.8948
+initial t0 0
+38.5239
+SA 38.5739local 38.5239
+initial t0 0.140035
+37.39
+SA 37.3921local 37.39
+initial t0 0.00595892
+37.9745
+SA 38.0712local 37.9745
+initial t0 0.271131
+37.39
+SA 37.4155local 37.39
+initial t0 0.0715071
+40.3656
+SA 40.3751local 40.3656
+initial t0 0.0268152
+38.3422
+SA 38.5473local 38.3422
+initial t0 0.575036
+38.5898
+SA 38.6695local 38.5898
+initial t0 0.22346
+38.0584
+SA 38.0967local 38.0584
+initial t0 0.107261
+37.7333
+SA 37.9118local 37.7333
+initial t0 0.50055
+39.4612
+SA 39.5005local 39.4612
+initial t0 0.11024
+38.0818
+SA 38.0818local 38.0818
+initial t0 0
+40.0733
+SA 40.1371local 40.0733
+initial t0 0.178768
+37.9851
+SA 38.0021local 37.9851
+initial t0 0.0476714
+37.7237
+SA 38.0159local 37.7237
+initial t0 0.819352
+40.0755
+SA 40.0765local 40.0755
+initial t0 0.00297946
+37.423
+SA 37.4251local 37.423
+initial t0 0.00595892
+38.3082
+SA 38.5824local 38.3082
+initial t0 0.768701
+40.3305
+SA 40.3464local 40.3305
+initial t0 0.0446919
+37.6695
+SA 37.9309local 37.6695
+initial t0 0.732948
+37.5664
+SA 37.9022local 37.5664
+initial t0 0.94151
+37.6684
+SA 37.6684local 37.6684
+initial t0 0
+37.6684
+SA 37.7726local 37.6684
+initial t0 0.291987
+37.3411
+SA 37.3411local 37.3411
+initial t0 0
+37.848
+SA 37.9607local 37.848
+initial t0 0.315823
+38.3337
+SA 38.6026local 38.3337
+initial t0 0.753804
+38.2147
+SA 38.6153local 38.2147
+initial t0 1.12326
+37.5919
+SA 37.6397local 37.5919
+initial t0 0.134076
+38.0829
+SA 38.0829local 38.0829
+initial t0 0
+38.1711
+SA 38.4995local 38.1711
+initial t0 0.920654
+38.1796
+SA 38.2604local 38.1796
+initial t0 0.226439
+39.9947
+SA 40.0298local 39.9947
+initial t0 0.0983222
+38.4166
+SA 38.6089local 38.4166
+initial t0 0.539283
+37.4899
+SA 37.4899local 37.4899
+initial t0 0
+37.9989
+SA 38.1445local 37.9989
+initial t0 0.408186
+37.1796
+SA 37.1934local 37.1796
+initial t0 0.038733
+37.6759
+SA 38.0159local 37.6759
+initial t0 0.953428
+39.8852
+SA 39.9437local 39.8852
+initial t0 0.16387
+38.0128
+SA 38.0298local 38.0128
+initial t0 0.0476714
+38.1403
+SA 38.4548local 38.1403
+initial t0 0.881921
+37.1796
+SA 37.8714local 37.1796
+initial t0 1.93963
+37.6408
+SA 37.644local 37.6408
+initial t0 0.00893839
+38.034
+SA 38.1382local 38.034
+initial t0 0.291987
+37.3603
+SA 37.6355local 37.3603
+initial t0 0.771681
+40.3262
+SA 40.3411local 40.3262
+initial t0 0.0417125
+38.1318
+SA 38.3422local 38.1318
+initial t0 0.589933
+37.7609
+SA 37.8172local 37.7609
+initial t0 0.157911
+40.0106
+SA 40.2519local 40.0106
+initial t0 0.676338
+37.7269
+SA 38.2561local 37.7269
+initial t0 1.48377
+37.5133
+SA 37.5569local 37.5133
+initial t0 0.122158
+37.3018
+SA 37.3018local 37.3018
+initial t0 0
+38.7439
+SA 38.8438local 38.7439
+initial t0 0.280069
+38.5313
+SA 38.6366local 38.5313
+initial t0 0.294967
+37.5399
+SA 37.5399local 37.5399
+initial t0 0
+39.2253
+SA 39.2253local 39.2253
+initial t0 0
+40.2763
+SA 40.2763local 40.2763
+initial t0 0
+38.4176
+SA 38.4176local 38.4176
+initial t0 0
+37.6982
+SA 37.9075local 37.6982
+initial t0 0.586954
+40.2933
+SA 40.7056local 40.2933
+initial t0 1.15603
+38.0244
+SA 38.0404local 38.0244
+initial t0 0.0446919
+39.2976
+SA 39.3039local 39.2976
+initial t0 0.0178768
+38.7566
+SA 38.8023local 38.7566
+initial t0 0.128117
+38.2604
+SA 38.4516local 38.2604
+initial t0 0.536303
+38.0606
+SA 38.2019local 38.0606
+initial t0 0.396268
+37.9713
+SA 37.9756local 37.9713
+initial t0 0.0119178
+40.3433
+SA 40.3433local 40.3433
+initial t0 0
+38.0595
+SA 38.4984local 38.0595
+initial t0 1.23052
+40.3433
+SA 40.3433local 40.3433
+initial t0 0
+38.1562
+SA 38.6472local 38.1562
+initial t0 1.37651
+37.2327
+SA 37.2327local 37.2327
+initial t0 0
+37.8937
+SA 37.8969local 37.8937
+initial t0 0.00893839
+37.9724
+SA 37.983local 37.9724
+initial t0 0.0297946
+37.0064
+SA 37.1286local 37.0064
+initial t0 0.342638
+37.8937
+SA 37.8937local 37.8937
+initial t0 0
+37.4251
+SA 37.8576local 37.4251
+initial t0 1.21264
+38.0903
+SA 38.1318local 38.0903
+initial t0 0.116199
+38.6047
+SA 38.6823local 38.6047
+initial t0 0.217501
+38.4028
+SA 38.6663local 38.4028
+initial t0 0.738907
+40.3433
+SA 40.3433local 40.3433
+initial t0 0
+37.475
+SA 37.6302local 37.475
+initial t0 0.435001
+39.3613
+SA 39.6036local 39.3613
+initial t0 0.679317
+38.2359
+SA 38.2359local 38.2359
+initial t0 0
+38.5356
+SA 38.5356local 38.5356
+initial t0 0
+39.6823
+SA 39.8332local 39.6823
+initial t0 0.423084
+39.7386
+SA 39.797local 39.7386
+initial t0 0.16387
+37.8959
+SA 37.8959local 37.8959
+initial t0 0
+39.7237
+SA 39.779local 39.7237
+initial t0 0.154932
+38.779
+SA 38.9586local 38.779
+initial t0 0.503529
+38.9373
+SA 38.9586local 38.9373
+initial t0 0.0595892
+40.3252
+SA 40.3252local 40.3252
+initial t0 0
+40.6748
+SA 40.7885local 40.6748
+initial t0 0.318802
+38.3921
+SA 38.6971local 38.3921
+initial t0 0.855106
+37.9384
+SA 37.9384local 37.9384
+initial t0 0
+38.3549
+SA 38.3549local 38.3549
+initial t0 0
+38.2497
+SA 38.4431local 38.2497
+initial t0 0.542262
+40.0691
+SA 40.3443local 40.0691
+initial t0 0.771681
+39.5919
+SA 39.6004local 39.5919
+initial t0 0.0238357
+37.3889
+SA 37.4017local 37.3889
+initial t0 0.0357535
+40.5154
+SA 40.5675local 40.5154
+initial t0 0.145994
+37.915
+SA 37.9288local 37.915
+initial t0 0.038733
+37.3889
+SA 37.3974local 37.3889
+initial t0 0.0238357
+37.915
+SA 37.915local 37.915
+initial t0 0
+40.0404
+SA 40.1881local 40.0404
+initial t0 0.414145
+37.3889
+SA 37.7779local 37.3889
+initial t0 1.09048
+39.5792
+SA 39.5877local 39.5792
+initial t0 0.0238357
+40.5069
+SA 40.6206local 40.5069
+initial t0 0.318802
+40.0786
+SA 40.0956local 40.0786
+initial t0 0.0476714
+38.6812
+SA 38.7141local 38.6812
+initial t0 0.0923633
+37.3889
+SA 37.3889local 37.3889
+initial t0 0
+38.2827
+SA 38.2837local 38.2827
+initial t0 0.00297946
+40.0414
+SA 40.0414local 40.0414
+initial t0 0
+38.6621
+SA 38.7301local 38.6621
+initial t0 0.190686
+38.9001
+SA 38.9001local 38.9001
+initial t0 0
+40.0085
+SA 40.169local 40.0085
+initial t0 0.449899
+37.746
+SA 37.746local 37.746
+initial t0 0
+40.1445
+SA 40.237local 40.1445
+initial t0 0.259213
+40.2104
+SA 40.3029local 40.2104
+initial t0 0.259213
+37.745
+SA 37.7991local 37.745
+initial t0 0.151953
+38.2232
+SA 38.2497local 38.2232
+initial t0 0.0744865
+40.135
+SA 40.1403local 40.135
+initial t0 0.0148973
+40.0021
+SA 40.3209local 40.0021
+initial t0 0.893839
+37.746
+SA 37.7577local 37.746
+initial t0 0.0327741
+38.0319
+SA 38.1785local 38.0319
+initial t0 0.411166
+40.9479
+SA 41.152local 40.9479
+initial t0 0.572057
+38.0053
+SA 38.0308local 38.0053
+initial t0 0.0715071
+39.7747
+SA 39.9054local 39.7747
+initial t0 0.366474
+37.746
+SA 37.8278local 37.746
+initial t0 0.229419
+38.3156
+SA 38.3305local 38.3156
+initial t0 0.0417125
+40.5994
+SA 40.5994local 40.5994
+initial t0 0
+38.3943
+SA 38.4857local 38.3943
+initial t0 0.256234
+41.0223
+SA 41.0999local 41.0223
+initial t0 0.217501
+38.9681
+SA 39.0181local 38.9681
+initial t0 0.140035
+38.6493
+SA 38.6652local 38.6493
+initial t0 0.0446919
+37.6089
+SA 37.6185local 37.6089
+initial t0 0.0268152
+40.8491
+SA 40.8533local 40.8491
+initial t0 0.0119178
+37.9894
+SA 37.9894local 37.9894
+initial t0 0
+39.1296
+SA 39.1371local 39.1296
+initial t0 0.0208562
+37.9894
+SA 38.0925local 37.9894
+initial t0 0.289008
+37.7141
+SA 37.7694local 37.7141
+initial t0 0.154932
+40.1424
+SA 40.2189local 40.1424
+initial t0 0.214521
+38.2837
+SA 38.4527local 38.2837
+initial t0 0.473734
+39.9979
+SA 40.0967local 39.9979
+initial t0 0.27709
+39.8225
+SA 39.8767local 39.8225
+initial t0 0.151953
+38.4453
+SA 38.6015local 38.4453
+initial t0 0.437981
+37.3826
+SA 37.6865local 37.3826
+initial t0 0.852126
+37.3836
+SA 37.3836local 37.3836
+initial t0 0
+38.5409
+SA 38.6738local 38.5409
+initial t0 0.372433
+40.3656
+SA 40.3656local 40.3656
+initial t0 0
+38.6727
+SA 39.0755local 38.6727
+initial t0 1.12922
+39.0978
+SA 39.4346local 39.0978
+initial t0 0.944489
+39.779
+SA 39.7811local 39.779
+initial t0 0.00595892
+37.4453
+SA 37.7311local 37.4453
+initial t0 0.801475
+38.1828
+SA 38.4931local 38.1828
+initial t0 0.870003
+40.3688
+SA 40.4187local 40.3688
+initial t0 0.140035
+40.746
+SA 40.7662local 40.746
+initial t0 0.0566098
+37.2136
+SA 37.3039local 37.2136
+initial t0 0.253254
+38.8332
+SA 38.8332local 38.8332
+initial t0 0
+38.406
+SA 38.5569local 38.406
+initial t0 0.423084
+37.2136
+SA 37.2136local 37.2136
+initial t0 0
+40.5919
+SA 40.7736local 40.5919
+initial t0 0.509488
+38.7375
+SA 38.9129local 38.7375
+initial t0 0.491611
+40.3688
+SA 40.4219local 40.3688
+initial t0 0.148973
+38.3996
+SA 38.4942local 38.3996
+initial t0 0.265172
+37.1488
+SA 37.4463local 37.1488
+initial t0 0.834249
+40.3422
+SA 40.4283local 40.3422
+initial t0 0.241336
+38.7906
+SA 39.0627local 38.7906
+initial t0 0.762742
+38.2179
+SA 38.3656local 38.2179
+initial t0 0.414145
+38.5069
+SA 38.5165local 38.5069
+initial t0 0.0268152
+37.1488
+SA 37.152local 37.1488
+initial t0 0.00893839
+38.3911
+SA 38.5292local 38.3911
+initial t0 0.38733
+40.4963
+SA 40.7651local 40.4963
+initial t0 0.753804
+38.1296
+SA 38.1296local 38.1296
+initial t0 0
+40.4655
+SA 40.4655local 40.4655
+initial t0 0
+38.7535
+SA 38.8385local 38.7535
+initial t0 0.238357
+38.1296
+SA 38.1615local 38.1296
+initial t0 0.0893839
+41.5813
+SA 41.593local 41.5813
+initial t0 0.0327741
+37.1488
+SA 37.1488local 37.1488
+initial t0 0
+38.1148
+SA 38.1296local 38.1148
+initial t0 0.0417125
+38.6961
+SA 38.6961local 38.6961
+initial t0 0
+40.4113
+SA 40.5675local 40.4113
+initial t0 0.437981
+38.3018
+SA 38.3539local 38.3018
+initial t0 0.145994
+37.1488
+SA 37.1488local 37.1488
+initial t0 0
+40.458
+SA 40.4772local 40.458
+initial t0 0.0536303
+38.0882
+SA 38.0882local 38.0882
+initial t0 0
+38.8406
+SA 38.9501local 38.8406
+initial t0 0.306885
+38.6961
+SA 38.7088local 38.6961
+initial t0 0.0357535
+40.2646
+SA 40.322local 40.2646
+initial t0 0.160891
+37.1753
+SA 37.3486local 37.1753
+initial t0 0.485652
+36.9947
+SA 37.4102local 36.9947
+initial t0 1.16497
+38.7439
+SA 38.8693local 38.7439
+initial t0 0.351576
+38.2869
+SA 38.5962local 38.2869
+initial t0 0.867023
+40.458
+SA 40.458local 40.458
+initial t0 0
+38.7928
+SA 38.8236local 38.7928
+initial t0 0.0864044
+39.4198
+SA 40.6153local 39.4198
+initial t0 3.35189
+36.9957
+SA 37.0648local 36.9957
+initial t0 0.193665
+38.6982
+SA 38.7109local 38.6982
+initial t0 0.0357535
+38.8215
+SA 38.8215local 38.8215
+initial t0 0
+39.4198
+SA 39.4198local 39.4198
+initial t0 0
+36.9936
+SA 36.9936local 36.9936
+initial t0 0
+38.3539
+SA 38.3539local 38.3539
+initial t0 0
+38.7694
+SA 38.966local 38.7694
+initial t0 0.5512
+38.4474
+SA 38.6142local 38.4474
+initial t0 0.467776
+40.2168
+SA 40.3666local 40.2168
+initial t0 0.420104
+39.3475
+SA 39.3507local 39.3475
+initial t0 0.00893839
+37.0255
+SA 37.0255local 37.0255
+initial t0 0
+38.3348
+SA 38.3348local 38.3348
+initial t0 0
+38.3688
+SA 38.4442local 38.3688
+initial t0 0.211542
+36.9936
+SA 37.1095local 36.9936
+initial t0 0.324761
+38.3751
+SA 38.3751local 38.3751
+initial t0 0
+39.6578
+SA 39.8852local 39.6578
+initial t0 0.637605
+38.2731
+SA 38.2731local 38.2731
+initial t0 0
+40.0393
+SA 40.1945local 40.0393
+initial t0 0.435001
+38.7694
+SA 38.8098local 38.7694
+initial t0 0.11322
+36.9936
+SA 37.0723local 36.9936
+initial t0 0.22048
+36.9936
+SA 36.9936local 36.9936
+initial t0 0
+39.4049
+SA 39.4134local 39.4049
+initial t0 0.0238357
+38.2359
+SA 38.2572local 38.2359
+initial t0 0.0595892
+38.762
+SA 38.7673local 38.762
+initial t0 0.0148973
+38.407
+SA 38.5505local 38.407
+initial t0 0.402227
+39.3496
+SA 39.4123local 39.3496
+initial t0 0.175788
+37.0351
+SA 37.2306local 37.0351
+initial t0 0.548221
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+38.3773
+SA 38.3773local 38.3773
+initial t0 0
+39.3103
+SA 39.3103local 39.3103
+initial t0 0
+38.762
+SA 38.762local 38.762
+initial t0 0
+37.9129
+SA 37.9734local 37.9129
+initial t0 0.169829
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+37.0351
+SA 37.0351local 37.0351
+initial t0 0
+38.695
+SA 38.9362local 38.695
+initial t0 0.676338
+38.2189
+SA 38.2349local 38.2189
+initial t0 0.0446919
+39.3103
+SA 39.3103local 39.3103
+initial t0 0
+38.0404
+SA 38.0436local 38.0404
+initial t0 0.00893839
+37.0351
+SA 37.0531local 37.0351
+initial t0 0.0506509
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+37.8459
+SA 38.2189local 37.8459
+initial t0 1.04579
+37.0351
+SA 37.0553local 37.0351
+initial t0 0.0566098
+38.1552
+SA 38.1838local 38.1552
+initial t0 0.0804455
+39.0829
+SA 39.0829local 39.0829
+initial t0 0
+39.3124
+SA 39.3634local 39.3124
+initial t0 0.143014
+38.1647
+SA 38.3156local 38.1647
+initial t0 0.423084
+39.0584
+SA 39.0638local 39.0584
+initial t0 0.0148973
+37.0351
+SA 37.0531local 37.0351
+initial t0 0.0506509
+40.2625
+SA 40.9341local 40.2625
+initial t0 1.88302
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+38.1647
+SA 38.1647local 38.1647
+initial t0 0
+39.0797
+SA 39.1753local 39.0797
+initial t0 0.268152
+37.0351
+SA 37.3773local 37.0351
+initial t0 0.959387
+38.0861
+SA 38.0903local 38.0861
+initial t0 0.0119178
+40.2625
+SA 40.2625local 40.2625
+initial t0 0
+38.2264
+SA 38.4134local 38.2264
+initial t0 0.524385
+39.0999
+SA 39.1679local 39.0999
+initial t0 0.190686
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+38.187
+SA 38.2157local 38.187
+initial t0 0.0804455
+37.0351
+SA 37.068local 37.0351
+initial t0 0.0923633
+38.187
+SA 38.187local 38.187
+initial t0 0
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+39.1562
+SA 39.1626local 39.1562
+initial t0 0.0178768
+39.2954
+SA 39.3061local 39.2954
+initial t0 0.0297946
+36.9692
+SA 36.9702local 36.9692
+initial t0 0.00297946
+39.5909
+SA 39.6291local 39.5909
+initial t0 0.107261
+36.9894
+SA 37.0882local 36.9894
+initial t0 0.27709
+39.2954
+SA 39.2954local 39.2954
+initial t0 0
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+38.7439
+SA 38.8725local 38.7439
+initial t0 0.360515
+37.9628
+SA 38.255local 37.9628
+initial t0 0.819352
+39.3305
+SA 39.6259local 39.3305
+initial t0 0.82829
+38.915
+SA 38.915local 38.915
+initial t0 0
+36.9894
+SA 37.0064local 36.9894
+initial t0 0.0476714
+38.6663
+SA 38.6684local 38.6663
+initial t0 0.00595892
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+38.6801
+SA 38.6801local 38.6801
+initial t0 0
+36.9894
+SA 36.9894local 36.9894
+initial t0 0
+39.2976
+SA 39.3114local 39.2976
+initial t0 0.038733
+38.7598
+SA 38.7598local 38.7598
+initial t0 0
+38.0425
+SA 38.0425local 38.0425
+initial t0 0
+36.9894
+SA 37.1923local 36.9894
+initial t0 0.569077
+39.0712
+SA 39.1222local 39.0712
+initial t0 0.143014
+39.2784
+SA 39.3284local 39.2784
+initial t0 0.140035
+39.3719
+SA 39.3719local 39.3719
+initial t0 0
+38.2976
+SA 38.322local 38.2976
+initial t0 0.0685276
+36.9894
+SA 36.9894local 36.9894
+initial t0 0
+38.3209
+SA 38.3209local 38.3209
+initial t0 0
+39.0234
+SA 39.0244local 39.0234
+initial t0 0.00297946
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+39.2976
+SA 39.2976local 39.2976
+initial t0 0
+38.0372
+SA 38.0638local 38.0372
+initial t0 0.0744865
+39.3507
+SA 39.4028local 39.3507
+initial t0 0.145994
+38.8576
+SA 38.9787local 38.8576
+initial t0 0.339659
+38.0372
+SA 38.0372local 38.0372
+initial t0 0
+36.9894
+SA 36.9894local 36.9894
+initial t0 0
+39.2338
+SA 39.2338local 39.2338
+initial t0 0
+37.1488
+SA 37.2667local 37.1488
+initial t0 0.33072
+38.084
+SA 38.084local 38.084
+initial t0 0
+39.2784
+SA 39.2784local 39.2784
+initial t0 0
+38.8852
+SA 38.898local 38.8852
+initial t0 0.0357535
+39.2338
+SA 39.2338local 39.2338
+initial t0 0
+39.0967
+SA 39.1296local 39.0967
+initial t0 0.0923633
+38.084
+SA 38.084local 38.084
+initial t0 0
+36.9894
+SA 36.9979local 36.9894
+initial t0 0.0238357
+39.5101
+SA 39.559local 39.5101
+initial t0 0.137055
+38.8587
+SA 38.9373local 38.8587
+initial t0 0.22048
+39.2338
+SA 39.2476local 39.2338
+initial t0 0.038733
+38.084
+SA 38.084local 38.084
+initial t0 0
+39.4995
+SA 39.5877local 39.4995
+initial t0 0.247295
+36.9894
+SA 37.0021local 36.9894
+initial t0 0.0357535
+38.8215
+SA 38.8215local 38.8215
+initial t0 0
+39.17
+SA 39.4176local 39.17
+initial t0 0.694215
+36.9894
+SA 36.9894local 36.9894
+initial t0 0
+39.2338
+SA 39.2338local 39.2338
+initial t0 0
+39.2944
+SA 39.3889local 39.2944
+initial t0 0.265172
+39.7088
+SA 40.2434local 39.7088
+initial t0 1.49867
+38.8438
+SA 38.9075local 38.8438
+initial t0 0.178768
+38.084
+SA 38.084local 38.084
+initial t0 0
+39.5558
+SA 39.5569local 39.5558
+initial t0 0.00297946
+38.8438
+SA 38.8438local 38.8438
+initial t0 0
+36.9894
+SA 37.0021local 36.9894
+initial t0 0.0357535
+39.186
+SA 39.186local 39.186
+initial t0 0
+38.084
+SA 38.084local 38.084
+initial t0 0
+39.2338
+SA 39.3114local 39.2338
+initial t0 0.217501
+38.084
+SA 38.084local 38.084
+initial t0 0
+38.9362
+SA 39.1998local 38.9362
+initial t0 0.738907
+38.6334
+SA 38.6408local 38.6334
+initial t0 0.0208562
+37.0871
+SA 37.2391local 37.0871
+initial t0 0.426063
+39.2338
+SA 39.2476local 39.2338
+initial t0 0.038733
+39.9065
+SA 39.9139local 39.9065
+initial t0 0.0208562
+38.9362
+SA 38.9362local 38.9362
+initial t0 0
+38.084
+SA 38.0882local 38.084
+initial t0 0.0119178
+39.2487
+SA 39.2657local 39.2487
+initial t0 0.0476714
+38.5165
+SA 38.5207local 38.5165
+initial t0 0.0119178
+39.2338
+SA 39.2338local 39.2338
+initial t0 0
+37.1498
+SA 37.2731local 37.1498
+initial t0 0.345618
+38.084
+SA 38.0882local 38.084
+initial t0 0.0119178
+36.9894
+SA 36.9894local 36.9894
+initial t0 0
+39.2487
+SA 39.2487local 39.2487
+initial t0 0
+38.7237
+SA 38.9384local 38.7237
+initial t0 0.601851
+38.5165
+SA 38.526local 38.5165
+initial t0 0.0268152
+39.2359
+SA 39.2359local 39.2359
+initial t0 0
+38.5569
+SA 38.56local 38.5569
+initial t0 0.00893839
+36.9894
+SA 36.9894local 36.9894
+initial t0 0
+39.0797
+SA 39.1498local 39.0797
+initial t0 0.196644
+39.2359
+SA 39.2359local 39.2359
+initial t0 0
+38.4304
+SA 38.7386local 38.4304
+initial t0 0.864044
+38.084
+SA 38.0999local 38.084
+initial t0 0.0446919
+38.4293
+SA 38.4293local 38.4293
+initial t0 0
+38.8884
+SA 39.0021local 38.8884
+initial t0 0.318802
+38.084
+SA 38.084local 38.084
+initial t0 0
+38.5558
+SA 38.5962local 38.5558
+initial t0 0.11322
+36.9586
+SA 36.9586local 36.9586
+initial t0 0
+39.2359
+SA 39.2359local 39.2359
+initial t0 0
+38.8916
+SA 38.8959local 38.8916
+initial t0 0.0119178
+36.9586
+SA 36.9596local 36.9586
+initial t0 0.00297946
+38.8533
+SA 38.932local 38.8533
+initial t0 0.22048
+38.084
+SA 38.084local 38.084
+initial t0 0
+39.2338
+SA 39.2508local 39.2338
+initial t0 0.0476714
+38.492
+SA 38.5303local 38.492
+initial t0 0.107261
+38.5303
+SA 38.5356local 38.5303
+initial t0 0.0148973
+38.4155
+SA 38.4187local 38.4155
+initial t0 0.00893839
+36.9586
+SA 36.9724local 36.9586
+initial t0 0.038733
+38.6599
+SA 38.7205local 38.6599
+initial t0 0.169829
+39.2625
+SA 39.2625local 39.2625
+initial t0 0
+38.9766
+SA 38.9766local 38.9766
+initial t0 0
+36.9586
+SA 36.9713local 36.9586
+initial t0 0.0357535
+38.9766
+SA 38.9766local 38.9766
+initial t0 0
+40.203
+SA 40.204local 40.203
+initial t0 0.00297946
+38.084
+SA 38.084local 38.084
+initial t0 0
+38.6599
+SA 38.7141local 38.6599
+initial t0 0.151953
+38.6004
+SA 38.6004local 38.6004
+initial t0 0
+39.0755
+SA 39.17local 39.0755
+initial t0 0.265172
+38.9766
+SA 38.9766local 38.9766
+initial t0 0
+38.1126
+SA 38.1126local 38.1126
+initial t0 0
+36.9586
+SA 36.9586local 36.9586
+initial t0 0
+39.2625
+SA 39.2721local 39.2625
+initial t0 0.0268152
+38.5484
+SA 38.5484local 38.5484
+initial t0 0
+38.5165
+SA 38.5165local 38.5165
+initial t0 0
+38.1126
+SA 38.1169local 38.1126
+initial t0 0.0119178
+39.2423
+SA 39.2423local 39.2423
+initial t0 0
+39.1211
+SA 39.1594local 39.1211
+initial t0 0.107261
+37.0128
+SA 37.0128local 37.0128
+initial t0 0
+36.9586
+SA 36.9586local 36.9586
+initial t0 0
+39.0128
+SA 39.0202local 39.0128
+initial t0 0.0208562
+38.5484
+SA 38.6355local 38.5484
+initial t0 0.244316
+38.5484
+SA 38.5484local 38.5484
+initial t0 0
+39.2232
+SA 39.2232local 39.2232
+initial t0 0
+38.1126
+SA 38.1286local 38.1126
+initial t0 0.0446919
+38.5324
+SA 38.5802local 38.5324
+initial t0 0.134076
+38.9681
+SA 38.9947local 38.9681
+initial t0 0.0744865
+36.9586
+SA 36.9586local 36.9586
+initial t0 0
+38.1126
+SA 38.1445local 38.1126
+initial t0 0.0893839
+39.7003
+SA 39.7014local 39.7003
+initial t0 0.00297946
+38.5218
+SA 38.5218local 38.5218
+initial t0 0
+39.2232
+SA 39.4761local 39.2232
+initial t0 0.709112
+38.6514
+SA 38.695local 38.6514
+initial t0 0.122158
+38.9681
+SA 38.9756local 38.9681
+initial t0 0.0208562
+38.1126
+SA 38.1126local 38.1126
+initial t0 0
+36.9586
+SA 37.1445local 36.9586
+initial t0 0.521406
+38.5165
+SA 38.5462local 38.5165
+initial t0 0.0834249
+39.2232
+SA 39.2232local 39.2232
+initial t0 0
+36.9586
+SA 36.9586local 36.9586
+initial t0 0
+38.1126
+SA 38.1126local 38.1126
+initial t0 0
+38.5972
+SA 38.9256local 38.5972
+initial t0 0.920654
+38.9586
+SA 38.9713local 38.9586
+initial t0 0.0357535
+38.5324
+SA 38.5324local 38.5324
+initial t0 0
+38.5165
+SA 38.5165local 38.5165
+initial t0 0
+39.2232
+SA 39.2232local 39.2232
+initial t0 0
+38.5324
+SA 38.5324local 38.5324
+initial t0 0
+38.9639
+SA 39.0213local 38.9639
+initial t0 0.160891
+37.6663
+SA 37.6801local 37.6663
+initial t0 0.038733
+38.084
+SA 38.0871local 38.084
+initial t0 0.00893839
+38.5165
+SA 38.5165local 38.5165
+initial t0 0
+39.0011
+SA 39.034local 39.0011
+initial t0 0.0923633
+39.221
+SA 39.2349local 39.221
+initial t0 0.038733
+38.9724
+SA 39.0181local 38.9724
+initial t0 0.128117
+38.0478
+SA 38.0553local 38.0478
+initial t0 0.0208562
+36.9586
+SA 36.9586local 36.9586
+initial t0 0
+38.0478
+SA 38.0478local 38.0478
+initial t0 0
+38.9586
+SA 39.0319local 38.9586
+initial t0 0.205583
+38.7694
+SA 38.7779local 38.7694
+initial t0 0.0238357
+39.221
+SA 39.3092local 39.221
+initial t0 0.247295
+37.0404
+SA 37.0404local 37.0404
+initial t0 0
+38.4453
+SA 38.4453local 38.4453
+initial t0 0
+39.0404
+SA 39.0404local 39.0404
+initial t0 0
+38.9586
+SA 38.9586local 38.9586
+initial t0 0
+38.0478
+SA 38.0478local 38.0478
+initial t0 0
+38.5324
+SA 38.5324local 38.5324
+initial t0 0
+38.7821
+SA 38.7821local 38.7821
+initial t0 0
+37.8672
+SA 37.8927local 37.8672
+initial t0 0.0715071
+37.8672
+SA 37.8672local 37.8672
+initial t0 0
+39.0404
+SA 39.0404local 39.0404
+initial t0 0
+Solution of core 1 has a score of 37.0871
+Solution of core 2 has a score of 37.2774
+Solution of core 3 has a score of 38.8034
+Solution of core 4 has a score of 38.0542
+Solution of core 5 has a score of 38.3061
+Solution of core 6 has a score of 36.9586
+Best solution:		36.9586
+Average solution:	37.7478
