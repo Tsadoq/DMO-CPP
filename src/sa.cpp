@@ -85,11 +85,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     Solution * best_solution=solution->copy_solution();
 
     //-------------------------SCRITTURA SU FILE
-  
-    /*std::string file_out="temperaturaVALE1";
-    std::ofstream output_file;
-    output_file.open(file_out);*/
-    
+      
     int iter=0;
     obj_SA=obj_local;
     
@@ -142,13 +138,11 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
                 }
             }
         }
-        //std::cout<<"Attenzioneeeeeeeeeeee:"<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
 
         //----------------------------------RANDOM SWAP-------------------------------
         
         neighbours_by_swapping(solution);
         solution->update_weights();
-        std::cout<<"Attenzioneeeeeeeeeeee:"<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams)<<std::endl;
 
         //--------------------------MUTATION-------------------------------------------------
         
@@ -159,7 +153,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
         double perc = 1;
         neighbours_by_mutation(solution, order_for_mutation, num_mutation, perc);
         solution->update_weights();
-        //std::cout<<"Attenzioneeeeeeeeeeee:"<<solution->check_feasibility(solution->timeslot_per_exams, solution->all_exams);
+        
         //--------------------------LOCAL SEARCH-------------------------------------------------
         perc_improvement=0.1*rel_t; 
         //bool first_local=true;      
@@ -210,9 +204,9 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     ftime(&now); 
     } 
     //output_file.close();               
-    std::cout<<"Best sol "<<best_sol<<std::endl;
+    //std::cout<<"Best sol "<<best_sol<<std::endl;
     best_solution->double_obj=best_sol;
-    std::cout<<iter<<std::endl;
+    //std::cout<<iter<<std::endl;
     return best_solution;  
 }
 

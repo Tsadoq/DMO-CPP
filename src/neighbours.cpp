@@ -153,45 +153,36 @@ bool neighbours_by_swapping_single(Solution* solution, int ii, int jj, double ob
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void neighbours_by_mutation(Solution* solution, std::vector<size_t> order_for_mutation, int num_mutation, double perc){ 
-    
-    //da inizializzare in SA se usiamo questa funzione
-    //std::vector<size_t> order_for_mutation=std::vector<size_t>(n_exams);
-    //order_for_mutation=sort_indexes(weight_for_exams);
-    //std::vector<std::vector<int>>mutations_vector=neighbours_by_mutation(solution, order_for_mutation, num_mutation, perc);
-                         
-    //std::vector<std::vector<int>> mutations_vector = std::vector<std::vector<int>> ();  
-    //mutations_vector.reserve(solution->n_exams);
-    //std::vector<int> single_mutation=std::vector<int> (2);                                        
+                                          
     Exam* exam_mutate; 
     int is_void=0; 
     int totTimeslot = solution->n_timeslot;
-
+    int n_exams=solution->n_exams;
     std::vector<int> not_available_timeslots = std::vector<int>();
     not_available_timeslots.reserve(totTimeslot);
     std::vector<int> available_timeslots=std::vector<int>();
     available_timeslots.reserve(totTimeslot);
-
+    std::vector<int> possible_timeslot=solution->possible_timeslot;
     int k; 
     int new_timeslot; 
     int randomIndex; 
-    int size_random=(int) (perc*solution->n_exams); 
+    int size_random=(int) (perc*n_exams); 
     std::vector<int> indexes= std::vector<int>(size_random); 
     std::iota(indexes.begin(), indexes.end(), 0); 
     // obtain a time-based seed:
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();    
     std::shuffle(indexes.begin(), indexes.end(),std::default_random_engine(seed) ); 
-    //std::random_shuffle(indexes.begin(), indexes.end()); 
-         
+             
     for(int i=0;i<num_mutation+is_void && i<size_random;i++){ 
         // exam I'm trying to mutate 
         available_timeslots.clear(); 
         exam_mutate=solution->all_exams[order_for_mutation[indexes[i]]];
         not_available_timeslots=exam_mutate->conflict_times; 
-        not_available_timeslots.push_back(solution->timeslot_per_exams[exam_mutate->id_exam]); 
+        not_available_timeslots.push_back(solution->timeslot_per_exams[order_for_mutation[indexes[i]]]); 
         // sort vector because set_difference works with sorted arrays 
         sort(not_available_timeslots.begin(), not_available_timeslots.end()); 
         // find available timeslot 
-        set_difference(solution->possible_timeslot.begin(), solution->possible_timeslot.end(), not_available_timeslots.begin(),  
+        set_difference(possible_timeslot.begin(), possible_timeslot.end(), not_available_timeslots.begin(),  
                         not_available_timeslots.end(),inserter(available_timeslots, available_timeslots.begin())); 
         
         if(available_timeslots.size()==0){ 
@@ -199,22 +190,8 @@ void neighbours_by_mutation(Solution* solution, std::vector<size_t> order_for_mu
         }else{ 
             randomIndex = rand() % available_timeslots.size(); 
             new_timeslot=available_timeslots[randomIndex]; 
-            solution->update_single_exam(exam_mutate->id_exam, new_timeslot);
-            // update timeslot in all exam in conflict with respect to exam_mutate 
-
-           /* for (auto j : exam_mutate->conflict_exams){ 
-                k=0; 
-                while(solution->all_exams[j]->conflict_exams[k] != exam_mutate->id_exam){ 
-                    k++;
-                } 
-                solution->all_exams[j]->conflict_times[k]=new_timeslot; 
-            } */
-            // insert exam I want to mutate 
-            //single_mutation[0]=exam_mutate->id_exam; 
-            // insert time slot in which I want to schedule exam 
-            //single_mutation[1]=new_timeslot; 
-            solution->timeslot_per_exams[exam_mutate->id_exam]=new_timeslot;       
-            //mutations_vector.push_back(single_mutation); 
+            // update timeslot in all exam in conflict with respect to exam_mutate
+            solution->update_single_exam(exam_mutate->id_exam, new_timeslot);             
         } 
     } 
 }
@@ -224,15 +201,18 @@ void neighbours_by_mutation(Solution* solution, std::vector<size_t> order_for_mu
 void neighbours_by_swapping(Solution* solution){
     std::vector<int> exams = solution->timeslot_per_exams;
     int totTimeslots = solution->n_timeslot;
+    int n_exams=solution->n_exams;
     // seleziono due diversi timeslot a caso
     int t1 = 1 + rand() % totTimeslots;
     int t2 = 1 + rand() % totTimeslots;
     while(t2==t1 && abs(t2-t1)>5) 
         t2 = 1 + rand() % totTimeslots;
     // vettori di indici di esami che stanno nello stesso timeslot rispettivamente in t1 e in t2
-    std::vector<int> e1 = std::vector<int>(solution->n_exams);
-    std::vector<int> e2 = std::vector<int>(solution->n_exams);  // preallocazione (cicciona, ma non ci sono altri upperbounds)
-    for (int i = 0; i<exams.size(); i++){
+    std::vector<int> e1;
+    e1.reserve(n_exams);
+    std::vector<int> e2;
+    e2.reserve(n_exams);  // preallocazione (cicciona, ma non ci sono altri upperbounds)
+    for (int i = 0; i<n_exams; i++){
         if (exams[i] == t1){
             e1.push_back(i);
         }
@@ -240,11 +220,12 @@ void neighbours_by_swapping(Solution* solution){
             e2.push_back(i);
         }
     }
-
     // cerco gli esami in e2 che sono in conflitto con gli esami in t1
-    std::vector<int> toSwappedIn1 = std::vector<int>(e2.size());
+    std::vector<int> toSwappedIn1;
+    toSwappedIn1.reserve(e2.size());
     // cerco gli esami in e1 che sono in conflitto con gli esami in t2
-    std::vector<int> toSwappedIn2 = std::vector<int>(e1.size());;
+    std::vector<int> toSwappedIn2 ;
+    toSwappedIn2.reserve(e1.size());
     for (int i = 0; i< e1.size(); i++){
         // cerco un esame conflittuale piazzato in t2
         if ( std::find(solution->all_exams[e1[i]]->conflict_times.begin(), 
@@ -263,23 +244,12 @@ void neighbours_by_swapping(Solution* solution){
     }
     // TIMESLOT UPDATE
      for (int i = 0; i < toSwappedIn1.size(); i++){
-       
-        solution->timeslot_per_exams[toSwappedIn1[i]]=t1;
+        solution->update_single_exam(toSwappedIn1[i], t1);
         
     }
     for (int i = 0; i < toSwappedIn2.size(); i++){
- 
-        solution->timeslot_per_exams[toSwappedIn2[i]]=t2;
-    }
-    solution->update_timeslots();
-
-    /*for (int i = 0; i < toSwappedIn1.size(); i++){
-        solution->update_single_exam(toSwappedIn1[i], t1);
-    }
-    for (int i = 0; i < toSwappedIn2.size(); i++){
         solution->update_single_exam(toSwappedIn2[i], t2);
-    } */
-    
+    }    
     return;
 
 }
