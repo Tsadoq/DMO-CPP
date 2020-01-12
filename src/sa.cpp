@@ -136,33 +136,38 @@ Solution* func_swap_deterministic(Solution* solution, std::vector<int> timeslot_
     
     switch (inception)
     {
-    case 0:
-        iii =0;
-    case 1:
-        double n_timeslot = solution->n_timeslot;
-        timeslot_pre_swap=solution->timeslot_per_exams;
-        double obj_pre_swap=solution->objective_function();
-        bool better;
-        for(int k=0; k<n_timeslot-1; k++){
-            for(int q=k+1; q<n_timeslot; q++){
-                better = neighbours_by_swapping_single(solution, k, q, obj_pre_swap);
-                if(better==false){
-                    // DECIDERE CHE FARE QUA
-                    solution->timeslot_per_exams= timeslot_pre_swap;
-                    solution->update_timeslots();
-                    solution->update_weights();
-                }else{
-                    obj_pre_swap=solution->objective_function();
-                    timeslot_pre_swap=solution->timeslot_per_exams;
+        case 0:
+        {
+            iii =0;
+        }
+        case 1:
+        {
+            double n_timeslot = solution->n_timeslot;
+            timeslot_pre_swap=solution->timeslot_per_exams;
+            double obj_pre_swap=solution->objective_function();
+            bool better;
+            for(int k=0; k<n_timeslot-1; k++){
+                for(int q=k+1; q<n_timeslot; q++){
+                    better = neighbours_by_swapping_single(solution, k, q, obj_pre_swap);
+                    if(better==false){
+                        // DECIDERE CHE FARE QUA
+                        solution->timeslot_per_exams= timeslot_pre_swap;
+                        solution->update_timeslots();
+                        solution->update_weights();
+                    }else{
+                        obj_pre_swap=solution->objective_function();
+                        timeslot_pre_swap=solution->timeslot_per_exams;
+                    }
                 }
             }
-        }
 
-        solution->update_weights();
-        break;
-    case 2:
-        iii =0;
-        break;
+            solution->update_weights();
+        } break;
+        case 2:
+        {
+            iii = 0;
+            break;
+        }
     }
     
 
@@ -247,10 +252,12 @@ Solution* get_new_solution(int idx , Solution* solution, std::vector<int> timesl
             solution = func_local_search(solution, perc_improvement);
             break;
         case 5:
+            {
             // la prima volta inception = 0 (guarda main.cpp)
             inception += 1;
             solution = func_alberto(solution, timeslot_pre_swap, old_timeslot_solution, rel_t,perc_improvement, 
             inception, now, current_instance);
+            } break;
         default:
             break;
         }
