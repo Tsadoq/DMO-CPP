@@ -3,6 +3,13 @@
 #include <vector>
 #include <iostream>
 
+using namespace std;
 
+/*Exam::Exam()
+{
+}
 
+Exam::~Exam()
+{
+}*/
 

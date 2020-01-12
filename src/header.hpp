@@ -6,17 +6,22 @@
 #include <time.h>
 #include <sys/timeb.h>
 
+using namespace std;
 
-
-int read_file_exm(std::string file_name);
-int read_file_slo(std::string file_name);
-std::vector<std::vector<int>> read_file_stu(char* file_name,int n_exams,int &total_number_students);
-std::vector<Exam*> inizialize_all_exams();
+int read_file_exm(string file_name);
+int read_file_slo(string file_name);
+vector<vector<int>> read_file_stu(char* file_name,int n_exams,int &total_number_students);
+vector<Exam*> inizialize_all_exams();
 template <typename T>
-std::vector<size_t> sort_indexes(const std::vector<T> &v) ;
-Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int n_timeslot, std::string current_instance);
-void alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams,std::vector<size_t> sorted_index);
+vector<size_t> sort_indexes(const vector<T> &v) ;
+void graph_coloring_greedy(Solution* initial_solution, int n_timeslot, vector<size_t> sorted_index, int n_exams);
+vector<vector<int>> neighbours_by_mutation(Solution* solution, vector<size_t> order_for_mutation,int num_mutation,vector<int> possible_timeslots,double perc,int n_exams);
+Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int total_number_students, int n_timeslot, string current_instance,double t0,int mutations, double cooling_coefficient, int num_before_swap);
+void neighbours_by_swapping(Solution* solution, int totTimeslots);
+double temperature_init(Solution *solution,int n_exams, int total_number_students, int n_timeslot);
+void neighbour_by_crossover(Solution* actual_sol,Solution* best_sol, int n_exams, int n_timeslot);
+int alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams,vector<size_t> sorted_index);
 bool unscheduling(Solution* sol, int num_unsched);
-bool rescheduling(Solution* sol, int totTimeslots);
-void localSearch(Solution* solution, std::vector<int> possible_timeslots,std::vector<size_t> sorted_exams,int n_timeslot);
-bool neighbours_by_swapping_single(Solution* solution, int ii, int jj, double obj_pre_swap);
+bool rescheduling(Solution* sol, int totTimeslots, int n_exams);
+int directional_mutation(Solution* sol, int totTimeslots);
+double directional_mutation_final(Solution* sol, int totTimeslots, double best_obj, int num_stud);
