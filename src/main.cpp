@@ -107,8 +107,8 @@ int main(int argc, char **argv) {
     
     int mysize;
     mysize = omp_get_num_threads();
-    std::cout << "  Number of processors available = " << omp_get_num_procs() << "\n";
-    std::cout << "  Number of threads =              " << omp_get_max_threads() << "\n";
+    // std::cout << "  Number of processors available = " << omp_get_num_procs() << "\n";
+    // std::cout << "  Number of threads =              " << omp_get_max_threads() << "\n";
 
     std::vector<Solution*> array_sol= std::vector<Solution*>(numproc);
     std::vector<Solution*> best_sol=std::vector<Solution*>(numproc);
@@ -140,9 +140,9 @@ int main(int argc, char **argv) {
         std::string str_id = std::to_string(id);
         if(id%2){
             double cooling_coeff=0.9;
-            best_sol[id] = sa_v1(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol",cooling_coeff);
+            best_sol[id] = sa_v1(array_sol[id], start, timelimit,"./"+current_instance+"_"+str_id+"_"+".sol",cooling_coeff);
         } else {
-            best_sol[id] = sa_v2(array_sol[id], start, timelimit, "./instances/"+current_instance+"_"+str_id+"_"+".sol", true);
+            best_sol[id] = sa_v2(array_sol[id], start, timelimit, "./"+current_instance+"_"+str_id+"_"+".sol", true);
         }        
 
     }
@@ -159,13 +159,13 @@ int main(int argc, char **argv) {
            index_best = i;
            min=best_sol[i]->double_obj;
        }
-       std::cout << "Solution of core " << i+1 << " has a score of " << best_sol[i]->double_obj << std::endl;
+       // std::cout << "Solution of core " << i+1 << " has a score of " << best_sol[i]->double_obj << std::endl;
        avg+=best_sol[i]->double_obj;
     }
 
     // -----------------------------------------------------------------
     
-    best_sol[index_best]->write_output_file("./instances/"+current_instance+".sol");
+    best_sol[index_best]->write_output_file("./"+current_instance+".sol");
     std::cout<<"Best solution:\t\t"<<best_sol[index_best]->double_obj<<std::endl;
     std::cout<<"Average solution:\t"<<avg/counter<<std::endl;
    
