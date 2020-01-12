@@ -21,14 +21,13 @@ Solution* func_local_search(Solution* solution, double perc_improvement)
 
     order_for_local=sort_indexes(solution->num_neighbours_for_exams);
     localSearch(solution,order_for_local);
-    obj_local=solution->objective_function();
+    obj_local=solution->double_obj;
     double obj_old=obj_SA;
     
     while((obj_old-obj_local)/obj_local>perc_improvement){
         obj_old=obj_local;
         localSearch(solution,order_for_local);
-        obj_local=solution->objective_function();
-        solution->double_obj = obj_local;
+        obj_local=solution->double_obj;
     }
     
     return solution;
@@ -123,8 +122,9 @@ Solution* func_swap_deterministic(Solution* solution, std::vector<int> timeslot_
                 solution->timeslot_per_exams= timeslot_pre_swap;
                 solution->update_timeslots();
                 solution->update_weights();
+                solution->objective_function();
             }else{
-                obj_pre_swap=solution->objective_function();
+                obj_pre_swap=solution->double_obj;
                 timeslot_pre_swap=solution->timeslot_per_exams;
             }
         }
@@ -228,8 +228,6 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     double t0_iter;
     
     int fail = 0;
-    double alpha;
-    double t0_iter;
 
     // prealloco tutti i vettori
     std::vector<int> timeslot_pre_swap=std::vector<int>(n_exams);    
