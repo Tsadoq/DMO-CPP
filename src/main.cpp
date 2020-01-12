@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
     initial_solution->solution_update(conflict_matrix,n_exams, total_number_students,n_timeslot);
     std::cout<<"dopo"<<std::endl;
 
-    //-------------------------------- VARIABLE VALUES INITIALIZATION --------------------------------------------
+  /*  //-------------------------------- VARIABLE VALUES INITIALIZATION --------------------------------------------
      // sort exams by decreasing value of number of neighbours
     std::vector<size_t> sorted_index=std::vector<size_t>(n_exams);
     // it's a vector of indexes: values in [0,n_exams-1]       
@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
     initial_solution->update_timeslots();
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
     std::cout<<"feasibility "<<flag<<std::endl;
-
+*/
     //---------------------------------- MULTI-THREAD -----------------------------------------------------------
  
     omp_set_dynamic(0);     // Explicitly disable dynamic teams
@@ -121,7 +121,22 @@ int main(int argc, char **argv) {
         Solution* tmp= new Solution();
         tmp = initial_solution->copy_solution();
         array_sol[id] = tmp;
-      
+
+        //-------------------------------- VARIABLE VALUES INITIALIZATION --------------------------------------------
+        // sort exams by decreasing value of number of neighbours
+        std::vector<std::vector<size_t>> sorted_index=std::vector<std::vector<size_t>>(n_exams);
+        // it's a vector of indexes: values in [0,n_exams-1]       
+        sorted_index[id]=sort_indexes(array_sol[id]->num_neighbours_for_exams);
+        
+        //-----------------------------------------------------------------------------------------
+        // apply a variant of greedy coloring trying to assign timeslots first to exams with higher degree
+        alternativeColoring(array_sol[id],sorted_index[id]);
+        //-----------------------------------------------------------------------------------------
+
+        array_sol[id]->update_timeslots();
+        int flag =  array_sol[id]->check_feasibility( array_sol[id]->timeslot_per_exams,  array_sol[id]->all_exams);
+        std::cout<<"feasibility "<<flag<<std::endl;
+
         std::string str_id = std::to_string(id);
         
         //double best_sol;
