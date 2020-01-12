@@ -35,7 +35,7 @@ Solution* func_local_search(Solution* solution, double perc_improvement)
 }
 
 
-Solution* func_rescheduling(Solution* solution, std::vector<int> old_timeslot_solution, double rel_t, int inception)
+Solution* func_rescheduling(Solution* solution, std::vector<int> old_timeslot_solution, double rel_t)
 {   
     int n_exams=solution->n_exams;
 
@@ -51,36 +51,12 @@ Solution* func_rescheduling(Solution* solution, std::vector<int> old_timeslot_so
     
     int num_unsched;
 
-    switch (inception)
-    {
-    case 0:
-        if (rel_t*0.3<0.1){
-            num_unsched=round(n_exams*0.1);
-        }else{
-            num_unsched=round(n_exams*rel_t*0.3);
-        }
-        break;
-    case 1:
-       
-        if (rel_t*0.3<0.1){
-            num_unsched=round(n_exams*0.1);
-        }else{
-            num_unsched=round(n_exams*rel_t*0.3);
-        }
-    case 2:
-        if (rel_t*0.3<0.1){
-            num_unsched=3;
-        }else{
-            num_unsched=4;
-        }
-    default:
-        if (rel_t*0.3<0.1){
-            num_unsched=round(n_exams*0.1);
-        }else{
-            num_unsched=round(n_exams*rel_t*0.3);
-        }
+   
+    if (rel_t*0.3<0.1){
+        num_unsched=round(n_exams*0.1);
+    }else{
+        num_unsched=round(n_exams*rel_t*0.3);
     }
-
     
 
     // ------------------------------------------------------------
@@ -100,7 +76,8 @@ Solution* func_rescheduling(Solution* solution, std::vector<int> old_timeslot_so
         first=0;
     }
     
-    solution->update_weights();
+    // viene fatto nell'if...
+    // solution->update_weights();
 
     return solution;
 }
@@ -130,47 +107,31 @@ Solution* func_mutation(Solution* solution)
 }
 
 
-Solution* func_swap_deterministic(Solution* solution, std::vector<int> timeslot_pre_swap, int inception)
+Solution* func_swap_deterministic(Solution* solution, std::vector<int> timeslot_pre_swap)
 {   
     int iii;
     
-    switch (inception)
-    {
-        case 0:
-        {
-            iii =0;
-        }
-        case 1:
-        {
-            double n_timeslot = solution->n_timeslot;
-            timeslot_pre_swap=solution->timeslot_per_exams;
-            double obj_pre_swap=solution->objective_function();
-            bool better;
-            for(int k=0; k<n_timeslot-1; k++){
-                for(int q=k+1; q<n_timeslot; q++){
-                    better = neighbours_by_swapping_single(solution, k, q, obj_pre_swap);
-                    if(better==false){
-                        // DECIDERE CHE FARE QUA
-                        solution->timeslot_per_exams= timeslot_pre_swap;
-                        solution->update_timeslots();
-                        solution->update_weights();
-                    }else{
-                        obj_pre_swap=solution->objective_function();
-                        timeslot_pre_swap=solution->timeslot_per_exams;
-                    }
-                }
+    double n_timeslot = solution->n_timeslot;
+    timeslot_pre_swap=solution->timeslot_per_exams;
+    double obj_pre_swap=solution->objective_function();
+    bool better;
+    for(int k=0; k<n_timeslot-1; k++){
+        for(int q=k+1; q<n_timeslot; q++){
+            better = neighbours_by_swapping_single(solution, k, q, obj_pre_swap);
+            if(better==false){
+                // DECIDERE CHE FARE QUA
+                solution->timeslot_per_exams= timeslot_pre_swap;
+                solution->update_timeslots();
+                solution->update_weights();
+            }else{
+                obj_pre_swap=solution->objective_function();
+                timeslot_pre_swap=solution->timeslot_per_exams;
             }
-
-            solution->update_weights();
-        } break;
-        case 2:
-        {
-            iii = 0;
-            break;
         }
     }
-    
 
+    solution->update_weights();
+       
     return solution;
 }
 
@@ -185,34 +146,7 @@ Solution* func_swap_random(Solution* solution)
 }
 
 
-
-
-Solution* func_alberto(Solution* solution, std::vector<int> timeslot_pre_swap, 
-        std::vector<int> old_timeslot_solution, double rel_t, double perc_improvement, 
-        int inception, struct timeb now, std::string current_instance)
-{   
-
-    solution = func_rescheduling(solution, old_timeslot_solution, rel_t, inception);
-    solution = func_swap_deterministic(solution, timeslot_pre_swap, inception);
-    solution = func_local_search(solution, perc_improvement);
-    
-    if (inception==1){
-        ftime(&now);
-        solution = sa(solution, now, 1, current_instance, inception);
-        // devo resettare inception da qualche parte?????? dopo sa interno???  DOMANDA!!!!!!!!!
-        inception = 0; // controlla qua
-    }
-    
-    if (inception==2){
-        solution = func_local_search(solution, perc_improvement);
-    }
-
-    return solution;
-}
-
-
-
-int choose_function(double rel_t, int iter, double perc_improvement, int inception)
+int choose_function(double rel_t, int iter, double perc_improvement, int fail)
 {   
     // CAMBIA PARAMETRO SE AGGIUNGI O TOGLI FUNZIONI!!!
     int num_func = 5;
@@ -224,8 +158,6 @@ int choose_function(double rel_t, int iter, double perc_improvement, int incepti
     // 3    -> mutation
     // 4    -> local search greedy
 
-
-    
     if (perc_improvement == 0){
         idx_func = 3;
     } else {
@@ -246,16 +178,16 @@ int choose_function(double rel_t, int iter, double perc_improvement, int incepti
 
 Solution* get_new_solution(int idx , Solution* solution, std::vector<int> timeslot_pre_swap,
          std::vector<int> old_timeslot_solution, double rel_t, double perc_improvement, 
-         int inception, struct timeb now, std::string current_instance)
+         struct timeb now, std::string current_instance)
 {   
 
     switch (idx)
         {
         case 0:     
-            solution = func_rescheduling(solution, old_timeslot_solution, rel_t, inception);
+            solution = func_rescheduling(solution, old_timeslot_solution, rel_t);
             break;
         case 1:
-            solution = func_swap_deterministic(solution, timeslot_pre_swap, inception);
+            solution = func_swap_deterministic(solution, timeslot_pre_swap);
             break;
         case 2:
             solution = func_swap_random(solution);
@@ -266,13 +198,6 @@ Solution* get_new_solution(int idx , Solution* solution, std::vector<int> timesl
         case 4:
             solution = func_local_search(solution, perc_improvement);
             break;
-        case 5:
-            {
-            // la prima volta inception = 0 (guarda main.cpp)
-            inception += 1;
-            solution = func_alberto(solution, timeslot_pre_swap, old_timeslot_solution, rel_t,perc_improvement, 
-            inception, now, current_instance);
-            } break;
         default:
             break;
         }
@@ -282,7 +207,7 @@ Solution* get_new_solution(int idx , Solution* solution, std::vector<int> timesl
 
 
 
-Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance, int inception){
+Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance, double cool_coef){
  
     struct timeb now;
     double prob = 0;
@@ -299,8 +224,12 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     double obj_SA;
     int n_exams=solution->n_exams;
     int n_timeslot=solution->n_timeslot;
+    double alpha;
+    double t0_iter;
     
     int fail = 0;
+    double alpha;
+    double t0_iter;
 
     // prealloco tutti i vettori
     std::vector<int> timeslot_pre_swap=std::vector<int>(n_exams);    
@@ -326,6 +255,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     // ------------------CALCOLO T0--------------------------------
     
     t0=(obj_SA-obj_local)/0.693747281;
+    // rialzo la temperatura in modo che ci sia una probabilità di 0.3 di accettare soluzioni peggioranti
+    alpha=(obj_SA-obj_local)/(t0*1.38629436);
     t=t0;
     std::cout<<"initial t0 "<<t0<<std::endl;
     // --------------------------------------------------
@@ -334,13 +265,14 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     Solution * best_solution=solution->copy_solution();
       
     int iter=0;
+    t0_iter = t0;
     obj_SA=obj_local;
 
     ftime(&now);
     while((int)((now.time-start.time))<timelimit){      
 
         if (t0!=0){
-            rel_t=t/t0;
+            rel_t=t/t0_iter;
         } else {
 
             // perchè t0=(obj_SA-obj_local)/0.693747281;
@@ -353,7 +285,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
 
         old_timeslot_solution=solution->timeslot_per_exams; 
 
-        int idx = choose_function(rel_t, iter, perc_improvement, inception, fail);
+        int idx = choose_function(rel_t, iter, perc_improvement, fail);
         
         solution = get_new_solution(idx , solution, timeslot_pre_swap, old_timeslot_solution, rel_t, perc_improvement, inception, now, current_instance);
     
@@ -370,6 +302,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
                 solution->timeslot_per_exams=old_timeslot_solution;
                 solution->update_timeslots();
                 solution->update_weights();
+                solution->objective_function();
             }else{
                 obj_SA=obj_new;  
             }
@@ -383,21 +316,26 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
             best_sol = obj_new;
             best_solution->timeslot_per_exams=solution->timeslot_per_exams;
             best_solution->update_timeslots();
-            solution->update_weights();
+            best_solution->update_weights();
+            best_solution->objective_function();
             best_solution->write_output_file(current_instance);
         }else{
             fail++;
         }
         
-        t = cooling(timelimit, now.time-start.time,t0);
-        //output_file<<"temperature "<<t<<" OF OLD "<<obj_SA<<"\n";
+        t *= cool_coef;
+
+        if(t<=t0_iter*0.01){
+            t0_iter=t0*alpha;
+            t=t0_iter;
+        }
 
     ftime(&now); 
     } 
     //output_file.close();               
     //std::cout<<"Best sol "<<best_sol<<std::endl;
-    best_solution->double_obj=best_sol;
-    //std::cout<<iter<<std::endl;
+    
+    std::cout<<iter<<std::endl;
     return best_solution;  
 }
 
@@ -408,8 +346,8 @@ double probability(double obj_new, double obj_old, double temperature)
     return p;
 }
 
-double cooling(double time_limit, double current_time,double t0)
+/*double cooling(double time_limit, double current_time,double t0, double cool_coef)
 {
     double coeff=(time_limit-current_time)/time_limit;
     return  t0*coeff;
-}
+}*/

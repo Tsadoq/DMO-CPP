@@ -190,4 +190,31 @@ void Solution::update_single_exam(int exam, int new_timeslot){
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void Solution::update_weights_conflicting(int exam, int new_timeslot,int old_timeslot){
+    double totalCostUpdate=0;
+    double num_stud;
+    int conf_timeslot;
+    int conf_exam;
+    int shift;
+    
+    for(int i=0; i<all_exams[exam]->num_conflict;i++){
+        conf_exam=all_exams[exam]->conflict_exams[i];
+        num_stud=all_exams[exam]->conflict_weights[i];
+        conf_timeslot=timeslot_per_exams[conf_exam];
+        if(abs(conf_timeslot-new_timeslot)<=5){
+            shift=(1<<(5-abs(conf_timeslot-new_timeslot)));
+            all_exams[conf_exam]->weight_in_obj_fun+=(num_stud*shift);
+            totalCostUpdate+=(num_stud*shift);
+        }
+        if(abs(conf_timeslot-old_timeslot)<=5){
+            shift=(1<<(5-abs(conf_timeslot-old_timeslot)));
+            all_exams[conf_exam]->weight_in_obj_fun-=(num_stud*shift);
+            totalCostUpdate-=(num_stud*shift);
+        }       
+
+    }
+    double_obj+=(totalCostUpdate/(2*total_number_students));
+    
+}

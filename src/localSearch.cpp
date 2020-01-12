@@ -22,12 +22,14 @@ void localSearch(Solution* solution, std::vector<size_t> sorted_exams){
     Exam* sort_exam;
     int diff;
     int best_time;
+    int old_time;
     
     for(int i=0;i<n_exams;i++){
         available_timeslots.clear(); 
         not_available_timeslots.clear();
         sort_exam=solution->all_exams[sorted_exams[i]];
         best_time=solution->timeslot_per_exams[sorted_exams[i]];
+        old_time=best_time;
         not_available_timeslots=sort_exam->conflict_times; // PROBLEMA
         not_available_timeslots.push_back(solution->timeslot_per_exams[sorted_exams[i]]);
         
@@ -54,7 +56,8 @@ void localSearch(Solution* solution, std::vector<size_t> sorted_exams){
                 best_time=time;
             }
         }
+        solution->update_weights_conflicting(sorted_exams[i],best_time,old_time);
         solution->update_single_exam(sorted_exams[i],best_time);
-        solution->update_weights();
+        //----------------------------------------------
     }
 }
