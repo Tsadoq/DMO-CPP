@@ -136,6 +136,17 @@ Solution* func_swap_random(Solution* solution)
 }
 
 
+int choose_function(double rel_t, int iter, double perc_improvement)
+{   
+    // CAMBIA PARAMETRO SE AGGIUNGI O TOGLI FUNZIONI!!!
+    int num_func = 5;
+
+    int idx_func = rand() % num_func;
+
+    return idx_func + 1;
+
+}
+
 
 Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance){
  
@@ -195,32 +206,41 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
 
         rel_t=t/t0;
         iter++;
+        perc_improvement = 0.1*rel_t;
 
-        // chose func to apply
-        // index_func = 1/2/3/4/5
-        // index = choose_function(rel_t, time, )
+        int idx = choose_function(rel_t, iter, perc_improvement);
 
-        //--------------------------------------- RESCHEDULING----------------
-        
-        old_timeslot_solution=solution->timeslot_per_exams; 
-        solution = func_rescheduling(solution, old_timeslot_solution, rel_t);
-        
-        //----------------------------------DETERMINISTIC SWAP-------------------------------
+        switch (idx)
+        {
+        case 1:
+            //--------------------------------------- RESCHEDULING----------------
+            
+            // riusciamo a metterlo dentro?
+            old_timeslot_solution=solution->timeslot_per_exams; 
+    
+            solution = func_rescheduling(solution, old_timeslot_solution, rel_t);
+            break;
+        case 2:
+            //----------------------------------DETERMINISTIC SWAP-------------------------------
+            solution = func_swap_deterministic(solution, timeslot_pre_swap);
+            break;
+        case 3:
+            //----------------------------------RANDOM SWAP-------------------------------
+            solution = func_swap_random(solution);
+            break;
+        case 4:
+            //--------------------------MUTATION-------------------------------------------------
+            solution = func_mutation(solution);
+            break;
+        case 5:
+            //--------------------------LOCAL SEARCH-------------------------------------------------
+            solution = func_local_search(solution, perc_improvement);
+            break;
+        default:
+            break;
+        }
 
-        solution = func_swap_deterministic(solution, timeslot_pre_swap);
-
-        //----------------------------------RANDOM SWAP-------------------------------
-        
-        solution = func_swap_random(solution);
-
-        //--------------------------MUTATION-------------------------------------------------
-        
-        solution = func_mutation(solution);
-        
-        //--------------------------LOCAL SEARCH-------------------------------------------------
-        perc_improvement=0.1*rel_t; 
-        solution = func_local_search(solution, perc_improvement);
-
+    
         //-------------------------SA--------------------------------------------------------
 
         obj_new = solution->double_obj;
