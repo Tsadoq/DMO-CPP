@@ -14,8 +14,10 @@ void piazzo_random(Solution* initial_solution, std::vector<int> available_colors
 bool swap_random(Solution* initial_solution, std::vector<int> available_colors);
 bool prova_a_inserire(Solution* initial_solution,  std::vector<int> available_colors, int TRY_PLACE, std::vector<Exam*> &notInPosition, Exam* exam);
 
-void alternativeColoring(Solution* initial_solution, int n_timeslot,  int n_exams,std::vector<size_t> sorted_index){
+void alternativeColoring(Solution* initial_solution,std::vector<size_t> sorted_index){
     srand(time(NULL));
+    int n_exams=initial_solution->n_exams;
+    int n_timeslot=initial_solution->n_timeslot;
     initial_solution->timeslot_per_exams=std::vector<int>(n_exams, -1);
     std::vector<int> seed_for_boxes{0,3,1,4,2,5};
     std::vector<std::vector<int>> boxes;
@@ -134,14 +136,8 @@ bool swap_random(Solution* initial_solution, std::vector<int> available_colors){
             //se ho trovato conflitto provo un'altra mossa random
             return false;
     }
-    initial_solution->timeslot_per_exams[index_exam]=t2;
-    for (auto jj : exam->conflict_exams){ 
-        kk=0; 
-        while(initial_solution->all_exams[jj]->conflict_exams[kk] != index_exam){ 
-            kk++;
-        } 
-        initial_solution->all_exams[jj]->conflict_times[kk]=t2; 
-    }    
+
+    initial_solution->update_single_exam(index_exam,t2);       
     return true;
 }
 
@@ -155,19 +151,11 @@ bool prova_a_inserire(Solution* initial_solution, std::vector<int> available_col
         for(int j=0; j< exam->conflict_times.size() && find_conflict==0; j++){
             if(exam->conflict_times[j]==time){
                 find_conflict=1; 
-                find_conflict=1;
             }
         }
         if(find_conflict==0){
             notInPosition.erase(notInPosition.begin());
-            initial_solution->timeslot_per_exams[exam->id_exam]=time;
-            for (auto jj : exam->conflict_exams){ 
-                kk=0; 
-                while(initial_solution->all_exams[jj]->conflict_exams[kk] != exam->id_exam){ 
-                    kk++;
-                } 
-            initial_solution->all_exams[jj]->conflict_times[kk]=time; 
-            }
+            initial_solution->update_single_exam(exam->id_exam,time); 
             return true; 
         } 
     }

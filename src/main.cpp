@@ -81,7 +81,9 @@ int main(int argc, char **argv) {
     std::cout<<"Number of students: "<<total_number_students<<std::endl;
     Solution* initial_solution=new Solution();    
     
-    initial_solution->solution_update(conflict_matrix,n_exams, total_number_students);
+    std::cout<<"prima"<<std::endl;
+    initial_solution->solution_update(conflict_matrix,n_exams, total_number_students,n_timeslot);
+    std::cout<<"dopo"<<std::endl;
 
     //-------------------------------- VARIABLE VALUES INITIALIZATION --------------------------------------------
      // sort exams by decreasing value of number of neighbours
@@ -91,7 +93,7 @@ int main(int argc, char **argv) {
     
     //-----------------------------------------------------------------------------------------
     // apply a variant of greedy coloring trying to assign timeslots first to exams with higher degree
-    alternativeColoring(initial_solution,  n_timeslot, n_exams,sorted_index);
+    alternativeColoring(initial_solution,sorted_index);
     //-----------------------------------------------------------------------------------------
     initial_solution->update_timeslots();
     int flag = initial_solution->check_feasibility(initial_solution->timeslot_per_exams, initial_solution->all_exams);
@@ -123,7 +125,7 @@ int main(int argc, char **argv) {
         std::string str_id = std::to_string(id);
         
         //double best_sol;
-        best_sol[id] = sa(array_sol[id], start, timelimit, n_exams, n_timeslot,"./instances/"+current_instance+"_"+str_id+"_"+".sol");
+        best_sol[id] = sa(array_sol[id], start, timelimit,"./instances/"+current_instance+"_"+str_id+"_"+".sol");
 
         //array_sol[id]->double_obj=best_sol;
         

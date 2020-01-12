@@ -26,23 +26,17 @@ bool unscheduling(Solution* sol, int num_unsched){
     std::shuffle(positions.begin(), positions.end(),std::default_random_engine(seed) );
     // random order so that I can choose from the num_unsch first positions
     for (int j= 0; j < num_unsched; j++){
-        sol->timeslot_per_exams[positions[j]] = -1; // mark the unscheduled exams
-        // now we need to change also this timeslots in the conflict matrix of his conflictuals
-         for (auto k : sol->all_exams[positions[j]]->conflict_exams){ 
-                h=0; 
-                while(sol->all_exams[k]->conflict_exams[h] != sol->all_exams[positions[j]]->id_exam){ 
-                    h++;
-                } 
-                sol->all_exams[k]->conflict_times[h]= -1; 
-            }
+        sol->update_single_exam(positions[j],-1);
     }
     return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool rescheduling(Solution* sol, int totTimeslots, std::vector<int> possible_timeslots){
-  
+bool rescheduling(Solution* sol){
+    
+    int totTimeslots=sol->n_timeslot;
+    std::vector<int> possible_timeslots=sol->possible_timeslot;
     int n_exams=sol->n_exams;
     int fail=0;
     int max_fail=n_exams/3;
@@ -116,14 +110,7 @@ bool rescheduling(Solution* sol, int totTimeslots, std::vector<int> possible_tim
                     not_available.end(),inserter(possible_mutation, possible_mutation.begin()));
         if (possible_mutation.size()> 0){
             rand_index = rand() % possible_mutation.size();
-            sol->timeslot_per_exams[pos] = possible_mutation[rand_index];
-            for (auto h : exam->conflict_exams){ 
-                k=0; 
-                while(sol->all_exams[h]->conflict_exams[k] != exam->id_exam){ 
-                    k++;
-                } 
-                sol->all_exams[h]->conflict_times[k]=possible_mutation[rand_index];
-            } 
+            sol->update_single_exam(pos,possible_mutation[rand_index]);
             unsched_exams.erase(unsched_exams.begin());
         }else{
             fail++;
@@ -132,15 +119,7 @@ bool rescheduling(Solution* sol, int totTimeslots, std::vector<int> possible_tim
                     exam->conflict_times[j]=-1;
                     pos_conf=exam->conflict_exams[j];
                     unsched_exams.push_back(sol->all_exams[pos_conf]);
-                    sol->timeslot_per_exams[pos_conf]=-1;
-                    // dico a tutti gli esami conflittuali dell'esame unschedulato che l'ho unschedulato
-                    for(auto conf_exam : sol->all_exams[pos_conf]->conflict_exams){
-                        kk=0; 
-                        while(sol->all_exams[conf_exam]->conflict_exams[kk] != pos_conf){ 
-                            kk++;
-                        } 
-                        sol->all_exams[conf_exam]->conflict_times[kk]=-1;                        
-                    }
+                    sol->update_single_exam(pos_conf,-1);
                 }
             }    
         }
@@ -151,21 +130,21 @@ bool rescheduling(Solution* sol, int totTimeslots, std::vector<int> possible_tim
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool neighbours_by_swapping_single(Solution* solution, int ii, int jj, double obj_pre_swap){
+
     std::vector<int> exams = solution->timeslot_per_exams;
     
     int t1 = ii+1;
     int t2 = jj+1;
     
-    for (int i = 0; i<exams.size(); i++){
+    for (int i = 0; i<solution->n_exams; i++){
         if (exams[i] == t1){
-            exams[i]=t2;
+            solution->update_single_exam(i,t2);
         }else{
             if (exams[i] == t2){
-                exams[i]=t1;
+                solution->update_single_exam(i,t1);
             }
         }
     }
-    solution->update_timeslots();
     solution->update_weights();
     if(solution->objective_function()<obj_pre_swap){
         return true;

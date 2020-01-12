@@ -10,8 +10,9 @@
 #include "Exam.hpp" 
 #include "Solution.hpp" 
 
-void localSearch(Solution* solution, std::vector<int> possible_timeslots,std::vector<size_t> sorted_exams,int n_timeslot){
-    //double starting_obj=solution->double_obj;
+void localSearch(Solution* solution, std::vector<size_t> sorted_exams){
+    std::vector<int> possible_timeslots=solution->possible_timeslot;
+    int n_timeslot=solution->n_timeslot;
     std::vector<int> not_available_timeslots;
     not_available_timeslots.reserve(n_timeslot);
     std::vector<int> available_timeslots;
@@ -20,12 +21,13 @@ void localSearch(Solution* solution, std::vector<int> possible_timeslots,std::ve
     int n_exams=solution->n_exams;
     Exam* sort_exam;
     int diff;
+    int best_time;
     
     for(int i=0;i<n_exams;i++){
         available_timeslots.clear(); 
         not_available_timeslots.clear();
         sort_exam=solution->all_exams[sorted_exams[i]];
-        
+        best_time=solution->timeslot_per_exams[sorted_exams[i]];
         not_available_timeslots=sort_exam->conflict_times; // PROBLEMA
         not_available_timeslots.push_back(solution->timeslot_per_exams[sorted_exams[i]]);
         
@@ -49,10 +51,10 @@ void localSearch(Solution* solution, std::vector<int> possible_timeslots,std::ve
             
             if (sort_exam->weight_in_obj_fun>cost_in_obj){
                 sort_exam->weight_in_obj_fun=cost_in_obj;
-                solution->timeslot_per_exams[sorted_exams[i]]=time;
+                best_time=time;
             }
         }
-        solution->update_timeslots();
+        solution->update_single_exam(sorted_exams[i],best_time);
         solution->update_weights();
     }
 }

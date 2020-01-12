@@ -6,20 +6,23 @@
 #include <math.h>
 #include <stdio.h>
 #include <fstream>
-#include<algorithm>
-#include<bitset>
+#include <algorithm>
+#include <bitset>
+#include <numeric>
 
 
-void Solution::solution_update(std::vector<std::vector<int>> conflict_matrix, int n_ex, int tot_num_students){
+void Solution::solution_update(std::vector<std::vector<int>> conflict_matrix, int n_ex, int tot_num_students, int timeslot){
     
     // initialize fixed values
     total_number_students=tot_num_students;
     n_exams=n_ex;
-
-    std::cout<<"num es"<<n_ex<<std::endl;
+    n_timeslot=timeslot;
+    possible_timeslot=std::vector<int>(timeslot) ; // vector with 100 ints.
+    std::iota (std::begin(possible_timeslot), std::end(possible_timeslot), 1);
 
     // initialize attributes conflict_exams and conflict_weights for each exam
     int num_neighbour;
+    int position_in_conf;
     num_neighbours_for_exams.reserve(n_exams);
     for(int i=0;i<n_exams;i++){
         num_neighbour=0;
@@ -41,6 +44,19 @@ void Solution::solution_update(std::vector<std::vector<int>> conflict_matrix, in
         all_exams.push_back(exam);
         num_neighbours_for_exams.push_back(num_neighbour);
     }
+
+    
+    for(int i=0;i<n_exams;i++){
+        for(auto conf_exams: all_exams[i]->conflict_exams){
+            int pos=0;
+            while(all_exams[conf_exams]->conflict_exams[pos] != all_exams[i]->id_exam){ 
+                pos++;
+            } 
+            all_exams[i]->position_in_conf_exams.push_back(pos);
+        }
+    }
+
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,6 +157,7 @@ Solution* Solution::copy_solution(){
         copy_exam->weight_in_obj_fun=all_exams[i]->weight_in_obj_fun;
         copy_exam->num_conflict= all_exams[i]->num_conflict;
         copy_exam->id_exam=all_exams[i]->id_exam;
+        copy_exam->position_in_conf_exams=all_exams[i]->position_in_conf_exams;
         copy_all_exams.push_back(copy_exam);
     }
     Solution* copy_sol=new Solution();
@@ -148,9 +165,26 @@ Solution* Solution::copy_solution(){
     copy_sol->timeslot_per_exams=timeslot_per_exams;
     copy_sol->num_neighbours_for_exams=num_neighbours_for_exams;
     copy_sol->n_exams=n_exams;
+    copy_sol->n_timeslot=n_timeslot;
+    copy_sol->possible_timeslot=possible_timeslot;
     copy_sol->total_number_students=total_number_students;
     
     return copy_sol;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Solution::update_single_exam(int exam, int new_timeslot){
+
+    timeslot_per_exams[exam]=new_timeslot;
+    int pos_in_conf;
+    int conf_exam;
+    for(int i=0; i<all_exams[exam]->num_conflict;i++){
+        pos_in_conf=all_exams[exam]->position_in_conf_exams[i];
+        conf_exam=all_exams[exam]->conflict_exams[i];
+        all_exams[conf_exam]->conflict_times[pos_in_conf]=new_timeslot;
+    }
 }
 
 

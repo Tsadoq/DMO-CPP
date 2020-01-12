@@ -15,6 +15,7 @@ public:
     size_t num_conflict;
     // id esame
     int id_exam;
+    std::vector<int> position_in_conf_exams;
 
     // valori che cambiano nel tempo
     // timeslot degli esami conflittuali

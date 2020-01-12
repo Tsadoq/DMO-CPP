@@ -10,7 +10,7 @@ double cooling(double time_limit, double current_time,double t0);
 int num_mutation_changer(int num_mutation_actual, double &perc, double improvement,double best_improvement,bool first,int n_exams);
 double temperature_shock(double temperature);
 
-Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams, int n_timeslot,std::string current_instance){
+Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string current_instance){
  
     struct timeb now;
     double prob = 0;
@@ -27,6 +27,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     double rel_t;
     double best_sol;
     double obj_SA;
+    int n_exams=solution->n_exams;
+    int n_timeslot=solution->n_timeslot;
     
     // prealloco tutti i vettori
     std::vector<int> timeslot_pre_swap=std::vector<int>(n_exams);    
@@ -44,14 +46,10 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
 
     solution->write_output_file(current_instance);
    
-    std::vector<int> possible_timeslots;
-    for (int i=0; i<n_timeslot;i++){
-        possible_timeslots.push_back(i+1);
-    }
 
     //--------------------LOCAL SEARCH INIZIALE---------------------------
     order_for_local=sort_indexes(solution->num_neighbours_for_exams);
-    localSearch(solution,possible_timeslots,order_for_local,n_timeslot);
+    localSearch(solution,order_for_local);
     obj_local=solution->objective_function();
     std::cout<<obj_local<<std::endl;
     obj_old=obj_SA;
@@ -59,7 +57,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     perc_improvement=0.1;
     while((obj_old-obj_local)/obj_local>perc_improvement){
         obj_old=obj_local;
-        localSearch(solution,possible_timeslots,order_for_local,n_timeslot);
+        localSearch(solution,order_for_local);
         obj_local=solution->objective_function();  
     }
     std::cout<<"SA "<<obj_SA<<"local "<<obj_local<<std::endl;
@@ -76,16 +74,17 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
 
     //-------------------------SCRITTURA SU FILE
   
-    std::string file_out="temperaturaVALE1";
+    /*std::string file_out="temperaturaVALE1";
     std::ofstream output_file;
-    output_file.open(file_out);
+    output_file.open(file_out);*/
     
+    int iter=0;
     obj_SA=obj_local;
     
     while((int)((now.time-start.time))<timelimit){        
         rel_t=t/t0;
         old_timeslot_solution=solution->timeslot_per_exams; 
-
+        iter++;
         //--------------------------------------- RESCHEDULING----------------
         
         int num_unsched;
@@ -98,13 +97,14 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         unres=false;
         int first=2;
         while(!unres){
-            if (first==0){               
+            if (first==0){        
+                // DECIDERE CHE FARE QUA       
                 solution->timeslot_per_exams=old_timeslot_solution;
                 solution->update_timeslots();
                 solution->update_weights();
             }
             un=unscheduling(solution, num_unsched);
-            res=rescheduling(solution, n_timeslot, possible_timeslots);
+            res=rescheduling(solution);
             unres=un||res;
             first=0;
         }
@@ -120,6 +120,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             for(int q=k+1; q<n_timeslot; q++){
                 better = neighbours_by_swapping_single(solution, k, q, obj_pre_swap);
                 if(better==false){
+                    // DECIDERE CHE FARE QUA
                     solution->timeslot_per_exams= timeslot_pre_swap;
                     solution->update_timeslots();
                     solution->update_weights();
@@ -134,14 +135,14 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         perc_improvement=0.1*rel_t; 
         //bool first_local=true;      
         obj_old=solution->objective_function();
-        localSearch(solution,  possible_timeslots,order_for_local,n_timeslot);
+        localSearch(solution, order_for_local);
         obj_local=solution->objective_function();
 
 
         while((obj_old-obj_local)/obj_local>perc_improvement){
       
             obj_old=obj_local;
-            localSearch(solution,  possible_timeslots,order_for_local,n_timeslot);
+            localSearch(solution,order_for_local);
             obj_local=solution->objective_function();
         
         }
@@ -154,6 +155,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
             prob=(obj_new,obj_SA, t);
             prob_random = distribution(generator);
             if (prob_random > prob){
+                // DECIDERE CHE FARE QUA
                 solution->timeslot_per_exams=old_timeslot_solution;
                 solution->update_timeslots();
                 solution->update_weights();
@@ -174,13 +176,14 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
         }
         
         t = cooling(timelimit, now.time-start.time,t0);
-        output_file<<"temperature "<<t<<" OF OLD "<<obj_SA<<"\n";
+        //output_file<<"temperature "<<t<<" OF OLD "<<obj_SA<<"\n";
 
     ftime(&now); 
     } 
     //output_file.close();               
     std::cout<<"Best sol "<<best_sol<<std::endl;
     best_solution->double_obj=best_sol;
+    std::cout<<iter<<std::endl;
     return best_solution;  
 }
 
