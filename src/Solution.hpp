@@ -10,7 +10,7 @@ class Solution{
     std::vector <int> timeslot_per_exams;
     std::vector <Exam*> all_exams;
     std::vector <int> num_neighbours_for_exams;
-    double double_obj=0;
+    double double_obj;
 
     // valori fissi all'interno dell'algoritmo
     int n_exams=0;

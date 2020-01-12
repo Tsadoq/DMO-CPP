@@ -141,6 +141,9 @@ double Solution::objective_function(){
         obj_fun+=all_exams[i]->weight_in_obj_fun;
     }
     obj_fun/=(2*total_number_students);
+    
+    double_obj = obj_fun;
+
     return obj_fun;
 }
 
