@@ -72,9 +72,7 @@ bool rescheduling(Solution* sol, int totTimeslots){
     not_available_time.reserve(totTimeslots);
     std::vector<int> available_time=std::vector<int>();
     available_time.reserve(totTimeslots);
-
-
-
+    
     int pos;
     int kk;
     int rand_index;

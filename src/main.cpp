@@ -119,8 +119,7 @@ int main(int argc, char **argv) {
         Solution* tmp= new Solution();
         tmp = initial_solution->copy_solution();
         array_sol[id] = tmp;
-           
-
+      
         std::string str_id = std::to_string(id);
         
         //double best_sol;

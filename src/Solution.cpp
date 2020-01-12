@@ -60,9 +60,12 @@ int Solution::check_feasibility(std::vector<int> t, std::vector<Exam*> e){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Solution::update_timeslots(){    
-    for(int i=0;i< n_exams;i++){   
-        std::vector <int> conflict_times_new=std::vector<int>(all_exams[i]->num_conflict);
+void Solution::update_timeslots(){   
+
+    std::vector <int> conflict_times_new;
+
+    for(int i=0;i< n_exams;i++){
+        conflict_times_new = std::vector<int>(all_exams[i]->num_conflict);
         // save timeslot for current exam 
         for (auto j:all_exams[i]->conflict_exams){
             // save timeslot of conflicting exams
@@ -143,6 +146,7 @@ Solution* Solution::copy_solution(){
     copy_sol->num_neighbours_for_exams=num_neighbours_for_exams;
     copy_sol->n_exams=n_exams;
     copy_sol->total_number_students=total_number_students;
+    
     return copy_sol;
 }
 

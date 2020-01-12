@@ -42,10 +42,8 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
     obj_SA = solution->objective_function();
     std::cout<<"Initial Objective Function: "<<obj_SA<<std::endl;
 
-    
-
     solution->write_output_file(current_instance);
-   
+    std::cout<<"aaa"<<"\n";
     std::vector<int> possible_timeslots;
     for (int i=0; i<n_timeslot;i++){
         possible_timeslots.push_back(i+1);
@@ -53,11 +51,13 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit, int n_exams,
 
     //--------------------LOCAL SEARCH INIZIALE---------------------------
     order_for_local=sort_indexes(solution->num_neighbours_for_exams);
-
+    std::cout<<"bbb"<<"\n";
     localSearch(solution,possible_timeslots,order_for_local,n_timeslot);
+    std::cout<<"ddd"<<"\n";
     obj_local=solution->objective_function();
+    std::cout<<"ccc"<<"\n";
     obj_old=obj_SA;
-  
+    
     perc_improvement=0.1;
     while((obj_old-obj_local)/obj_local>perc_improvement){
         obj_old=obj_local;
