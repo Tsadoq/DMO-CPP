@@ -20,6 +20,7 @@ std::vector<std::vector<int>> read_file_stu(char* file_name,int n_exams, int &to
 
     fp = fopen(file_name, "r");
     if(fp == NULL){
+        fclose(fp);
         std::cerr << file_name << " file not found" << std::endl;
         exit(EXIT_FAILURE); 
     }
