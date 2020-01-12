@@ -158,7 +158,7 @@ Solution* func_swap_random(Solution* solution)
 }
 
 
-int choose_function(double rel_t, int iter, double perc_improvement, int fail)
+int choose_function(double rel_t, int iter, double perc_improvement, int fail_sa)
 {   
     // CAMBIA PARAMETRO SE AGGIUNGI O TOGLI FUNZIONI!!!
     int num_func = 6;
@@ -246,7 +246,7 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
     double alpha;
     double t0_iter;
     
-    int fail = 0;
+    int fail_sa = 0;
 
     // prealloco tutti i vettori
     std::vector<int> timeslot_pre_swap=std::vector<int>(n_exams);    
@@ -300,14 +300,18 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
 
         old_timeslot_solution=solution->timeslot_per_exams; 
 
-        // int idx = choose_function(rel_t, iter, perc_improvement, fail);
+        // int idx = choose_function(rel_t, iter, perc_improvement, fail_sa);
         // solution = get_new_solution(idx , solution, timeslot_pre_swap, old_timeslot_solution, rel_t, perc_improvement, now, current_instance);
-    
 
-        solution = func_rescheduling(solution, old_timeslot_solution, rel_t);
-        solution = func_swap_deterministic(solution, timeslot_pre_swap);
-        solution = func_local_search(solution, perc_improvement);
-       
+        if (fail_sa < 100){
+            solution = func_chiara(solution, timeslot_pre_swap, perc_improvement, old_timeslot_solution, rel_t);
+        } else {
+            double tmp_rel_t = 1;
+            solution = func_rescheduling(solution, old_timeslot_solution, tmp_rel_t);
+            fail_sa = 0;
+        }
+        
+
 
         obj_new = solution->double_obj;
 
@@ -330,17 +334,22 @@ Solution* sa(Solution* solution, struct timeb start, int timelimit,std::string c
         }
 
         if (obj_new <= best_sol){
-            fail = 0;
+            fail_sa = 0;
             best_sol = obj_new;
             best_solution->timeslot_per_exams=solution->timeslot_per_exams;
             best_solution->update_timeslots();
             best_solution->update_weights();
             best_solution->objective_function();
             best_solution->write_output_file(current_instance);
+
+            std::cout << "best_sol:\t" << best_sol << std::endl;
+
         }else{
-            fail++;
+            fail_sa++;
         }
         
+        std::cout << "fail:\t" << fail_sa << std::endl;
+
         t *= cool_coef;
 
         if(t<=t0_iter*0.01){
